@@ -1,0 +1,56 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+main {
+    height: 300vh; /* Para crear más espacio de scroll */
+    font-family: Arial, sans-serif;
+}
+
+.introductionShopp {
+    position: relative;
+    height: 100vh; /* Sección de altura extendida */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.backgroundVideo {
+    position: fixed; /* El video permanece fijo durante el scroll */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* El video cubrirá toda la pantalla */
+    z-index: -1; /* El video estará detrás del logo */
+    background-color: transparent; /* Asegúrate de que no haya fondo blanco */
+}
+
+.overlay {
+    position: fixed; /* Asegúrate de que la capa esté fija sobre el video */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0); /* Comienza transparente */
+    z-index: 0; /* Capa oscura detrás del logo pero por delante del video */
+    transition: background-color 1s ease; /* Transición suave para el cambio de color de fondo */
+}
+
+.logoContainer {
+    position: fixed; /* Mantener el logo fijo durante todo el scroll */
+    bottom: 10%; /* Fijar el logo a 10% del fondo inicialmente */
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 1; /* El logo se superpone al video y a la capa oscura */
+}
+
+.logoContainer h1 {
+    font-size: 4rem;
+    color: white;
+    letter-spacing: 5px;
+}

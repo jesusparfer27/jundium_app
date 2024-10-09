@@ -1,0 +1,17 @@
+main {
+    position: relative; /* Para manejar la posición de las secciones */
+}
+
+.contentSection {
+    height: 100vh; /* Ocupa toda la altura de la ventana */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white; /* Fondo blanco para la sección */
+    z-index: 1; /* Asegúrate de que esté por encima del video */
+}
+
+.contentSection h1 {
+    font-size: 3rem; /* Ajusta el tamaño del texto según tus necesidades */
+    color: black; /* Color del texto */
+}

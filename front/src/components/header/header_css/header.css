@@ -1,0 +1,151 @@
+/* Animaciones globales */
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Reutilización de la animación de deslizamiento */
+.slideIn {
+    animation: slideIn 0.3s ease forwards;
+}
+
+/* Reutilización de la animación de desvanecimiento */
+.fadeIn {
+    animation: fadeIn 0.3s ease forwards;
+}
+
+/* Barra de anuncios */
+html, 
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Contenedor principal del header */
+.headerContainer {
+    width: 100%;
+    background-color: #f8f8ff;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Alineación de los elementos del header */
+.headerLeft, .headerRight {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 1.7rem 0;
+}
+
+/* Centrando el logo */
+.headerCentral {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Logo */
+.logo {
+    font-size: 16px;
+    color: black;
+    padding-left: 11rem;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Iconos y textos alineados */
+.material-symbols-outlined, 
+.buttonText {
+    font-size: 16px;
+    color: black;
+    display: flex;
+    align-items: center;
+}
+
+/* Botones generales */
+.button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* NUEVOS ESTILOS PARA ANIMACIONES Y ELEMENTOS */
+.sideMenu, .favouriteContainer, .filterMenu {
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.sideMenu {
+    position: fixed;
+    top: 5rem;
+    left: -33%;
+    width: 33%;
+    height: 100vh;
+    background-color: #333;
+    color: white;
+    padding: 2rem;
+    z-index: 999;
+}
+
+.sideMenu.open {
+    left: 0;
+}
+
+/* Filtros adicionales */
+.filterMenu {
+    position: fixed;
+    top: 5rem;
+    left: 33%;
+    width: 33%;
+    height: 100vh;
+    background-color: #555;
+    color: white;
+    padding: 2rem;
+    opacity: 0;
+    display: none;
+    z-index: 998;
+}
+
+.filterMenu.open {
+    display: block;
+    opacity: 1;
+}
+
+.favouriteContainer {
+    position: fixed;
+    top: 60px;
+    right: -40%;
+    width: 40%;
+    height: calc(100% - 60px);
+    background-color: white;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    z-index: 1002;
+}
+
+.favouriteContainer.active {
+    right: 0;
+}
