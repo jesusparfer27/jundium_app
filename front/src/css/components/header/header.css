@@ -1,0 +1,179 @@
+/* Estilos globales */
+html,
+*::before,
+*::after {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* Animaciones globales */
+@keyframes slideInVertical {
+    from {
+        transform: translateY(-100%); /* Desliza desde arriba */
+    }
+    to {
+        transform: translateY(0); /* Llega a su posición final */
+    }
+}
+
+@keyframes slideOutVertical {
+    from {
+        transform: translateY(0); /* Empieza desde su posición final */
+    }
+    to {
+        transform: translateY(-100%); /* Se desliza hacia arriba y se oculta */
+    }
+}
+
+@keyframes slideInHorizontal {
+    from {
+        transform: translateX(-100%); /* Desliza desde la izquierda */
+    }
+    to {
+        transform: translateX(0); /* Llega a su posición final */
+    }
+}
+
+@keyframes slideOutHorizontal {
+    from {
+        transform: translateX(0); /* Empieza desde su posición final */
+    }
+    to {
+        transform: translateX(-100%); /* Se desliza hacia la izquierda y se oculta */
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Reutilización de la animación de deslizamiento vertical */
+.slideInVertical {
+    animation: slideInVertical 0.3s ease forwards;
+}
+
+.slideOutVertical {
+    animation: slideOutVertical 0.3s ease forwards;
+}
+
+/* Reutilización de la animación de deslizamiento horizontal */
+.slideInHorizontal {
+    animation: slideInHorizontal 0.3s ease forwards;
+}
+
+.slideOutHorizontal {
+    animation: slideOutHorizontal 0.3s ease forwards;
+}
+
+/* Contenedor principal del header */
+.headerContainer {
+    width: 100%;
+    background-color: transparent; /* Fondo transparente por defecto */
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    color: white; /* Texto blanco por defecto */
+}
+
+/* Cambia el fondo y el color del texto y botones al hacer scroll */
+.headerContainer.scrolled {
+    background-color: white; /* Cambia el fondo a blanco al hacer scroll */
+    color: black; /* Cambia el color del texto a negro al hacer scroll */
+}
+
+/* Cambia el color de texto y botones en hover */
+.headerContainer:hover,
+.headerContainer.scrolled:hover {
+    background-color: white; /* Cambia el fondo a blanco al hacer hover */
+    color: black; /* Cambia el color del texto a negro al hacer hover */
+}
+
+/* Cambiar color de texto y botones en hover */
+.headerContainer:hover .logo,
+.headerContainer:hover .material-symbols-outlined,
+.headerContainer:hover .buttonText,
+.headerContainer.scrolled .logo,
+.headerContainer.scrolled .material-symbols-outlined,
+.headerContainer.scrolled .buttonText {
+    color: black; /* Cambia el color de los textos a negro al hacer hover */
+}
+
+/* Estilos adicionales para los botones */
+.headerContainer .button {
+    color: white; /* Color de los botones en estado normal */
+}
+
+/* Cambia el color de los botones en hover */
+.headerContainer:hover .button,
+.headerContainer.scrolled .button {
+    background-color: rgba(0, 0, 0, 0.1); /* Cambia el fondo de los botones en hover */
+    color: black; /* Asegúrate de que el texto de los botones sea negro en hover */
+}
+
+/* Alineación de los elementos del header */
+.headerLeft,
+.headerRight {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 1.7rem;
+}
+
+.headerRight {
+    padding-right: 4rem;
+}
+
+/* Centrando el logo */
+.headerCentral {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Logo */
+.logo {
+    font-size: 16px;
+    color: white; /* Color del logo en estado normal */
+    padding-left: 11rem;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Iconos y textos alineados */
+.material-symbols-outlined,
+.buttonText {
+    font-size: 16px;
+    color: white; /* Color de iconos y textos en estado normal */
+    display: flex;
+    align-items: center;
+}
+
+/* Botones generales */
+.button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* NUEVOS ESTILOS PARA ANIMACIONES Y ELEMENTOS */
+.sideMenu,
+.favouriteContainer,
+.filterMenu,
+.genderMenu {
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}

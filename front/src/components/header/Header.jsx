@@ -1,56 +1,51 @@
 // src/components/Header.jsx
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { HeaderContext } from '../../context/HeaderContext';
-import '../header/header_css/header.css';
-import SideMenu from '../header/HeaderMenu';
-import FavouriteContainer from '../header/HeaderFavourite';
-import LoginContainer from '../header/HeaderLogIn';
-import CartContainer from '../header/HeaderCart';
-import ContactContainer from '../header/HeaderContact';
-import FilterMenu from '../header/Header.jsx'; // Asegúrate de importar el componente de filtro
+import '../../css/components/header/header.css';
+import HeaderMenu from './MenuHeader';
+import FavouriteContainer from './FavouriteHeader';
+import LoginContainer from './LoginHeader';
+import CartContainer from './CartHeader';
+import ContactContainer from './ContactHeader';
+import HeaderSearch from './SearchHeader'; // Importamos el nuevo componente HeaderSearch
 
 const Header = () => {
-    const { activeMenu, toggleMenu, closeMenu, setActiveMenu } = useContext(HeaderContext);
-    const { search, setSearch } = useContext(HeaderContext);
+    const { activeMenu, openMenu, search } = useContext(HeaderContext);
+    const [isScrolled, setIsScrolled] = useState(false);
 
-    const activateSearchMode = () => {
-        setSearch({ term: '', mode: true });
-        setActiveMenu(null); // Cierra cualquier otro menú
-    };
+    // Manejar el evento de scroll
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 20) {
+                setIsScrolled(true);
+            } else {
+                setIsScrolled(false);
+            }
+        };
 
-    const handleSearch = () => {
-        if (search.term.trim()) {
-            console.log("Buscando:", search.term);
-            // Aquí puedes agregar la lógica para buscar productos
-        } else {
-            console.log("Por favor, inserte un término de búsqueda.");
-        }
-    };
+        window.addEventListener('scroll', handleScroll);
 
-    const clearSearch = () => {
-        setSearch({ ...search, term: '' });
-    };
-
-    const handleContainerToggle = (type) => {
-        toggleMenu(type);
-    };
+        // Limpiar el evento al desmontar el componente
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
 
     return (
         <>
-            <div className="advertiseNews"></div>
             <header>
-                <div className="headerContainer">
+                <div className={`headerContainer ${isScrolled ? 'scrolled' : ''}`}>
                     {!search.mode ? (
                         <>
                             <div className="headerLeft">
                                 <div className="headerMenu">
-                                    <button className='button headerButton' onClick={() => toggleMenu('sideMenu')}>
+                                    <button className='button headerButton' onClick={() => openMenu('sideMenu')}>
                                         <span className="material-symbols-outlined">menu</span>
                                         <h3 className="h3Style">Menú</h3>
                                     </button>
                                 </div>
                                 <div className="headerSearch">
-                                    <button className='button headerButton' onClick={activateSearchMode}>
+                                    <button className='button headerButton' onClick={() => openMenu('searchBar')}>
                                         <span className="material-symbols-outlined">search</span>
                                         <h3 className='h3Style'>Buscar</h3>
                                     </button>
@@ -63,54 +58,39 @@ const Header = () => {
 
                             <div className="headerRight">
                                 <div className="contact">
-                                    <button className='button contactButton' onClick={() => handleContainerToggle('contact')}>
+                                    <button className='button contactButton' onClick={() => openMenu('contact')}>
                                         <h3 className='h3Style'>Llámenos</h3>
                                     </button>
                                 </div>
                                 <div className="like">
-                                    <button className='button favButton' onClick={() => handleContainerToggle('favourite')}>
+                                    <button className='button favButton' onClick={() => openMenu('favourite')}>
                                         <span className="material-symbols-outlined">favorite</span>
                                     </button>
                                 </div>
                                 <div className="logIn">
-                                    <button className='button logInButton' onClick={() => handleContainerToggle('login')}>
+                                    <button className='button logInButton' onClick={() => openMenu('login')}>
                                         <span className="material-symbols-outlined">person</span>
                                     </button>
                                 </div>
                                 <div className="shopCart">
-                                    <button className='button cartButton' onClick={() => handleContainerToggle('cart')}>
+                                    <button className='button cartButton' onClick={() => openMenu('cart')}>
                                         <span className="material-symbols-outlined">shopping_bag</span>
                                     </button>
                                 </div>
                             </div>
                         </>
                     ) : (
-                        <div className="headerSearchActive">
-                            <input
-                                type="text"
-                                placeholder="Inserte su búsqueda..."
-                                value={search.term}
-                                onChange={(e) => setSearch({ ...search, term: e.target.value })}
-                                className="searchBar"
-                            />
-                            <button className='button headerButton' onClick={handleSearch}>
-                                <span className="material-symbols-outlined">search</span>
-                            </button>
-                            <button className='button clearButton' onClick={clearSearch}>
-                                <span className="material-symbols-outlined">clear</span>
-                            </button>
-                        </div>
+                        <HeaderSearch /> // Renderiza el componente HeaderSearch cuando el modo de búsqueda está activo
                     )}
                 </div>
             </header>
 
             {/* Componentes de Contenedores */}
-            <SideMenu />
-            <FavouriteContainer />
-            <LoginContainer />
-            <CartContainer />
-            <ContactContainer />
-            <FilterMenu /> {/* Asegúrate de incluir el componente de filtro */}
+            {activeMenu === 'sideMenu' && <HeaderMenu />}
+            {activeMenu === 'favourite' && <FavouriteContainer />}
+            {activeMenu === 'login' && <LoginContainer />}
+            {activeMenu === 'cart' && <CartContainer />}
+            {activeMenu === 'contact' && <ContactContainer />}
         </>
     );
 };

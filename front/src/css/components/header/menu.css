@@ -1,0 +1,116 @@
+/* Estilos para el GenderMenu */
+
+.genderSection {
+    position: fixed; /* Se mantiene en la parte superior */
+    top: 54px; /* Se mueve justo debajo del header */
+    left: 33%; /* Se coloca justo al lado del sideMenu */
+    width: 33%; /* Ajusta el ancho según sea necesario */
+    height: calc(100vh - 54px); /* Ajuste para que no cubra el header */
+    background-color: #555; /* Color de fondo para la sección de género */
+    color: white;
+    padding: 2rem;
+    z-index: 998; /* Asegúrate que esté por debajo del SideMenu y del Header */
+    transition: transform 0.3s ease-in-out, left 0.3s ease-in-out;
+    padding-top: 5rem;
+    margin-top: 3.1rem;
+    margin-left: 4rem;
+    
+    
+}
+
+/* Cuando se muestra la sección de género */
+.genderSection.open {
+    left: 33%; /* Se mueve a la vista */
+    animation: slideInHorizontal 0.3s ease forwards; /* Añadir animación */
+}
+
+/* Estilos para el SideMenu */
+.sideMenu {
+    position: fixed;
+    top: 54px; /* Inicia justo debajo del header */
+    left: 0; /* Inicia visible */
+    width: 33%;
+    height: calc(100vh - 54px); /* Ajusta la altura para no cubrir el header */
+    margin-top: 3.1rem; /* Agregado el margen superior */
+    background-color: #333;
+    color: white;
+    padding: 2rem;
+    z-index: 999; /* Asegúrate que coincida con el z-index del Header */
+    transition: transform 0.3s ease-in-out, left 0.3s ease-in-out;
+}
+
+.sideMenu.open {
+    left: 0; /* Se mueve a la vista */
+    animation: slideInHorizontal 0.3s ease forwards; /* Añadir animación */
+}
+
+.genderSection .productNav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding-top: 2rem;
+}
+
+.genderSection .productNav a {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #444;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.genderSection .productNav a:hover {
+    background-color: #222;
+    transform: translateY(-3px);
+}
+
+/* Estilos para la sección de Hombre */
+.genderSection.Hombre {
+    background-color: #e0f7fa; /* Color azul claro */
+    border: 1px solid #00838f;
+}
+
+.genderSection.Hombre h3 {
+    color: #006064; /* Azul más oscuro */
+}
+
+.genderSection.Hombre .productNav a {
+    background-color: #00838f; /* Azul para los enlaces */
+}
+
+.genderSection.Hombre .productNav a:hover {
+    background-color: #004d40; /* Azul oscuro al hacer hover */
+}
+
+/* Estilos para la sección de Mujer */
+.genderSection.Mujer {
+    background-color: #fce4ec; /* Color rosa claro */
+    border: 1px solid #d81b60;
+}
+
+.genderSection.Mujer h3 {
+    color: #880e4f; /* Rosa más oscuro */
+}
+
+.genderSection.Mujer .productNav a {
+    background-color: #d81b60; /* Rosa para los enlaces */
+}
+
+.genderSection.Mujer .productNav a:hover {
+    background-color: #880e4f; /* Rosa oscuro al hacer hover */
+}
+
+/* Botón para cerrar el menú */
+.closeMenu {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}

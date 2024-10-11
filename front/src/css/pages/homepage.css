@@ -1,17 +1,59 @@
-main {
-    position: relative; /* Para manejar la posición de las secciones */
+/* Estilos generales para la sección de nuevos drops */
+.newCollections {
+    padding: 2rem 4rem;
+    text-align: center;
 }
 
-.contentSection {
-    height: 100vh; /* Ocupa toda la altura de la ventana */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: white; /* Fondo blanco para la sección */
-    z-index: 1; /* Asegúrate de que esté por encima del video */
+.h1Style {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #333;
+    font-family: 'Arial', sans-serif;
 }
 
-.contentSection h1 {
-    font-size: 3rem; /* Ajusta el tamaño del texto según tus necesidades */
-    color: black; /* Color del texto */
+.newDropsHome {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columnas */
+    grid-template-rows: repeat(2, auto); /* 2 filas */
+    gap: 3rem; /* Espacio entre los productos */
+    justify-items: center; /* Centra los elementos en cada celda */
+    margin: 0 auto;
+    width: 100%;
 }
+
+/* Estilos para el video link */
+.videoLink {
+    display: block;
+    margin: 2rem 0;
+    text-align: center;
+}
+
+/* Estilos para la sección de video */
+.homeVideo {
+    width: 100%;
+    height: auto;
+}
+
+.homeVideo.fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10; /* Asegura que el video esté encima de otros elementos */
+}
+
+/* Estilos para el contenedor de video que se desplaza hasta 1000px */
+.videoScrollContainer {
+    height: 3600px; /* Altura total del área donde el video será fijo por 1000px */
+    position: relative;
+}
+
+/* Video fijo durante el scroll de 1000px */
+.videoWrapper {
+    position: sticky;
+    top: 0;
+    height: 1000px; /* Mantiene el video fijo durante los primeros 1000px de scroll */
+    z-index: 10;
+    overflow: hidden; /* Asegura que solo se vea el video dentro del área definida */
+}
+

@@ -1,0 +1,49 @@
+/* Estilos para el componente HeaderSearch */
+.headerSearchActive {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem; /* Espacio entre el input y los botones */
+    width: 100%;
+    max-width: 800px; /* Ancho máximo */
+    padding: 1rem;
+    margin: auto; /* Centrado */
+    padding-top: 1.7rem;
+    padding-bottom: 1.7rem;
+}
+
+/* Estilos para el input de búsqueda */
+.inputSearch {
+    padding: 0.5rem;
+    border-radius: 0.25rem; /* Bordes redondeados */
+    border: 1px solid #ccc; /* Borde gris claro */
+    width: 100%; /* Ancho completo */
+}
+
+/* Estilos para el botón de búsqueda */
+.searchButton {
+    background-color: #4caf50; /* Color verde */
+    color: white; /* Texto blanco */
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem; /* Bordes redondeados */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Animación suave en hover */
+}
+
+/* Efecto hover en el botón de búsqueda */
+.searchButton:hover {
+    background-color: #45a049; /* Color más oscuro */
+}
+
+/* Estilo de botones de filtro */
+.filterButton {
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    margin: 0.5rem 0;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+}
+

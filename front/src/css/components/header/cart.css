@@ -1,0 +1,31 @@
+/* Estilos para el CartContainer */
+.cartContainer {
+    position: fixed;
+    top: 54px; /* Se mueve justo debajo del header */
+    right: 0; /* Mantiene el carrito en la parte derecha */
+    width: 33%;
+    height: calc(100vh - 54px); /* Ajuste para que no cubra el header */
+    margin-top: 3.1rem; /* Agregado el margen superior */
+    background-color: #333;
+    color: white;
+    padding: 2rem;
+    z-index: 999; /* Asegúrate que coincida con el z-index del Header y SideMenu */
+    transition: transform 0.3s ease-in-out, top 0.3s ease-in-out;
+}
+
+.cartContainer.active {
+    top: 54px; /* Se mueve a la vista justo debajo del header */
+    animation: slideInVertical 0.3s ease forwards; /* Añadir animación */
+}
+
+/* Botón para cerrar el carrito */
+.closeContainer {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
