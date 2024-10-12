@@ -58,6 +58,20 @@ html,
     animation: slideInVertical 0.3s ease forwards;
 }
 
+.zoomContainer {
+    transition: transform 0.3s ease; /* Suaviza la animación de zoom */
+    overflow: hidden; /* Evita el desbordamiento si el contenido crece */
+    position: relative; /* Para un mejor posicionamiento si se requiere */
+}
+
+/* Estilos adicionales para la imagen o video */
+.zoomContainer img {
+    width: 100%; /* Asegúrate de que la imagen ocupe el contenedor */
+    height: auto; /* Mantiene la proporción de la imagen */
+    display: block; /* Quita el espacio inferior */
+}
+
+
 .slideOutVertical {
     animation: slideOutVertical 0.3s ease forwards;
 }
@@ -74,24 +88,24 @@ html,
 /* Contenedor principal del header */
 .headerContainer {
     width: 100%;
-    background-color: transparent; /* Fondo         transparente por defecto */
+    background-color: transparent; /* Fondo transparente por defecto */
     z-index: 1000;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
     position: fixed;
     top: 0;
     left: 0;
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
     color: white; /* Texto blanco por defecto */
+    padding-top: 1.2rem;
+    padding-bottom: 1.2rem;
 }
 
 /* Cambia el fondo y el color del texto y botones al hacer scroll */
 .headerContainer.scrolled {
     background-color: white; /* Cambia el fondo a blanco al hacer scroll */
     color: black; /* Cambia el color del texto a negro al hacer scroll */
-    max-width: 100%;
 }
 
 /* Cambia el color de texto y botones en hover */
@@ -119,7 +133,7 @@ html,
 /* Cambia el color de los botones en hover */
 .headerContainer:hover .button,
 .headerContainer.scrolled .button {
-    background-color: rgba(0, 0, 0, 0.1); /* Cambia el fondo de los botones en hover */
+    
     color: black; /* Asegúrate de que el texto de los botones sea negro en hover */
 }
 
@@ -129,14 +143,22 @@ html,
     display: flex;
     align-items: center;
     gap: 2rem;
-    padding-top: .7rem;
-    padding-bottom: .7rem;
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+}
+
+.headerCentral {
+    padding-left: 11rem;
+}
+
+.headerLeft {
+    padding-left: 2rem;
 }
 
 .headerRight {
     max-width: 100%;
     display: flex;
-    justify-content: flex-start;
+    padding-right: 2rem;
 }
 
 /* Centrando el logo */
@@ -151,8 +173,6 @@ html,
 .logo {
     font-size: 16px;
     color: white; /* Color del logo en estado normal */
-    padding-left: 11rem;
-    transition: opacity 0.3s ease-in-out;
 }
 
 /* Iconos y textos alineados */
@@ -183,10 +203,6 @@ html,
 }
 
 /* Línea separadora en el header */
-.separatingHeader {
-    height: 4px; /* Línea fina */
-    width: 100%;
-    background-color: black; /* Color de la línea */
-    position: absolute; /* Posición absoluta */
-    z-index: 999;
-}
+/* Línea separadora en el header */
+
+

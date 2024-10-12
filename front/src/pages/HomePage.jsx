@@ -5,6 +5,7 @@ import '../css/pages/homepage.css';
 
 export const HomePage = () => {
     const [offset, setOffset] = useState(0);
+    const [scale, setScale] = useState(1); // Estado para el zoom
 
     const productsData = {
         products: [
@@ -20,11 +21,27 @@ export const HomePage = () => {
     };
 
     useEffect(() => {
+        // Manejar el desplazamiento para el carrusel
         const interval = setInterval(() => {
             setOffset((prevOffset) => (prevOffset >= 100 ? 0 : prevOffset + 0.5));
         }, 30); // Ajusta el valor para cambiar la velocidad del desplazamiento
 
         return () => clearInterval(interval);
+    }, []);
+
+    useEffect(() => {
+        // Manejar el desplazamiento de la ventana
+        const handleScroll = () => {
+            const offsetY = window.scrollY; // Obtener el desplazamiento vertical
+            const newScale = 1 + offsetY / 7000; // Calcular el nuevo valor de escala
+            setScale(newScale); // Actualizar el estado del zoom
+        };
+
+        window.addEventListener('scroll', handleScroll); // Agregar el listener al scroll
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll); // Limpiar el listener al desmontar el componente
+        };
     }, []);
 
     return (
@@ -39,6 +56,7 @@ export const HomePage = () => {
                         loop
                         playsInline
                         className="scrollVideo"
+                        style={{ transform: `scale(${scale})`, transition: 'transform 0.1s ease' }} // Aplicar el estilo de zoom
                     >
                         <source src={SeasonVideo} type="video/mp4" />
                         Tu navegador no soporta la reproducción de videos.
@@ -87,6 +105,7 @@ export const HomePage = () => {
                     </NavLink>
                 </div>
             </section>
+            
             <section className="carruselHome">
                 <div className="leftTextContainer">
                     <p>Descubre nuestros productos destacados</p>
@@ -106,6 +125,50 @@ export const HomePage = () => {
                     </div>
                 </div>
             </section>
+
+            <section>
+                <div className="container_video">
+                    <NavLink to="/video" className="videoLink">
+                        <video
+                            width="100%"
+                            height="auto"
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                        >
+                            <source src={SeasonVideo} type="video/mp4" />
+                            Tu navegador no soporta la reproducción de videos.
+                        </video>
+                    </NavLink>
+                </div>
+            </section>
+
+            <section className="newCollections">
+    <h1 className='h1Style'>Echa un vistazo a los nuevos drops</h1>
+    <div className="newDropsHome2">
+        {productsData.products.slice(0, 3).map((product) => (  // Cambié aquí
+            <NavLink
+                to={`/product/${product.id}`}
+                key={product.id}
+                className="dropItem"
+            >
+                <div className="imageContainer">
+                    <img
+                        src={product.image}
+                        alt={product.name}
+                        className="itemImage"
+                    />
+                </div>
+                <div className="itemDescription">
+                    <p>{product.name}</p>
+                </div>
+            </NavLink>
+        ))}
+    </div>
+</section>
+
+
         </main>
     );
 };

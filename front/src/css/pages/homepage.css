@@ -1,4 +1,4 @@
-html,
+body,
 *::after,
 *::before {
     margin: 0;
@@ -148,4 +148,51 @@ html,
     width: 100%;
     height: 100%;
     background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+}
+
+.videoScrollContainer {
+    height: 3600px; /* Altura total de la sección */
+    position: relative;
+}
+
+.videoWrapper {
+    position: sticky;
+    top: 0;
+    height: auto;
+    z-index: 10;
+    overflow: hidden; /* Asegura que el contenido no se desborde */
+}
+
+.containerProductsLast {
+    display: grid; /* Cambia a grid para usar gap */
+    grid-template-columns: repeat(3, 1fr); /* Ajusta según el número de productos que desees mostrar por fila */
+    gap: 2rem; /* Espacio entre los elementos */
+    justify-items: center; /* Centrar elementos si es necesario */
+}
+
+.product {
+    width: 100%; /* Mantener el ancho al 100% del contenedor */
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent; /* Asegúrate de que el color gris no afecte a todos los productos */
+}
+
+.imageSimulator {
+    width: 100%; /* Ajusta el ancho a 100% */
+    height: 400px;
+    background-color: gray; /* Esto afectará solo a la simulación de imagen */
+    border-radius: 8px; /* Añadir bordes redondeados si lo deseas */
+}
+
+.dropItem {
+    justify-content: center;
+}
+
+.newDropsHome2 {
+    display: flex;
+    gap: 3rem;
+    justify-content: center;
 }

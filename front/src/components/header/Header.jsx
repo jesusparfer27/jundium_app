@@ -30,10 +30,15 @@ const Header = () => {
         };
     }, []);
 
+    // Determinar la clase del contenedor del header
+    const headerClassName = `headerContainer ${
+        isScrolled || activeMenu ? 'scrolled' : ''
+    }`;
+
     return (
         <>
             <header>
-                <div className={`headerContainer ${isScrolled ? 'scrolled' : ''}`}>
+                <div className={headerClassName}>
                     {!search.mode ? (
                         <>
                             <div className="headerLeft">
