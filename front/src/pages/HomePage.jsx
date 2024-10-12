@@ -1,8 +1,10 @@
-import SeasonVideo from '../assets/1321208-uhd_3840_2160_30fps.mp4'; // Importa el video correctamente
-import { NavLink } from 'react-router-dom'; // Para futuras rutas
-import '../css/pages/homepage.css'; // Asegúrate de tener un archivo CSS
+import React, { useEffect, useState } from 'react';
+import SeasonVideo from '../assets/1321208-uhd_3840_2160_30fps.mp4';
+import { NavLink } from 'react-router-dom';
+import '../css/pages/homepage.css';
 
 export const HomePage = () => {
+    const [offset, setOffset] = useState(0);
 
     const productsData = {
         products: [
@@ -16,6 +18,14 @@ export const HomePage = () => {
             { id: 8, name: "Reloj Deportivo", image: "https://via.placeholder.com/150?text=Reloj+Deportivo", category: "Accesorios", description: "Reloj deportivo resistente al agua, con múltiples funciones." }
         ]
     };
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setOffset((prevOffset) => (prevOffset >= 100 ? 0 : prevOffset + 0.5));
+        }, 30); // Ajusta el valor para cambiar la velocidad del desplazamiento
+
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <main>
@@ -41,7 +51,7 @@ export const HomePage = () => {
                 <div className="newDropsHome">
                     {productsData.products.map((product) => (
                         <NavLink
-                            to={`/product/${product.id}`} // Ruta futura
+                            to={`/product/${product.id}`}
                             key={product.id}
                             className="dropItem"
                         >
@@ -62,7 +72,6 @@ export const HomePage = () => {
 
             <section>
                 <div className="container_video">
-                    {/* NavLink con el video y el efecto CSS */}
                     <NavLink to="/video" className="videoLink">
                         <video
                             width="100%"
@@ -76,6 +85,25 @@ export const HomePage = () => {
                             Tu navegador no soporta la reproducción de videos.
                         </video>
                     </NavLink>
+                </div>
+            </section>
+            <section className="carruselHome">
+                <div className="leftTextContainer">
+                    <p>Descubre nuestros productos destacados</p>
+                </div>
+                <div className="rightCarouselContainer">
+                    <div className="carousel" style={{ transform: `translateX(-${offset}%)`, transition: 'transform 0.1s linear' }}>
+                        {[...productsData.products, ...productsData.products].map((product, index) => (
+                            <div key={index} className="carouselItem">
+                                <img
+                                    src={product.image}
+                                    alt={product.name}
+                                    className="carouselImage"
+                                />
+                                <p>{product.name}</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </section>
         </main>

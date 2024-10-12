@@ -74,7 +74,7 @@ html,
 /* Contenedor principal del header */
 .headerContainer {
     width: 100%;
-    background-color: transparent; /* Fondo transparente por defecto */
+    background-color: transparent; /* Fondo         transparente por defecto */
     z-index: 1000;
     display: flex;
     justify-content: space-between;
@@ -91,6 +91,7 @@ html,
 .headerContainer.scrolled {
     background-color: white; /* Cambia el fondo a blanco al hacer scroll */
     color: black; /* Cambia el color del texto a negro al hacer scroll */
+    max-width: 100%;
 }
 
 /* Cambia el color de texto y botones en hover */
@@ -128,11 +129,14 @@ html,
     display: flex;
     align-items: center;
     gap: 2rem;
-    padding: 1.7rem;
+    padding-top: .7rem;
+    padding-bottom: .7rem;
 }
 
 .headerRight {
-    padding-right: 4rem;
+    max-width: 100%;
+    display: flex;
+    justify-content: flex-start;
 }
 
 /* Centrando el logo */
@@ -176,4 +180,13 @@ html,
 .filterMenu,
 .genderMenu {
     transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+/* Línea separadora en el header */
+.separatingHeader {
+    height: 4px; /* Línea fina */
+    width: 100%;
+    background-color: black; /* Color de la línea */
+    position: absolute; /* Posición absoluta */
+    z-index: 999;
 }

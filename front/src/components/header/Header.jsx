@@ -1,4 +1,3 @@
-// src/components/Header.jsx
 import React, { useContext, useEffect, useState } from 'react';
 import { HeaderContext } from '../../context/HeaderContext';
 import '../../css/components/header/header.css';
