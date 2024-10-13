@@ -1,0 +1,136 @@
+/* Estilos generales para el footer */
+footer {
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+/* Estilos para la parte superior del footer */
+.footerSuperior {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px;
+    padding-left: 3.6rem;
+    padding-top: 4.5rem;
+    padding-bottom: 4rem;
+    background-color: #f9f9f9;
+    border-top: 2px solid #dcdcdc;
+    border-bottom: 2px solid #dcdcdc;
+}
+
+/* Estilos para el contenedor de enlaces del footer */
+.footerLinksContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 6rem;
+    align-items: center;
+}
+
+.footerSection {
+    display: flex;
+    flex-direction: column;
+}
+
+.linksSections {
+    display: flex;
+    flex-direction: column;
+}
+
+.footerSection strong {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.linksSections a {
+    text-decoration: none;
+    color: #666;
+    margin-bottom: 8px;
+    font-size: 0.9em;
+    transition: color 0.3s;
+}
+
+.linksSections a:hover {
+    color: #007bff;
+}
+
+/* Estilos para la suscripción */
+.footerSubscriptionContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    padding-right: 1.6rem;
+    max-width: 300px;
+    align-items: center;
+}
+
+.subscriptionInputContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.subscriptionInputContainer input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px;
+    font-size: 0.9em;
+    color: #333;
+}
+
+.subscriptionInputContainer input::placeholder {
+    color: #999;
+}
+
+.subscriptionInputContainer button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 0.9em;
+}
+
+.subscriptionInputContainer button:hover {
+    background-color: #0056b3;
+}
+
+/* Estilos para el footer inferior */
+.footerInferior {
+    background-color: #e9ecef;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Línea de separación */
+.footerLineSeparation {
+    width: 100%;
+    height: 4px;
+    background-color: #b3b3b3;
+    margin-bottom: 20px;
+}
+
+/* Contenedor del input y párrafo en la parte inferior */
+.footerBottomRow {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.footerBottomRow input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: #333;
+}
+
+.footerBottomRow input::placeholder {
+    color: #999;
+}

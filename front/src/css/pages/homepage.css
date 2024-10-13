@@ -14,7 +14,7 @@ body,
 
 /* Estilos generales para la sección de nuevos drops */
 .newCollections {
-    padding: 2rem 4rem;
+    padding: 2rem 9.4rem;
     text-align: center;
 }
 
@@ -34,6 +34,10 @@ body,
     justify-items: center;
     margin: 0 auto;
     width: 100%;
+    min-height: 800px; /* Incrementa la altura mínima para hacerla más alta */
+    gap: 2rem; /* Añade un espacio entre los elementos para mejor separación */
+    padding: 2rem; /* Añade padding para dar más espacio alrededor del contenido */
+    border-radius: 10px; /* Bordes redondeados para darle un toque moderno */
 }
 
 /* Estilos para el video link */
@@ -73,6 +77,7 @@ body,
 
 .itemImage {
     width: 20vw;
+    height: 485px;
 }
 
 .carruselHome {
@@ -191,8 +196,10 @@ body,
     justify-content: center;
 }
 
+
 .newDropsHome2 {
     display: flex;
     gap: 3rem;
     justify-content: center;
+    padding-bottom: 3.6rem;
 }

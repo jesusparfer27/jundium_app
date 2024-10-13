@@ -1,20 +1,18 @@
 /* Estilos para el LoginContainer */
 .loginContainer {
     position: fixed;
-    top: 54px; /* Se mueve justo debajo del header */
     right: 0; /* Se mantiene en la parte derecha */
-    width: 33%;
-    height: calc(100vh - 54px); /* Ajuste para que no cubra el header */
-    margin-top: 3.1rem; /* Agregado el margen superior */
-    background-color: #333;
+    width: 50%;
+    height: 100%;
+    background-color: white;
+    top: 0;
     color: white;
     padding: 2rem;
-    z-index: 999; /* Asegúrate que coincida con el z-index del Header y SideMenu */
+    z-index: 1001; /* Asegúrate que coincida con el z-index del Header y SideMenu */
     transition: transform 0.3s ease-in-out, top 0.3s ease-in-out;
 }
 
 .loginContainer.active {
-    top: 54px; /* Se mueve a la vista justo debajo del header */
     animation: slideInVertical 0.3s ease forwards; /* Añadir animación */
 }
 

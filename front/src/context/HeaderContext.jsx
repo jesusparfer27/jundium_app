@@ -7,22 +7,30 @@ export const HeaderProvider = ({ children }) => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [search, setSearch] = useState({ term: '', mode: false });
     const [activeMenu, setActiveMenu] = useState('');
+    const [overlayVisible, setOverlayVisible] = useState(false); // Nuevo estado para la capa
 
     const toggleMenu = () => {
         setMenuOpen(prev => !prev);
         if (search.mode) setSearch(prev => ({ ...prev, mode: false }));
+        setOverlayVisible(!overlayVisible); // Alterna la visibilidad de la capa
     };
 
     const closeMenu = () => {
         setActiveMenu('');
+        setOverlayVisible(false); // Oculta la capa al cerrar el menú
     };
 
     const openMenu = (type) => {
-        if (type === 'searchBar') {
-            setSearch({ ...search, mode: true });
-            closeMenu(); // Cierra cualquier otro menú
+        if (activeMenu === type) {
+            closeMenu();
         } else {
             setActiveMenu(type);
+            setOverlayVisible(true); // Muestra la capa cuando se abre un menú
+        }
+
+        if (type === 'searchBar') {
+            setSearch({ ...search, mode: true });
+            closeMenu();
         }
     };
 
@@ -30,6 +38,7 @@ export const HeaderProvider = ({ children }) => {
         menuOpen,
         search,
         activeMenu,
+        overlayVisible,
         toggleMenu,
         closeMenu,
         openMenu,
