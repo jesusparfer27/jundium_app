@@ -95,3 +95,7 @@ html,
 .overlay.slideOutHorizontal {
     animation: slideOutHorizontal 0.3s ease-in-out forwards;
 }
+
+.mainContent {
+    margin-top: 7rem;
+}

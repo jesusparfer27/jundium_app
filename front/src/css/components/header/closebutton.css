@@ -1,0 +1,17 @@
+/* src/css/components/shared/closeButton.css */
+.closeContainer {
+    background: none;
+    border: none;
+    color: #333;
+    font-size: 1.5rem;
+    cursor: pointer;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1001;
+    transition: color 0.3s ease;
+}
+
+.closeContainer:hover {
+    color: #000; /* Cambia a negro en el hover */
+}

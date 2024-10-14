@@ -86,56 +86,31 @@ html,
 }
 
 /* Contenedor principal del header */
+/* Estilo para el Header */
+/* Contenedor principal del header */
 .headerContainer {
     width: 100%;
-    background-color: transparent; /* Fondo transparente por defecto */
-    z-index: 1000;
+    background-color: white; /* Fondo siempre blanco */
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: fixed;
+    position: fixed; /* Cambiado a relative para flujo natural */
     top: 0;
-    left: 0;
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-    color: white; /* Texto blanco por defecto */
+    color: black; /* Texto siempre negro */
     padding-top: 1.2rem;
     padding-bottom: 1.2rem;
     border-bottom: 2px solid #dcdcdc;
-}
-
-/* Cambia el fondo y el color del texto y botones al hacer scroll */
-.headerContainer.scrolled {
-    background-color: white; /* Cambia el fondo a blanco al hacer scroll */
-    color: black; /* Cambia el color del texto a negro al hacer scroll */
-}
-
-/* Cambia el color de texto y botones en hover */
-.headerContainer:hover,
-.headerContainer.scrolled:hover {
-    background-color: white; /* Cambia el fondo a blanco al hacer hover */
-    color: black; /* Cambia el color del texto a negro al hacer hover */
-}
-
-/* Cambiar color de texto y botones en hover */
-.headerContainer:hover .logo,
-.headerContainer:hover .material-symbols-outlined,
-.headerContainer:hover .buttonText,
-.headerContainer.scrolled .logo,
-.headerContainer.scrolled .material-symbols-outlined,
-.headerContainer.scrolled .buttonText {
-    color: black; /* Cambia el color de los textos a negro al hacer hover */
-}
-
-/* Estilos adicionales para los botones */
-.headerContainer .button {
-    color: white; /* Color de los botones en estado normal */
-}
-
-/* Cambia el color de los botones en hover */
-.headerContainer:hover .button,
-.headerContainer.scrolled .button {
+    z-index: 11;
     
-    color: black; /* Asegúrate de que el texto de los botones sea negro en hover */
+}
+
+/* Elimina estilos de hover para mantener colores constantes */
+.headerContainer .logo,
+.headerContainer .material-symbols-outlined,
+.headerContainer .buttonText,
+.headerContainer .button {
+    color: black; /* Asegúrate de que los textos e íconos sean negros */
 }
 
 /* Alineación de los elementos del header */
@@ -146,28 +121,14 @@ html,
     gap: 2rem;
     padding-top: 0.7rem;
     padding-bottom: 0.7rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
 }
 
-.headerCentral {
-    padding-left: 11rem;
-}
-
-.headerLeft {
-    padding-left: 2rem;
-}
-
-.headerRight {
-    max-width: 100%;
-    display: flex;
-    padding-right: 2rem;
-}
-
-/* Centrando el logo */
 .headerCentral {
     display: flex;
     justify-content: center;
     flex-grow: 1;
-    transition: all 0.3s ease-in-out;
 }
 
 /* Logo */

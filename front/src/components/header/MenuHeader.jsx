@@ -1,35 +1,48 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { HeaderContext } from '../../context/HeaderContext';
 import '../../css/components/header/header.css';
-import '../../css/components/header/menu.css'
+import '../../css/components/header/menu.css';
 
 const HeaderMenu = () => {
-    const { activeMenu, closeMenu } = useContext(HeaderContext);
+    const { activeMenu, closeMenu, setMenuOpen } = useContext(HeaderContext);
     const sideMenuRef = useRef(null);
-    
-    // Estado para manejar la visibilidad de la sección de género
+    const location = useLocation();
     const [showGenderSection, setShowGenderSection] = useState('');
-    const [isClosing, setIsClosing] = useState(false); // Estado para controlar el cierre
-    const [isClickable, setIsClickable] = useState(true); // Controla si se pueden hacer clics en el menú
+    const [isClosing, setIsClosing] = useState(false);
+    const [isClickable, setIsClickable] = useState(true);
 
-    // Función para mostrar la sección de género
+    // Cerrar el menú cuando la ruta cambie
+    useEffect(() => {
+        setMenuOpen(false); // Cerrar el menú
+    }, [location.pathname, setMenuOpen]); // Ejecutar el efecto cuando la ubicación cambie
+
     const handleGenderClick = (gender) => {
-        if (!isClickable) return; // Si no se puede hacer clic, salir
-        if (showGenderSection !== gender) {
-            setShowGenderSection(gender);
-        }
+        if (!isClickable) return;
+        // Alternar la sección de género al hacer clic
+        setShowGenderSection((prev) => (prev === gender ? '' : gender));
     };
 
-    // Manejar el clic en el botón de cerrar
     const handleCloseMenu = () => {
-        setIsClosing(true); // Iniciar la animación de cierre
-        setIsClickable(false); // Desactivar clics mientras se cierra
+        setIsClosing(true);
+        setIsClickable(false);
         setTimeout(() => {
-            closeMenu(); // Cerrar el menú después de un tiempo
-            setIsClosing(false); // Restablecer el estado de cierre
-            setIsClickable(true); // Volver a activar los clics
-        }, 300); // 300ms debe coincidir con la duración de la animación
+            closeMenu();
+            setIsClosing(false);
+            setIsClickable(true);
+        }, 300);
     };
+
+    // Nueva función para manejar el clic en un enlace
+    // Nueva función para manejar el clic en un enlace
+const handleLinkClick = () => {
+    setMenuOpen(false); // Reiniciar el estado a false
+    handleCloseMenu(); // Cerrar el menú
+
+    // Desplazar la ventana a la parte superior de forma inmediata
+    window.scrollTo(0, 0);
+};
+
 
     return (
         <>
@@ -43,23 +56,22 @@ const HeaderMenu = () => {
                 <button className="filterButton" onClick={() => handleGenderClick('Mujer')}>Mujer</button>
             </div>
 
-            {/* Contenedor de la sección de género */}
             {showGenderSection && (
                 <div className={`genderSection ${activeMenu === 'sideMenu' ? 'open' : 'close'}`}>
                     <h3>Productos de {showGenderSection}</h3>
                     <div className="productNav">
                         {showGenderSection === 'Mujer' && (
                             <>
-                                <a href="#bolsos">Bolsos</a>
-                                <a href="#vestidos">Vestidos</a>
-                                <a href="#joyas">Joyas</a>
+                                <Link to="/woman-bags" onClick={handleLinkClick}>Bolsos</Link>
+                                <Link to="/woman-collection" onClick={handleLinkClick}>Winter Collection</Link>
+                                <Link to="/woman-shoes" onClick={handleLinkClick}>Zapatos</Link>
                             </>
                         )}
                         {showGenderSection === 'Hombre' && (
                             <>
-                                <a href="#camisas">Camisas</a>
-                                <a href="#pantalones">Pantalones</a>
-                                <a href="#zapatos">Zapatos</a>
+                                <Link to="/man-bags" onClick={handleLinkClick}>Bolsos</Link>
+                                <Link to="/man-collection" onClick={handleLinkClick}>Ropa</Link>
+                                <Link to="/man-shoes" onClick={handleLinkClick}>Zapatos</Link>
                             </>
                         )}
                     </div>

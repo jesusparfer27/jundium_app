@@ -20,15 +20,21 @@ function App() {
 
 // Componente separado para el contenido principal
 function MainContent() {
-    const { overlayVisible, activeMenu } = useContext(HeaderContext);
+    const { overlayVisible, activeMenu, handleOverlayClick } = useContext(HeaderContext);
 
     return (
         <>
             {/* Capa que cubre la aplicación */}
             {overlayVisible && (
-                <div className={`overlay ${activeMenu ? 'active' : ''}`}></div>
+                <div
+                    className={`overlay ${activeMenu ? 'active' : ''}`}
+                    onClick={handleOverlayClick} // Llama a handleOverlayClick aquí
+                ></div>
             )}
-            <Outlet />
+            
+            <div className="mainContent">
+                <Outlet />
+            </div>
         </>
     );
 }

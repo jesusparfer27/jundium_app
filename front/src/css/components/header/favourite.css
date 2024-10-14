@@ -1,19 +1,65 @@
 /* Estilos para el FavouriteContainer */
 .favouriteContainer {
     position: fixed;
-    top: 54px; /* Se mueve justo debajo del header */
-    right: 0; /* Se mantiene en la parte derecha */
-    width: 33%;
-    height: calc(100vh - 54px); /* Ajuste para que no cubra el header */
-    margin-top: 3.1rem; /* Agregado el margen superior */
-    background-color: #444; /* Color de fondo diferente */
-    color: white;
+    top: -2px; /* Se ajusta para que quede justo debajo del header */
+    right: 0;
+    width: 50%;
+    height: calc(100vh - 54px);
+    background-color: #f8f8f8; /* Fondo gris muy claro */
+    color: #333; /* Texto en gris oscuro */
     padding: 2rem;
-    z-index: 999; /* Asegúrate que coincida con el z-index del Header, SideMenu y LoginContainer */
-    transition: transform 0.3s ease-in-out, top 0.3s ease-in-out;
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
 }
 
+/* Animación de activación */
 .favouriteContainer.active {
-    top: 54px; /* Se mueve a la vista justo debajo del header */
-    animation: slideInVertical 0.3s ease forwards; /* Añadir animación */
+    animation: slideInVertical 0.3s ease forwards;
+}
+
+/* Botón para cerrar el contenedor */
+.closeFavourite {
+    background: none;
+    border: none;
+    color: #333;
+    font-size: 1.5rem;
+    cursor: pointer;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+/* Estilos para los elementos favoritos */
+.favouriteItems {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    width: 100%;
+}
+
+.favouriteItem {
+    background-color: #fff; /* Fondo blanco para destacar cada ítem */
+    border-radius: 8px;
+    padding: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.favouriteItem:hover {
+    background-color: #f0f0f0; /* Cambio de fondo al hacer hover */
+}
+
+.favouriteItem h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.favouriteItem p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    color: #666;
 }

@@ -1,49 +1,58 @@
-/* Estilo para el contenedor de contacto */
-.contactContainer {
+/* Estilos para el CartContainer */
+.cartContainer {
     position: fixed;
-    top: 54px; /* Se mueve justo debajo del header */
-    right: 0; /* Mantiene el carrito en la parte derecha */
-    width: 33%;
-    height: calc(100vh - 54px); /* Ajuste para que no cubra el header */
-    margin-top: 3.1rem; /* Agregado el margen superior */
-    background-color: #333;
-    color: white;
+    top: -2px; /* Se ajusta para que quede justo debajo del header */
+    right: 0;
+    width: 50%;
+    height: calc(100vh - 54px);
+    background-color: #f0f0f0; /* Fondo gris claro */
+    color: #333; /* Texto en gris oscuro */
     padding: 2rem;
-    z-index: 999; /* Asegúrate que coincida con el z-index del Header y SideMenu */
-    transition: transform 0.3s ease-in-out, top 0.3s ease-in-out;
-}
-
-.contactContainer.active {
-    top: 54px; /* Se mueve a la vista justo debajo del header */
-    animation: slideInVertical 0.3s ease forwards; /* Añadir animación */
-}
-
-/* Estilo para el formulario */
-.contactContainer form {
+    z-index: 1001;
     display: flex;
-    flex-direction: column; /* Coloca los elementos en una columna */
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
 }
 
-.contactContainer input,
-.contactContainer textarea {
-    margin-bottom: 1rem; /* Espacio entre los campos */
-    padding: 0.5rem; /* Espaciado interno */
-    border: 1px solid #ccc; /* Borde gris */
-    border-radius: 0.25rem; /* Bordes redondeados */
+/* Estilo para la animación de activación */
+.cartContainer.active {
+    animation: slideInVertical 0.3s ease forwards;
 }
 
-/* Estilo para el botón de envío */
-.contactContainer button {
-    background-color: #4caf50; /* Color verde */
-    color: white; /* Texto blanco */
+/* Botón para cerrar el carrito */
+.closeContainer {
+    background: none;
+    border: none;
+    color: #333;
+    font-size: 1.5rem;
+    cursor: pointer;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+/* Estilos para la lista de productos (puedes ajustar o eliminar esto si no es necesario) */
+.cartContainer ul {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+/* Estilo para el botón de eliminar (opcional, según necesites) */
+.cartContainer .cart-item button {
+    background-color: #333;
+    color: #fff;
     border: none;
     padding: 0.5rem 1rem;
-    border-radius: 0.25rem; /* Bordes redondeados */
+    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease; /* Animación suave en hover */
+    transition: background-color 0.3s ease;
 }
 
-/* Efecto hover en el botón de envío */
-.contactContainer button:hover {
-    background-color: #45a049; /* Color más oscuro */
+/* Efecto hover en el botón de eliminar */
+.cartContainer .cart-item button:hover {
+    background-color: #000; /* Cambia a negro en el hover */
 }

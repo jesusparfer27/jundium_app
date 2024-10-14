@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { HeaderContext } from '../../context/HeaderContext';
 import '../../css/components/header/header.css';
 import HeaderMenu from './MenuHeader';
@@ -6,39 +7,19 @@ import FavouriteContainer from './FavouriteHeader';
 import LoginContainer from './LoginHeader';
 import CartContainer from './CartHeader';
 import ContactContainer from './ContactHeader';
-import HeaderSearch from './SearchHeader'; // Importamos el nuevo componente HeaderSearch
+import HeaderSearch from './SearchHeader';
 
 const Header = () => {
     const { activeMenu, openMenu, search } = useContext(HeaderContext);
-    const [isScrolled, setIsScrolled] = useState(false);
+    const location = useLocation();
 
-    // Manejar el evento de scroll
-    useEffect(() => {
-        const handleScroll = () => {
-            if (window.scrollY > 20) {
-                setIsScrolled(true);
-            } else {
-                setIsScrolled(false);
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-
-        // Limpiar el evento al desmontar el componente
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
-
-    // Determinar la clase del contenedor del header
-    const headerClassName = `headerContainer ${
-        isScrolled || activeMenu ? 'scrolled' : ''
-    }`;
+    // Determinar si estamos en la HomePage
+    const isHomePage = location.pathname === '/';
 
     return (
         <>
             <header>
-                <div className={headerClassName}>
+                <div className="headerContainer">
                     {!search.mode ? (
                         <>
                             <div className="headerLeft">
@@ -57,7 +38,7 @@ const Header = () => {
                             </div>
 
                             <div className="headerCentral">
-                                <h2 className="logo">LOGO</h2>
+                                <Link to="/" className="logo">LOGO</Link>
                             </div>
 
                             <div className="headerRight">
@@ -84,7 +65,7 @@ const Header = () => {
                             </div>
                         </>
                     ) : (
-                        <HeaderSearch /> // Renderiza el componente HeaderSearch cuando el modo de búsqueda está activo
+                        <HeaderSearch />
                     )}
                 </div>
             </header>

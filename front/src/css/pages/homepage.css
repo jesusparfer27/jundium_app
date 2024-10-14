@@ -69,10 +69,9 @@ body,
 
 .videoWrapper {
     position: sticky;
-    top: 0;
     height: auto;
     z-index: 10;
-    overflow: hidden;
+   
 }
 
 .itemImage {

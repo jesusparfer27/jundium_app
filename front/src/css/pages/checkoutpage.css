@@ -1,0 +1,170 @@
+/* CheckOutPage.css */
+
+.checkout-section {
+    display: flex;
+}
+
+.left-column {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #D9D9D9;
+    padding-top: 3rem;
+}
+
+.infoAboutChanges {
+    width: 80%;
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.black-box {
+    width: 15%;
+    height: 80px;
+    background-color: black;
+}
+
+.white-box {
+    width: 85%;
+    background-color: white;
+    text-align: start;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    padding-left: 1rem;
+}
+
+.cartPrev {
+    width: 80%;
+    background-color: transparent;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.view-cart-button {
+    background-color: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.cartDetails {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-item {
+    display: flex;
+    width: 100%; /* Ocupa el 100% del ancho del contenedor */
+    border-bottom: 2px solid black;
+    margin-bottom: 1rem;
+}
+
+.product-image {
+    width: 160%; /* Ajustar el ancho para que ocupe un 30% del contenedor */
+    padding: 10px;
+    background-color: white;
+    border-right: 2px solid black;
+
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 1px solid #ddd;
+}
+
+.infoProductCheckOut {
+    width: 100%; /* Ajustar para ocupar el restante 70% */
+    height: 93%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 2.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: white;
+   
+
+}
+
+.product-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-bottom: 2px solid black;
+    gap: 1rem;
+    padding-bottom: 0.5rem;
+    padding-top: 1.2rem;
+}
+
+.upperInformation {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 16rem;
+    
+}
+
+.color-size {
+    display: flex;
+    justify-content: space-between;
+}
+
+.quantity-price {
+    display: flex;
+    justify-content: space-between;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    border-top: 2px solid black;
+    padding-top: 0.5rem;
+}
+
+.favorites-button, .remove-button {
+    width: 50%;
+    background-color: white;
+    color: black;
+    border: none;
+    cursor: pointer;
+}
+
+.favorites-button:hover, .remove-button:hover {
+    background-color: black;
+    color: white;
+}
+
+.checkout-button-container {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    padding-top: 1.3rem;
+    padding-right: 16.5rem;
+    padding-bottom: 3rem;
+}
+
+.checkout-button {
+    width: 20%;
+    height: 80px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.checkout-button:hover {
+    background-color: white;
+    color: black;
+}
+
+.right-column {
+    width: 30%;
+    /* Puedes agregar estilos adicionales para la columna derecha si es necesario */
+}

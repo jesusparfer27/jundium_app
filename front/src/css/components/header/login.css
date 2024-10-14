@@ -1,32 +1,90 @@
 /* Estilos para el LoginContainer */
 .loginContainer {
     position: fixed;
-    right: 0; /* Se mantiene en la parte derecha */
+    right: 0;
+    top: 0;
     width: 50%;
     height: 100%;
-    background-color: white;
-    top: 0;
-    color: white;
+    background-color: #f0f0f0; /* Fondo blanco grisáceo */
+    color: #333; /* Texto en tono gris oscuro */
     padding: 2rem;
-    z-index: 1001; /* Asegúrate que coincida con el z-index del Header y SideMenu */
-    transition: transform 0.3s ease-in-out, top 0.3s ease-in-out;
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1); /* Sombra ligera para dar profundidad */
 }
 
+/* Estilo para la animación de activación */
 .loginContainer.active {
-    animation: slideInVertical 0.3s ease forwards; /* Añadir animación */
+    animation: slideInVertical 0.3s ease forwards;
 }
 
-/* Estilos para el pie de página del LoginContainer */
+/* Estilos comunes para el botón de cerrar y el de iniciar sesión */
+.loginButton {
+    width: 80%;
+    padding: 0.75rem;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1.5rem;
+    position: relative;
+}
+
+/* Posiciona el botón de cerrar en la esquina superior derecha */
+.loginButton:first-of-type {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: auto;
+}
+
+/* Cambia el color a negro en el hover */
+.loginButton:hover {
+    background-color: #000;
+}
+
+/* Estilos para los inputs */
+.loginContainer input {
+    width: 80%;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #333;
+}
+
+/* Estilos para los enlaces del pie de página */
 .login-footer {
-    margin-top: 1rem;
+    width: 80%;
     text-align: center;
+    border-top: 1px solid #e0e0e0; /* Línea ligera en la parte superior */
+    padding-top: 1rem;
+}
+
+.login-footer p {
+    margin: 0.5rem 0;
 }
 
 .login-footer a {
-    color: #4caf50; /* Color verde para los enlaces */
+    color: #333;
     text-decoration: none;
 }
 
 .login-footer a:hover {
-    text-decoration: underline; /* Subrayar en hover */
+    text-decoration: underline;
+}
+
+/* Bordes inferiores ligeros entre secciones */
+.loginContainer h2,
+.loginContainer input,
+.loginContainer .loginButton {
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 0.5rem;
 }

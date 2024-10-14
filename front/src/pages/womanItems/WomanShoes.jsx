@@ -1,4 +1,4 @@
-export const WomanSeason = () => {
+export const WomanShoes = () => {
     return (
         <>
         

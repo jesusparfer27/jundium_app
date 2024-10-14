@@ -1,0 +1,126 @@
+.womanCollectionSection {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.videoWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.scrollVideo {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    transition: transform 0.1s ease;
+}
+
+.productGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columnas */
+    gap: 0; /* Sin espacio entre los elementos */
+}
+
+.productItem {
+    width: 100%; /* Ocupará el 25% del ancho del contenedor */
+    height: 400px; /* Altura de cada producto */
+    border: 1px solid #ccc; /* Estilo de borde opcional */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.featuredProduct {
+    grid-column: span 2; /* Ocupa 2 columnas */
+    grid-row: span 2; /* Ocupa 2 filas */
+    height: 800px; /* Altura del producto destacado */
+    background-color: #f0f0f0; /* Color de fondo opcional */
+    position: relative; /* Para posicionar elementos internos si es necesario */
+}
+
+.featuredImage {
+    width: 100%;
+    height: 100%;
+    background-image: url('url_de_la_imagen_destacada'); /* URL de la imagen destacada */
+    background-size: cover;
+    background-position: center;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0; /* Espaciado alrededor de la paginación */
+}
+
+.paginationButton {
+    background-color: #4CAF50; /* Color del botón */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    padding: 10px 15px; /* Espaciado interno */
+    margin: 0 5px; /* Espaciado entre botones */
+    cursor: pointer; /* Cambiar cursor al pasar el mouse */
+    border-radius: 5px; /* Bordes redondeados */
+    transition: background-color 0.3s; /* Transición de color */
+}
+
+.paginationButton:hover {
+    background-color: #45a049; /* Color al pasar el mouse */
+}
+
+.paginationButton:disabled {
+    background-color: #ccc; /* Color para botones deshabilitados */
+    cursor: not-allowed; /* Cambiar cursor cuando está deshabilitado */
+}
+
+.paginationInfo {
+    margin: 0 10px; /* Espaciado alrededor del texto de información */
+    font-weight: bold; /* Texto en negrita */
+}
+
+.seasonalCollection {
+    grid-column: span 4; /* Ocupa 4 columnas */
+    grid-row: span 2;    /* Ocupa 2 filas */
+    height: 800px;       /* Ajusta la altura para mantener las proporciones */
+    position: relative;
+    overflow: hidden;
+}
+
+.seasonalImage {
+    width: 100%;
+    height: 100%;
+    background-image: url('url_de_la_imagen_temporada'); /* URL de la imagen de la colección de temporada */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.seasonalLink {
+    width: 100%;
+    height: 100%;
+    text-decoration: none; /* Sin subrayado */
+    color: inherit; /* Heredar color del texto */
+}
+
+.groupCollection {
+    grid-column: span 2; /* Ocupa 2 columnas */
+    grid-row: span 2;    /* Ocupa 2 filas */
+    height: 800px;       /* Ajusta la altura para mantener las proporciones */
+    position: relative;
+    overflow: hidden;
+}
+
+.groupImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+

@@ -1,21 +1,19 @@
 /* Estilos para el GenderMenu */
-
 .genderSection {
     position: fixed; /* Se mantiene en la parte superior */
-    top: 54px; /* Se mueve justo debajo del header */
+    top: -54px; /* Se mueve justo debajo del header */
     left: 33%; /* Se coloca justo al lado del sideMenu */
-    width: 33%; /* Ajusta el ancho según sea necesario */
+    width: 32%; /* Ajusta el ancho según sea necesario */
     height: calc(100vh - 54px); /* Ajuste para que no cubra el header */
-    background-color: #555; /* Color de fondo para la sección de género */
+    background-color: white; /* Color de fondo para la sección de género */
+    border-left: 2px solid #555;
     color: white;
     padding: 2rem;
     z-index: 998; /* Asegúrate que esté por debajo del SideMenu y del Header */
     transition: transform 0.3s ease-in-out, left 0.3s ease-in-out;
     padding-top: 5rem;
     margin-top: 3.1rem;
-    margin-left: 4rem;
-    
-    
+    margin-left: 2.9rem;
 }
 
 /* Cuando se muestra la sección de género */
@@ -27,14 +25,15 @@
 /* Estilos para el SideMenu */
 .sideMenu {
     position: fixed;
-    top: 54px; /* Inicia justo debajo del header */
+    top: -54px; /* Inicia justo debajo del header */
     left: 0; /* Inicia visible */
-    width: 33%;
+    width: 32%;
     height: calc(100vh - 54px); /* Ajusta la altura para no cubrir el header */
     margin-top: 3.1rem; /* Agregado el margen superior */
-    background-color: #333;
+    background-color: white;
     color: white;
     padding: 2rem;
+    padding-top: 6rem;
     z-index: 999; /* Asegúrate que coincida con el z-index del Header */
     transition: transform 0.3s ease-in-out, left 0.3s ease-in-out;
 }
@@ -57,7 +56,7 @@
     padding: 10px 20px;
     border-radius: 5px;
     font-size: 1rem;
-    color: #fff;
+    color: black;
     background-color: #444;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
@@ -113,4 +112,107 @@
     position: absolute;
     top: 1rem;
     right: 1rem;
+}
+
+/* Estilos para el CartContainer */
+.cartContainer {
+    position: fixed;
+    top: -2px; /* Se ajusta para que quede justo debajo del header */
+    right: 0;
+    width: 50%;
+    height: calc(100vh - 54px);
+    background-color: #f0f0f0; /* Fondo gris claro */
+    color: #333; /* Texto en gris oscuro */
+    padding: 2rem;
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+}
+
+/* Estilo para la animación de activación */
+.cartContainer.active {
+    animation: slideInVertical 0.3s ease forwards;
+}
+
+/* Botón para cerrar el carrito */
+.closeContainer {
+    background: none;
+    border: none;
+    color: #333;
+    font-size: 1.5rem;
+    cursor: pointer;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+/* Estilos para la lista de productos */
+.cartContainer ul {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+.cartContainer .cart-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #e0e0e0; /* Línea ligera */
+}
+
+.cartContainer .cart-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.cartContainer .cart-item div {
+    flex-grow: 1;
+}
+
+.cartContainer .cart-item h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.cartContainer .cart-item p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Estilos para el botón de eliminar */
+.cartContainer .cart-item button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cartContainer .cart-item button:hover {
+    background-color: #000; /* Cambia a negro en el hover */
+}
+
+/* Estilos para el total */
+.cartContainer .total {
+    border-top: 1px solid #e0e0e0;
+    padding-top: 1rem;
+    width: 100%;
+    text-align: center;
+}
+
+.cartContainer .total h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
 }

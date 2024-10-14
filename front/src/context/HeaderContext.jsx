@@ -18,6 +18,7 @@ export const HeaderProvider = ({ children }) => {
     const closeMenu = () => {
         setActiveMenu('');
         setOverlayVisible(false); // Oculta la capa al cerrar el menú
+        setMenuOpen(false); // Asegura que el menú se cierre
     };
 
     const openMenu = (type) => {
@@ -34,6 +35,11 @@ export const HeaderProvider = ({ children }) => {
         }
     };
 
+    // Nueva función para manejar el clic en la superposición
+    const handleOverlayClick = () => {
+        closeMenu(); // Cierra el menú al hacer clic en la superposición
+    };
+
     const value = {
         menuOpen,
         search,
@@ -43,6 +49,8 @@ export const HeaderProvider = ({ children }) => {
         closeMenu,
         openMenu,
         setSearch,
+        setMenuOpen,
+        handleOverlayClick, // Agrega esta función al valor del contexto
     };
 
     return (

@@ -1,0 +1,72 @@
+.productSection {
+    display: flex;
+    border-bottom: 2px solid #000; /* Borde inferior para el div de producto */
+}
+
+.imageContainer {
+    display: flex;
+    flex-direction: column; /* Coloca las imágenes en columna */
+    width: 60%; /* Cambiado a 60% */
+    margin-bottom: 8rem;
+}
+
+.productImage {
+    width: 100%; /* Ocupa todo el ancho */
+    height: 500px; /* Altura fija para las imágenes */
+}
+
+.productImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Mantiene la proporción de las imágenes */
+}
+
+.infoProduct {
+    width: 30%; /* Cambiado a 35% */
+    padding: 2rem;
+    align-content: center;
+    display: flex;
+    right: 0;
+    margin-right: 4rem;
+    flex-direction: column; /* Alinear los elementos en columna */
+    justify-content: flex-start; /* Centrar verticalmente los elementos */
+    margin-top: 14rem;
+    background-color: white; /* Fondo blanco para la información */
+    transition: position 0.3s; /* Añadir transición suave */
+    z-index: 10; /* Asegúrate de que esté por encima de otros elementos */
+}
+
+.infoProduct.fixed {
+    position: fixed; /* Mantener fijo en el viewport */
+    top: 20px; /* Espacio desde la parte superior */
+}
+
+h2 {
+    color: #000; /* Título negro */
+}
+
+.accordion {
+    background-color: transparent; /* Botón de acordeón transparente */
+    border: 1px solid #000; /* Borde negro */
+    padding: 0.5rem;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.accordionContent {
+    margin-top: 0.5rem; /* Espacio superior */
+}
+
+.addToCart {
+    background-color: black; /* Fondo negro */
+    color: white; /* Texto blanco */
+    border: none;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.addToCart:hover {
+    background-color: #333; /* Cambio a un negro más oscuro */
+}
