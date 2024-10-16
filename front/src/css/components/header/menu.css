@@ -2,8 +2,8 @@
 .genderSection {
     position: fixed; /* Se mantiene en la parte superior */
     top: -54px; /* Se mueve justo debajo del header */
-    left: 33%; /* Se coloca justo al lado del sideMenu */
-    width: 32%; /* Ajusta el ancho según sea necesario */
+    left: 25%; /* Se coloca justo al lado del sideMenu */
+    width: 25%; /* Ajusta el ancho según sea necesario */
     height: calc(100vh - 54px); /* Ajuste para que no cubra el header */
     background-color: white; /* Color de fondo para la sección de género */
     border-left: 2px solid #555;
@@ -18,16 +18,17 @@
 
 /* Cuando se muestra la sección de género */
 .genderSection.open {
-    left: 33%; /* Se mueve a la vista */
+    left: 25.8%; /* Se mueve a la vista */
     animation: slideInHorizontal 0.3s ease forwards; /* Añadir animación */
+    border-right: 1px solid black;
 }
 
 /* Estilos para el SideMenu */
 .sideMenu {
     position: fixed;
     top: -54px; /* Inicia justo debajo del header */
-    left: 0; /* Inicia visible */
-    width: 32%;
+    left: 25%; /* Inicia visible */
+    width: 25%;
     height: calc(100vh - 54px); /* Ajusta la altura para no cubrir el header */
     margin-top: 3.1rem; /* Agregado el margen superior */
     background-color: white;
@@ -100,6 +101,42 @@
 
 .genderSection.Mujer .productNav a:hover {
     background-color: #880e4f; /* Rosa oscuro al hacer hover */
+}
+
+/* Estilos para la sección de Colecciones */
+.collectionSection {
+    margin: 2rem 0;
+    padding: 1rem;
+    background-color: #f9f9f9; /* Fondo claro */
+    border-radius: 5px;
+}
+
+.collectionSection h2 {
+    color: #333;
+}
+
+/* Estilos para la sección de Otros Tipos de Prendas */
+.otherItemsSection {
+    margin: 2rem 0;
+    padding: 1rem;
+    background-color: #f1f1f1; /* Fondo más oscuro */
+    border-radius: 5px;
+}
+
+.otherItemsSection h2 {
+    color: #333;
+}
+
+/* Estilos para la sección de Descuentos */
+.discountSection {
+    margin: 2rem 0;
+    padding: 1rem;
+    background-color: #fff3cd; /* Fondo amarillo claro */
+    border-radius: 5px;
+}
+
+.discountSection h2 {
+    color: #856404; /* Color marrón oscuro */
 }
 
 /* Botón para cerrar el menú */
@@ -215,4 +252,13 @@
     margin: 0;
     font-size: 1.2rem;
     color: #333;
+}
+
+/* Estilos para el footer */
+.footer {
+    border-top: 1px solid #D9D9D9;
+    text-align: center;
+    padding: 1rem;
+    color: #D9D9D9; /* Color del texto del footer */
+    background-color: #f9f9f9; /* Fondo del footer */
 }

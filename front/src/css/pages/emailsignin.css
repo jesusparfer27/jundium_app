@@ -1,0 +1,165 @@
+.email-signin-section {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0;
+}
+
+.main-content {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.form-button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 3rem;
+    width: 100%;
+    gap: 20px; /* Espacio entre el formulario y el botón */
+}
+
+.first-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    background-color: white;
+    padding: 20px;
+}
+
+.insert-email {
+    display: flex;
+    padding-top: 2rem;
+    padding-bottom: 6rem;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: white;
+    height: 70%;
+}
+
+.email-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 90%;
+    gap: 10px;
+    padding-right: 1.5rem;
+}
+
+.email-label, .email-validation-label {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.email-input input, .email-validation-input input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.email-input, .email-validation-input {
+    width: 100%;
+}
+
+.email-validation-label {
+    padding-top: 1rem;
+}
+
+.submit-button-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.submit-button {
+    background-color: black;
+    color: white;
+    padding: 12px 24px;
+    border: 1px solid black;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    width: 83.5%;
+}
+
+.submit-button:hover {
+    background-color: white;
+    color: black;
+}
+
+.accordion-container {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    background-color: white;
+    padding: 20px;
+    justify-content: flex-end;
+    gap: 20px;
+}
+
+.accordion-group1 {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 2rem;
+    background-color: #D9D9D9;
+    padding-bottom: 6rem;
+}
+
+.accordion-group2 {
+    margin-bottom: 4rem;
+}
+
+.accordion-item {
+    border-bottom: 1px solid black;
+    padding: 10px;
+    cursor: pointer;
+    width: 80%;
+    margin-left: 2.6rem;
+    padding-top: 1rem;
+}
+
+.accordion-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.accordion-icon {
+    flex: 1;
+    gap: 1.3rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    color: black;
+}
+
+.accordion-icon span{
+    color: black;
+}
+
+.accordion-content {
+    flex: 3;
+}
+
+.accordion-body {
+    padding: 10px 0;
+}
+
+.accordion-header-text {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.tittle-accordion-group {
+    padding-left: 3rem;
+}

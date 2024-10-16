@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'AntonioFont'; /* Nombre que usarás para la fuente */
+    src: url('../../font/static/Antonio-Light.ttf') format('woff2'), /* Ajusta la ruta según sea necesario */
+         url('../../font//static//Antonio-SemiBold.ttf') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Aplica la fuente globalmente */
+html {
+    font-family: 'AntonioFont', sans-serif; /* O la fuente de respaldo que prefieras */
+}
+

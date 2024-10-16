@@ -12,6 +12,9 @@ import { ManBags } from "../pages/manItems/ManBags";
 import { ManShoes } from "../pages/manItems/ManShoes";
 import { ProductPage } from "../pages/ProductPage";
 import { CheckOutPage } from "../pages/CheckOutPage";
+import { EmailSignIn } from "../pages/EmailSignIn";
+import { Profile } from "../pages/Profile";
+import { SecondStepSignIn} from '../pages/SecondStepSignIn'
 
 // Crear las rutas
 const router = createBrowserRouter([
@@ -54,6 +57,18 @@ const router = createBrowserRouter([
             {
                 path: 'check-out',
                 element: <CheckOutPage/>
+            },
+            {
+                path: 'email-validation',
+                element: <EmailSignIn/>
+            },
+            {
+                path: 'profile',
+                element: <Profile/>
+            },
+            {
+                path: 'email-validation-2',
+                element: <SecondStepSignIn/>
             }
         ]
     }

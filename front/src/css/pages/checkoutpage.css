@@ -2,6 +2,7 @@
 
 .checkout-section {
     display: flex;
+    
 }
 
 .left-column {
@@ -81,16 +82,12 @@
 
 .infoProductCheckOut {
     width: 100%; /* Ajustar para ocupar el restante 70% */
-    height: 93%;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-bottom: 2.8rem;
+    height: 100%;
+    /* padding-bottom: 2.7rem; */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     background-color: white;
-   
-
 }
 
 .product-header {
@@ -124,7 +121,6 @@
     display: flex;
     justify-content: space-between;
     border-top: 2px solid black;
-    padding-top: 0.5rem;
 }
 
 .favorites-button, .remove-button {
@@ -132,7 +128,14 @@
     background-color: white;
     color: black;
     border: none;
+    padding-bottom: 1.7rem;
+    padding-top: 1.7rem;
     cursor: pointer;
+    
+}
+
+.favorites-button {
+    border-right: 1px solid black;
 }
 
 .favorites-button:hover, .remove-button:hover {
@@ -165,6 +168,88 @@
 }
 
 .right-column {
-    width: 30%;
+    width: 230%;
     /* Puedes agregar estilos adicionales para la columna derecha si es necesario */
+}
+
+.header-finalBuying {
+    width: 100%;
+    border-bottom: 1px solid black;
+}
+
+.totalPrice {
+    display: flex;
+    justify-content: space-between;
+}
+
+.deliverySpendings {
+    padding-top: 1.2rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.deliverySpendings div{
+    padding-top: 0;
+    padding-bottom: 4rem;
+}
+
+.finalPrice {
+    padding-top: 5.1rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.finalPriceCheckOut {
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+.finalPrice-CheckOut {
+    display: flex;
+    padding-left: 3.4rem;
+    padding-top: 2.2rem;
+    padding-right: 1rem;
+
+}
+
+
+.buyingButtonContainer {
+    width: 100%;
+    padding-top: 1.2rem;
+    padding-bottom: 1.2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.buyingButtonContainer button{
+    width: 80%;
+    border-radius: 7px;
+    padding-top: .3rem;
+    padding-bottom: .3rem;
+    border: none;
+    background-color: black;
+    color: white;
+    padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
+
+}
+
+.buyingButtonContainer button:hover{
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+}
+
+.divCosts {
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+}
+
+.divCosts:nth-child(2) {
+    padding-top: .7rem;
+}
+
+.right-columnInformation {
+    width: 200%;
 }

@@ -1,8 +1,16 @@
-import '../../css/components/footer/footer.css';
+// src/components/footer/Footer.js
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+import '../../css/components/footer/footer.css'; // Asegúrate de que esta ruta sea correcta
 
 const Footer = () => {
+    const location = useLocation();
+
+    // Determina si estás en la ruta deseada
+    const isHomeOrWomenCollection = location.pathname === '/' || location.pathname === '/woman-collection';
+
     return (
-        <footer>
+        <footer className={isHomeOrWomenCollection ? 'footer-light' : 'footer-dark'}>
             <div className="footerSuperior">
                 {/* Primer contenedor con tres divs y navLinks */}
                 <div className="footerLinksContainer">
@@ -18,7 +26,7 @@ const Footer = () => {
                         <strong>Soporte</strong>
                         <nav className="linksSections">
                             <a href="#help-center">Centro de Ayuda</a>
-                            <a href="#contact-us">Contáctanos</a>
+                            <a href="#contact-us">Contáctanos</a>   
                             <a href="#faq">Preguntas Frecuentes</a>
                         </nav>
                     </div>
@@ -43,16 +51,26 @@ const Footer = () => {
                         <button>Suscribirse</button>
                     </div>
                     <strong>¡Mantente informado!</strong>
+
+                    {/* Nuevo div para los enlaces a redes sociales */}
+                    <div className="socialLinks">
+                        <a href="#facebook" title="Facebook">
+                            <span className="material-icons">facebook</span>
+                        </a>
+                        <a href="#twitter" title="Twitter">
+                            <span className="material-icons">twitter</span>
+                        </a>
+                        <a href="#instagram" title="Instagram">
+                            <span className="material-icons">instagram</span>
+                        </a>
+                    </div>
                 </div>
             </div>
 
             <div className="footerInferior">
-                {/* Línea de separación */}
-                <div className="footerLineSeparation"></div>
-                
                 {/* Contenedor con input y párrafo */}
                 <div className="footerBottomRow">
-                    <input type="text" placeholder="Escribe un comentario..." />
+                    <div>LOGO</div>
                     <p>Déjanos tus comentarios y sugerencias</p>
                 </div>
             </div>

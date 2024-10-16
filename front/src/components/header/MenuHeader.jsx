@@ -14,12 +14,11 @@ const HeaderMenu = () => {
 
     // Cerrar el menú cuando la ruta cambie
     useEffect(() => {
-        setMenuOpen(false); // Cerrar el menú
-    }, [location.pathname, setMenuOpen]); // Ejecutar el efecto cuando la ubicación cambie
+        setMenuOpen(false);
+    }, [location.pathname, setMenuOpen]);
 
     const handleGenderClick = (gender) => {
         if (!isClickable) return;
-        // Alternar la sección de género al hacer clic
         setShowGenderSection((prev) => (prev === gender ? '' : gender));
     };
 
@@ -33,16 +32,11 @@ const HeaderMenu = () => {
         }, 300);
     };
 
-    // Nueva función para manejar el clic en un enlace
-    // Nueva función para manejar el clic en un enlace
-const handleLinkClick = () => {
-    setMenuOpen(false); // Reiniciar el estado a false
-    handleCloseMenu(); // Cerrar el menú
-
-    // Desplazar la ventana a la parte superior de forma inmediata
-    window.scrollTo(0, 0);
-};
-
+    const handleLinkClick = () => {
+        setMenuOpen(false);
+        handleCloseMenu();
+        window.scrollTo(0, 0);
+    };
 
     return (
         <>
@@ -54,6 +48,8 @@ const handleLinkClick = () => {
                 <h2>Filtrar por:</h2>
                 <button className="filterButton" onClick={() => handleGenderClick('Hombre')}>Hombre</button>
                 <button className="filterButton" onClick={() => handleGenderClick('Mujer')}>Mujer</button>
+                <button className="filterButton" onClick={() => handleGenderClick('Colecciones')}>Colecciones</button>
+                <button className="filterButton" onClick={() => handleGenderClick('Descuentos')}>Descuentos</button>
             </div>
 
             {showGenderSection && (
@@ -74,9 +70,28 @@ const handleLinkClick = () => {
                                 <Link to="/man-shoes" onClick={handleLinkClick}>Zapatos</Link>
                             </>
                         )}
+                        {showGenderSection === 'Colecciones' && (
+                            <>
+                                <Link to="/new-arrivals" onClick={handleLinkClick}>Nuevas Llegadas</Link>
+                                <Link to="/seasonal-collection" onClick={handleLinkClick}>Colección de Temporada</Link>
+                            </>
+                        )}
+                        {showGenderSection === 'Descuentos' && (
+                            <>
+                                <Link to="/discounts" onClick={handleLinkClick}>Ofertas Especiales</Link>
+                                <Link to="/clearance" onClick={handleLinkClick}>Liquidaciones</Link>
+                            </>
+                        )}
                     </div>
                 </div>
             )}
+            
+            {/* Footer */}
+            <footer className="footerHeader">
+                <div className="footerHeader-content">
+                    <p>© 2024 Tu Tienda de Ropa. Todos los derechos reservados.</p>
+                </div>
+            </footer>
         </>
     );
 };

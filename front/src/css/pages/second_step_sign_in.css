@@ -1,0 +1,62 @@
+section {
+    background-color: #D9D9D9;
+  }
+  
+  .second-step-sign-in {
+    width: 100%;
+    margin: 0 auto;
+    padding: 2rem 0;
+  }
+  
+  .second-step-sign-in-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Añadido para centrar verticalmente */
+  }
+  
+  .header, .registro-proceso, .informacion-adicional, .politica-privacidad, .boton-continuar {
+    width: 90%; /* Ajustado al 90% para todos los divs */
+    padding: 1rem 0;
+  }
+  
+  .input-password {
+    background-color: white;
+    padding: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .campos {
+    background-color: white;
+  }
+  
+  .campo {
+    margin-bottom: 1rem;
+  }
+  
+  .politica-privacidad {
+    display: flex;
+    background-color: white;
+    align-items: center;
+  }
+  
+  .boton-continuar {
+    text-align: center;
+    width: 100%;
+  }
+  
+  .submit-button2 {
+    padding: 0.75rem 2rem;
+    background-color: black;
+    color: white;
+    border: 1px solid black;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    width: 90%;
+  }
+  
+  .submit-button:hover {
+    background-color: white;
+    color: black;
+  }
+  

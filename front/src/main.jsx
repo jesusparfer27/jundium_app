@@ -3,6 +3,7 @@ import router from './lib/Routes.jsx'
 import { RouterProvider } from 'react-router-dom'
 import { createRoot } from 'react-dom/client'
 import React from 'react'
+import '../src/css/main/main.css'
 
 
 
