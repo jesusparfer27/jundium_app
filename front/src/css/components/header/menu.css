@@ -135,7 +135,7 @@ h2 {
     right: 0;
     width: 50%;
     height: calc(100vh - 54px);
-    background-color: #f0f0f0;
+    background-color: white;
     color: #333;
     padding: 2rem;
     z-index: 1001;

@@ -1,126 +1,149 @@
 /* Estilos para el CartContainer */
 .cartContainer {
     position: fixed;
-    top: -2px; /* Se ajusta para que quede justo debajo del header */
+    top: -2px;
     right: 0;
     width: 50%;
-    height: calc(100vh - 54px);
-    background-color: #f0f0f0; /* Fondo gris claro */
-    color: #333; /* Texto en gris oscuro */
+    background-color: white;
+    color: #333;
     padding: 2rem;
     z-index: 1001;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
     gap: 1.5rem;
-    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
-    
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilo para la animación de activación */
+
+
 .cartContainer.active {
     animation: slideInVertical 0.3s ease forwards;
-    
 }
 
-/* Botón para cerrar el carrito */
-.closeContainer {
+.closeContainerCart {
     background: none;
     border: none;
     color: #333;
     font-size: 1.5rem;
     cursor: pointer;
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
 }
 
-/* Estilos para la lista de productos */
-.cartContainer ul {
+.cartHeader, .cartSummary, .checkoutButtonContainer {
+    width: 70%;
+}
+
+.cartHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 3rem;
+}
+
+.cartItems {
+    width: 70%;
     list-style: none;
     padding: 0;
+}
+
+.redirectToHome {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.cartTitle {
+    display: flex;
+    justify-content: space-between;
     width: 100%;
 }
 
-.cartContainer .cart-item {
+.cartItem {
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding: 1rem 0;
-    border-bottom: 1px solid #e0e0e0; /* Línea ligera */
+    padding: 0.2rem;
 }
 
-.cartContainer .cart-item img {
-    width: 80px;
-    height: 80px;
+.cartItem img {
+    width: 200px;
+    height: 200px;
     object-fit: cover;
-    border-radius: 8px;
 }
 
-.cartContainer .cart-item div {
+.cartItemContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     flex-grow: 1;
+    
 }
 
-.cartContainer .cart-item h3 {
-    margin: 0;
-    font-size: 1.1rem;
-    color: #333;
-}
 
-.cartContainer .cart-item p {
-    margin: 0.5rem 0;
-    font-size: 0.9rem;
-    color: #666;
-}
 
-/* Estilos para el botón de eliminar */
-.cartContainer .cart-item button {
-    background-color: #333;
-    color: #fff;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.cartContainer .cart-item button:hover {
-    background-color: #000; /* Cambia a negro en el hover */
-}
-
-/* Estilos para el total */
-.cartContainer .total {
+.cartSummary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     border-top: 1px solid #e0e0e0;
     padding-top: 1rem;
-    width: 100%;
     text-align: center;
 }
 
-.cartContainer .total h3 {
-    margin: 0;
-    font-size: 1.2rem;
-    color: #333;
-}
-
-/* Agrega estos estilos al final de cart.css */
-
-.checkout-button {
-    background-color: #28a745; /* Color verde */
-    color: #fff; /* Texto blanco */
+.checkoutButton {
+    background-color: black;
+    color: #fff;
     border: none;
-    padding: 0.75rem 1.5rem; /* Espaciado interno */
-    border-radius: 5px; /* Bordes redondeados */
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    border-radius: 22px;
     cursor: pointer;
-    font-size: 1rem; /* Tamaño de fuente */
-    transition: background-color 0.3s ease; /* Transición suave */
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
 }
 
-.checkout-button:hover {
-    background-color: #218838; /* Color más oscuro al hacer hover */
+.checkoutButton:hover {
+    background-color: transparent;
+    border: 1px solid black;
+    color: black;
 }
 
-.checkout-button:disabled {
-    background-color: #ccc; /* Color gris cuando está deshabilitado */
-    cursor: not-allowed; /* Cambia el cursor cuando está deshabilitado */
+.emptyCart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+    height: 90vh;
+    width: 100%;
+}
+
+.emptyCartButton {
+    width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.emptyCartMessage {
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.emptyCartButton {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.emptyCartButton:hover {
+    background-color: transparent;
+    color: black;
+    border: 1px solid black;
 }

@@ -1,90 +1,160 @@
 /* Estilos para el LoginContainer */
 .loginContainer {
     position: fixed;
-    right: 0;
     top: 0;
+    right: 0;
     width: 50%;
-    height: 100%;
-    background-color: #f0f0f0; /* Fondo blanco grisáceo */
-    color: #333; /* Texto en tono gris oscuro */
-    padding: 2rem;
+    height: 100vh;
+    background-color: white;
+    color: #333;
     z-index: 1001;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 1.5rem;
-    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1); /* Sombra ligera para dar profundidad */
+    gap: 2rem;
+    overflow-y: auto;
 }
 
-/* Estilo para la animación de activación */
+/* Estilo para la activación */
 .loginContainer.active {
     animation: slideInVertical 0.3s ease forwards;
 }
 
-/* Estilos comunes para el botón de cerrar y el de iniciar sesión */
-.loginButton {
-    width: 80%;
+/* Estilo para logIn */
+.logIn, .signIn {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.logInH2 {
+    padding-left: 0;
+}
+
+/* Estilo para el encabezado de logIn */
+.logInHeader {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+
+/* Estilo del botón de cerrar */
+.closeContainerLogin {
+    background: none;
+    border: none;
+    color: #333;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* Estilo para el texto de cuenta */
+.accountText, .mandatoryFields, .additionalText {
+    width: 100%;
+    text-align: center;
+}
+
+/* Estilo para los campos obligatorios */
+.mandatoryFields {
+    text-align: right;
+}
+
+/* Estilo para los campos de entrada */
+.inputField {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Estilo para los inputs */
+.inputField input {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Estilo para los labels */
+.inputField label {
+    font-weight: bold;
+}
+
+/* Estilo para el enlace de recuperar contraseña */
+.forgotPassword {
+    color: #333;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Efecto hover en el enlace de recuperar contraseña */
+.forgotPassword:hover {
+    color: #000;
+}
+
+/* Estilo para los botones */
+.buttonSubmitLogIn, .buttonSubmitSignIn {
     padding: 0.75rem;
-    background-color: #333;
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    font-size: 1.5rem;
-    position: relative;
+    width: 100%;
 }
 
-/* Posiciona el botón de cerrar en la esquina superior derecha */
-.loginButton:first-of-type {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: auto;
+.buttonSubmitLogIn {
+    background-color: black;
+    border-radius: 28px;
 }
 
-/* Cambia el color a negro en el hover */
-.loginButton:hover {
-    background-color: #000;
+.buttonSubmitLogIn:hover {
+    background-color: transparent;
+    color: black;
+    border: 1px solid black;
 }
 
-/* Estilos para los inputs */
-.loginContainer input {
-    width: 80%;
-    padding: 0.75rem;
-    margin: 0.5rem 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-    color: #333;
+.buttonSubmitSignIn {
+    background-color: transparent;
+    border: 1px solid black;
+    color: black;
+    border-radius: 28px;
+
 }
 
-/* Estilos para los enlaces del pie de página */
-.login-footer {
-    width: 80%;
-    text-align: center;
-    border-top: 1px solid #e0e0e0; /* Línea ligera en la parte superior */
-    padding-top: 1rem;
+.inputField input {
+    padding-top: 1.7rem;
 }
 
-.login-footer p {
-    margin: 0.5rem 0;
+.buttonSubmitSignIn:hover {
+    background-color: black;
+    color: white;
 }
 
-.login-footer a {
-    color: #333;
-    text-decoration: none;
+/* Estilo para el pie de signIn */
+.signIn {
+    border-top: 1px solid black;
+    padding-top: 3rem;
+    width: 100%;
 }
 
-.login-footer a:hover {
-    text-decoration: underline;
+.additionalText p{
+    display: flex;
 }
 
-/* Bordes inferiores ligeros entre secciones */
-.loginContainer h2,
-.loginContainer input,
-.loginContainer .loginButton {
-    border-bottom: 1px solid #e0e0e0;
-    padding-bottom: 0.5rem;
+.submitButton {
+    width: 100%;
+}
+
+.welcomeText {
+    width: 70%;
+}
+
+.extraText {
+    width: 70%;
+}
+
+.registerButton {
+    width: 70%
 }

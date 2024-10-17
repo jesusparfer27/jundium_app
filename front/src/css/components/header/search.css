@@ -1,38 +1,63 @@
+/* Animaciones */
+@keyframes slideInVertical {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideOutVertical {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-100%);
+    }
+}
+
+/* Clases de animación para la transición secuencial */
+.slideInVertical {
+    animation: slideInVertical 0.3s ease forwards;
+}
+
+.slideOutVertical {
+    animation: slideOutVertical 0.3s ease forwards;
+}
+
+
+
 /* Estilos para el componente HeaderSearch */
 .searchContainer {
     position: fixed;
     top: -2px; /* Se ajusta para que quede justo debajo del header */
     width: 100%;
     height: auto;
-    background-color: #f0f0f0; /* Fondo gris claro */
+    background-color: white; /* Fondo gris claro */
     color: #333; /* Texto en gris oscuro */
-    padding-top: 2rem;
+    padding-top: 1rem;
     z-index: 1001;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start; /* Cambiado a flex-start para evitar el espacio extra */
-    gap: 1.5rem;
     box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
 }
 
 .searchContainer.active {
-    opacity: 1;
-    transform: translateY(0);
+    animation: slideInVertical 0.3s ease forwards;
 }
 
-.searchContainer.slideOut {
-    opacity: 0;
-    transform: translateY(-10px); /* Desplazamiento al salir */
-}
+
 
 /* Primer div para la barra de búsqueda */
 .searchInputContainer {
     display: flex;
-    flex-direction: column; /* Organizar en columnas */
+    flex-direction: row ; /* Organizar en columnas */
     width: 100%;
     border-bottom: 1px solid black; /* Línea inferior */
-    padding: 10px; /* Espaciado alrededor */
+    padding-bottom: 1rem;
     align-items: center;
 }
 
@@ -46,11 +71,11 @@
 
 /* Estilos para el input de búsqueda */
 .searchBar {
-    padding: 0.5rem;
-    border-radius: 0.25rem; /* Bordes redondeados */
-    border: 1px solid #ccc; /* Borde gris claro */
+    padding: 1rem;
+    border-radius: 25px; /* Bordes redondeados */
+    border: 1px solid black; /* Borde gris claro */
     width: 60%; /* Ancho completo */
-    margin-bottom: 10px; /* Espaciado entre el input y el botón */
+    
 }
 
 /* Botón de eliminar */
@@ -71,7 +96,7 @@
 
 /* Segundo div para el texto adicional */
 .additionalTextContainer {
-    padding: 10px; /* Espaciado alrededor del texto */
+    border-bottom: 2px solid black;
     width: 100%; /* Ancho completo */
 }
 
@@ -100,4 +125,127 @@
     cursor: pointer;
     width: 100%;
     text-align: left;
+}
+
+/* Flex row para organizar los dos divs */
+.flexRow {
+    display: flex;
+    width: 100%;
+}
+
+/* Estilos para lo más buscado */
+.popularSearches {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+}
+
+.popularSearches h3 {
+    width: 30%;
+    padding-left: 3rem;
+}
+
+.genderSearch {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 2rem;
+    padding-top: 2rem;
+    gap: 3rem;
+    padding-left: 6rem;
+}
+
+.maleSearch, .femaleSearch {
+    width: 30%;
+    
+}
+
+.maleSearch ul li a, .femaleSearch ul li a {
+    display: block; /* Asegurarse de que el enlace sea un elemento de bloque */
+    margin-bottom: 0.5rem; /* Añadir margen inferior para separar los enlaces */
+    color: #191919;
+    text-decoration: none;
+}
+
+
+.maleSearch h4, .femaleSearch h4 {
+    margin-bottom: 0.5rem;
+}
+
+.maleSearch ul, .femaleSearch ul {
+    list-style: none;
+    padding: 0;
+    
+}
+
+/* Estilos para el grid de productos */
+.productGridHeader {
+    width: 50%;
+    border-left: 1px solid black;
+    padding-bottom: 2rem;
+}
+
+.productGridHeader h3 {
+    width: 50%;
+    padding-left: 7.3rem;
+}
+
+.gridContainer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Repartir el espacio equitativamente en dos columnas */
+    grid-template-rows: repeat(2, 1fr); 
+    gap: 1rem;
+    width: 80%; /* Reducir el ancho para centrar mejor el contenedor */
+    margin: 0 auto; /* Centrar el contenedor en su padre */
+    
+    align-items: center; /* Centrar elementos en el eje vertical */
+}
+
+/* Elemento individual de la cuadrícula */
+/* Elemento individual de la cuadrícula */
+.productItemHeader {
+    display: flex;
+    flex-direction: row; /* Organizar imagen y texto en una columna */
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.5rem; /* Ajustar el espacio entre la imagen y el texto */
+    padding: 1rem;
+    width: 100%;
+}
+
+/* Estilo para la imagen */
+.productItemHeader img {
+    width: 30%; /* La imagen ocupa un 80% del ancho disponible */
+    height: auto;
+    object-fit: cover;
+    border-radius: 0.5rem;
+}
+
+/* Estilo para el texto */
+.productItemHeader p {
+    width: 100%;
+    text-align: center;
+    margin: 0;
+}
+
+.productItem {
+    text-align: center;
+}
+
+.productItem img {
+    width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.closeButtonHeader {
+   font-size: 16px;
+    right: 0;
+    border: none;
+    padding-right: 2rem;
+    cursor: pointer;
+    background: transparent;
 }

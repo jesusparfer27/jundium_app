@@ -39,7 +39,7 @@
     grid-column: span 2; /* Ocupa 2 columnas */
     grid-row: span 2; /* Ocupa 2 filas */
     height: 800px; /* Altura del producto destacado */
-    background-color: #f0f0f0; /* Color de fondo opcional */
+    background-color: white; /* Color de fondo opcional */
     position: relative; /* Para posicionar elementos internos si es necesario */
 }
 
