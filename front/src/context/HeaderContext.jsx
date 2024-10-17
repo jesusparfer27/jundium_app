@@ -1,56 +1,51 @@
-// src/context/HeaderContext.js
 import React, { createContext, useState } from 'react';
 
+// Crear el contexto
 export const HeaderContext = createContext();
 
+// Proveedor del contexto
 export const HeaderProvider = ({ children }) => {
-    const [menuOpen, setMenuOpen] = useState(false);
-    const [search, setSearch] = useState({ term: '', mode: false });
-    const [activeMenu, setActiveMenu] = useState('');
-    const [overlayVisible, setOverlayVisible] = useState(false); // Nuevo estado para la capa
+    const [menuOpen, setMenuOpen] = useState(false); // Estado para controlar si el menú está abierto
+    const [activeMenu, setActiveMenu] = useState(''); // Estado para el menú activo
+    const [overlayVisible, setOverlayVisible] = useState(false); // Estado para la capa de superposición
 
+    // Función para alternar el menú
     const toggleMenu = () => {
-        setMenuOpen(prev => !prev);
-        if (search.mode) setSearch(prev => ({ ...prev, mode: false }));
-        setOverlayVisible(!overlayVisible); // Alterna la visibilidad de la capa
+        setMenuOpen((prev) => !prev); // Alterna el estado del menú
     };
 
+    // Función para cerrar el menú
     const closeMenu = () => {
-        setActiveMenu('');
+        setActiveMenu(''); // Restablece el menú activo
         setOverlayVisible(false); // Oculta la capa al cerrar el menú
         setMenuOpen(false); // Asegura que el menú se cierre
     };
 
+    // Función para abrir un menú específico
     const openMenu = (type) => {
         if (activeMenu === type) {
-            closeMenu();
+            closeMenu(); // Si el menú activo es el mismo, se cierra
         } else {
-            setActiveMenu(type);
-            setOverlayVisible(true); // Muestra la capa cuando se abre un menú
-        }
-
-        if (type === 'searchBar') {
-            setSearch({ ...search, mode: true });
-            closeMenu();
+            setActiveMenu(type); // Establece el nuevo menú activo
+            setOverlayVisible(true); // Muestra la capa de superposición
         }
     };
 
-    // Nueva función para manejar el clic en la superposición
+    // Función para manejar el clic en la capa de superposición
     const handleOverlayClick = () => {
         closeMenu(); // Cierra el menú al hacer clic en la superposición
     };
 
+    // Valores del contexto que se pasan a los componentes hijos
     const value = {
         menuOpen,
-        search,
         activeMenu,
         overlayVisible,
         toggleMenu,
         closeMenu,
         openMenu,
-        setSearch,
         setMenuOpen,
-        handleOverlayClick, // Agrega esta función al valor del contexto
+        handleOverlayClick, // Función para cerrar el menú al hacer clic en la superposición
     };
 
     return (

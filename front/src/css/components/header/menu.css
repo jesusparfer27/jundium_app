@@ -1,55 +1,79 @@
+/* Animaciones */
+@keyframes slideInHorizontal {
+    from {
+        transform: translateX(-100%); /* Desliza desde la izquierda */
+    }
+    to {
+        transform: translateX(0); /* Llega a su posición final */
+    }
+}
+
+@keyframes slideOutHorizontal {
+    from {
+        transform: translateX(0); /* Empieza desde su posición final */
+    }
+    to {
+        transform: translateX(-100%); /* Se desliza hacia la izquierda y se oculta */
+    }
+}
+
 /* Estilos para el GenderMenu */
 .genderSection {
-    position: fixed; /* Se mantiene en la parte superior */
-    top: -54px; /* Se mueve justo debajo del header */
-    left: 25%; /* Se coloca justo al lado del sideMenu */
-    width: 25%; /* Ajusta el ancho según sea necesario */
-    height: calc(100vh - 54px); /* Ajuste para que no cubra el header */
-    background-color: white; /* Color de fondo para la sección de género */
+    position: fixed;
+    top: -54px;
+    left: 25%;
+    width: 25%;
+    height: calc(100vh - 54px);
+    background-color: white;
     border-left: 2px solid #555;
     color: white;
     padding: 2rem;
-    z-index: 998; /* Asegúrate que esté por debajo del SideMenu y del Header */
+    z-index: 998;
     transition: transform 0.3s ease-in-out, left 0.3s ease-in-out;
     padding-top: 5rem;
     margin-top: 3.1rem;
     margin-left: 2.9rem;
 }
 
-/* Cuando se muestra la sección de género */
+/* Mostrar la sección de género */
 .genderSection.open {
-    left: 25.8%; /* Se mueve a la vista */
-    animation: slideInHorizontal 0.3s ease forwards; /* Añadir animación */
+    left: 25.8%;
+    animation: slideInHorizontal 0.3s ease forwards;
     border-right: 1px solid black;
 }
 
 /* Estilos para el SideMenu */
 .sideMenu {
     position: fixed;
-    top: -54px; /* Inicia justo debajo del header */
-    left: 25%; /* Inicia visible */
-    width: 25%;
-    height: calc(100vh - 54px); /* Ajusta la altura para no cubrir el header */
-    margin-top: 3.1rem; /* Agregado el margen superior */
+    top: -54px;
+    left: 25%;
+    width: 28%;
+    height: calc(100vh - 54px);
+    margin-top: 3.1rem;
     background-color: white;
     color: white;
-    padding: 2rem;
     padding-top: 6rem;
-    z-index: 999; /* Asegúrate que coincida con el z-index del Header */
+    z-index: 999;
     transition: transform 0.3s ease-in-out, left 0.3s ease-in-out;
 }
 
+/* Mostrar el SideMenu */
 .sideMenu.open {
-    left: 0; /* Se mueve a la vista */
-    animation: slideInHorizontal 0.3s ease forwards; /* Añadir animación */
+    left: 0;
+    animation: slideInHorizontal 0.3s ease forwards;
 }
 
+/* Encabezado */
+h2 {
+    padding-left: 3rem;
+}
+
+/* Estilos para la sección de productos */
 .genderSection .productNav {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    flex-wrap: wrap;
-    padding-top: 2rem;
+    padding-top: 1rem;
 }
 
 .genderSection .productNav a {
@@ -58,92 +82,32 @@
     border-radius: 5px;
     font-size: 1rem;
     color: black;
-    background-color: #444;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    background-color: transparent;
+    position: relative;
 }
 
-.genderSection .productNav a:hover {
-    background-color: #222;
-    transform: translateY(-3px);
+/* Línea de fondo en el hover */
+.genderSection .productNav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background-color: black;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
 }
 
-/* Estilos para la sección de Hombre */
-.genderSection.Hombre {
-    background-color: #e0f7fa; /* Color azul claro */
-    border: 1px solid #00838f;
-}
-
-.genderSection.Hombre h3 {
-    color: #006064; /* Azul más oscuro */
-}
-
-.genderSection.Hombre .productNav a {
-    background-color: #00838f; /* Azul para los enlaces */
-}
-
-.genderSection.Hombre .productNav a:hover {
-    background-color: #004d40; /* Azul oscuro al hacer hover */
-}
-
-/* Estilos para la sección de Mujer */
-.genderSection.Mujer {
-    background-color: #fce4ec; /* Color rosa claro */
-    border: 1px solid #d81b60;
-}
-
-.genderSection.Mujer h3 {
-    color: #880e4f; /* Rosa más oscuro */
-}
-
-.genderSection.Mujer .productNav a {
-    background-color: #d81b60; /* Rosa para los enlaces */
-}
-
-.genderSection.Mujer .productNav a:hover {
-    background-color: #880e4f; /* Rosa oscuro al hacer hover */
-}
-
-/* Estilos para la sección de Colecciones */
-.collectionSection {
-    margin: 2rem 0;
-    padding: 1rem;
-    background-color: #f9f9f9; /* Fondo claro */
-    border-radius: 5px;
-}
-
-.collectionSection h2 {
-    color: #333;
-}
-
-/* Estilos para la sección de Otros Tipos de Prendas */
-.otherItemsSection {
-    margin: 2rem 0;
-    padding: 1rem;
-    background-color: #f1f1f1; /* Fondo más oscuro */
-    border-radius: 5px;
-}
-
-.otherItemsSection h2 {
-    color: #333;
-}
-
-/* Estilos para la sección de Descuentos */
-.discountSection {
-    margin: 2rem 0;
-    padding: 1rem;
-    background-color: #fff3cd; /* Fondo amarillo claro */
-    border-radius: 5px;
-}
-
-.discountSection h2 {
-    color: #856404; /* Color marrón oscuro */
+.genderSection .productNav a:hover::after {
+    transform: scaleX(1);
 }
 
 /* Botón para cerrar el menú */
 .closeMenu {
     background: none;
     border: none;
-    color: white;
+    color: black;
     font-size: 1.5rem;
     cursor: pointer;
     position: absolute;
@@ -151,15 +115,28 @@
     right: 1rem;
 }
 
+/* Footer */
+.footerHeader {
+    margin-top: auto;
+    padding: 1rem;
+    background-color: #f1f1f1;
+    text-align: center;
+}
+
+.footerHeader-content p {
+    margin: 0;
+    color: #333;
+}
+
 /* Estilos para el CartContainer */
 .cartContainer {
     position: fixed;
-    top: -2px; /* Se ajusta para que quede justo debajo del header */
+    top: -2px;
     right: 0;
     width: 50%;
     height: calc(100vh - 54px);
-    background-color: #f0f0f0; /* Fondo gris claro */
-    color: #333; /* Texto en gris oscuro */
+    background-color: #f0f0f0;
+    color: #333;
     padding: 2rem;
     z-index: 1001;
     display: flex;
@@ -167,10 +144,10 @@
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
-    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilo para la animación de activación */
+/* Activación del carrito */
 .cartContainer.active {
     animation: slideInVertical 0.3s ease forwards;
 }
@@ -199,7 +176,7 @@
     align-items: center;
     gap: 1rem;
     padding: 1rem 0;
-    border-bottom: 1px solid #e0e0e0; /* Línea ligera */
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .cartContainer .cart-item img {
@@ -225,7 +202,7 @@
     color: #666;
 }
 
-/* Estilos para el botón de eliminar */
+/* Botón para eliminar */
 .cartContainer .cart-item button {
     background-color: #333;
     color: #fff;
@@ -237,10 +214,10 @@
 }
 
 .cartContainer .cart-item button:hover {
-    background-color: #000; /* Cambia a negro en el hover */
+    background-color: #000;
 }
 
-/* Estilos para el total */
+/* Total del carrito */
 .cartContainer .total {
     border-top: 1px solid #e0e0e0;
     padding-top: 1rem;
@@ -254,11 +231,81 @@
     color: #333;
 }
 
-/* Estilos para el footer */
-.footer {
-    border-top: 1px solid #D9D9D9;
-    text-align: center;
-    padding: 1rem;
-    color: #D9D9D9; /* Color del texto del footer */
-    background-color: #f9f9f9; /* Fondo del footer */
+/* Botones filterButtonMenu */
+.filterButtonMenu {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: black;
+    background-color: transparent;
+    position: relative;
+    border: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    text-align: start;
+    
+}
+
+/* Organizar botones en columna */
+.sideMenu .filterButtonMenu {
+    display: block;
+    width: 80%;
+    margin-bottom: 10px;
+    margin-left: 2rem;
+}
+
+/* Línea que aparece al hacer hover */
+.filterButtonMenu::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background-color: black;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.filterButtonMenu:hover::after {
+    transform: scaleX(1);
+}
+
+.headerFooter {
+    padding-top: 2rem;
+    margin-top: 3rem;
+    padding-left: 3rem;
+    border-top: 1px solid black;
+    width: 92%;
+}
+
+/* Título del headerFooter */
+.title-headerFooter {
+    color: black;
+    font-size: 1.5rem;
+    font-weight: 600;
+    padding-bottom: 1rem;
+}
+
+.soporte {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+.soporte Link{
+    color: black;
+}
+
+/* Estilo para los enlaces de soporte */
+.headerFooter .soporte a {
+    color: black;
+    text-decoration: none;
+}
+
+/* Cambia el color al hacer hover */
+.headerFooter .soporte a:hover {
+    color: black;
+    text-decoration: underline;
 }

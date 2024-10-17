@@ -11,8 +11,9 @@ const HeaderMenu = () => {
     const [showGenderSection, setShowGenderSection] = useState('');
     const [isClosing, setIsClosing] = useState(false);
     const [isClickable, setIsClickable] = useState(true);
+    const [color, setColor] = useState('transparent');
+    const [imageColor, setImageColor] = useState('transparent');
 
-    // Cerrar el menú cuando la ruta cambie
     useEffect(() => {
         setMenuOpen(false);
     }, [location.pathname, setMenuOpen]);
@@ -20,6 +21,29 @@ const HeaderMenu = () => {
     const handleGenderClick = (gender) => {
         if (!isClickable) return;
         setShowGenderSection((prev) => (prev === gender ? '' : gender));
+
+        switch (gender) {
+            case 'Hombre':
+                setColor('#E0F7FA');
+                setImageColor('#00796B'); // Color más oscuro
+                break;
+            case 'Mujer':
+                setColor('#FCE4EC');
+                setImageColor('#D81B60'); // Color más oscuro
+                break;
+            case 'Colecciones':
+                setColor('#E8F5E9');
+                setImageColor('#388E3C'); // Color más oscuro
+                break;
+            case 'Descuentos':
+                setColor('#FFF3E0');
+                setImageColor('#F57C00'); // Color más oscuro
+                break;
+            default:
+                setColor('transparent');
+                setImageColor('transparent');
+                break;
+        }
     };
 
     const handleCloseMenu = () => {
@@ -46,15 +70,45 @@ const HeaderMenu = () => {
             >
                 <button className="closeMenu" onClick={handleCloseMenu}>X</button>
                 <h2>Filtrar por:</h2>
-                <button className="filterButton" onClick={() => handleGenderClick('Hombre')}>Hombre</button>
-                <button className="filterButton" onClick={() => handleGenderClick('Mujer')}>Mujer</button>
-                <button className="filterButton" onClick={() => handleGenderClick('Colecciones')}>Colecciones</button>
-                <button className="filterButton" onClick={() => handleGenderClick('Descuentos')}>Descuentos</button>
+                <button className="filterButtonMenu" onClick={() => handleGenderClick('Hombre')}>Hombre</button>
+                <button className="filterButtonMenu" onClick={() => handleGenderClick('Mujer')}>Mujer</button>
+                <button className="filterButtonMenu" onClick={() => handleGenderClick('Colecciones')}>Colecciones</button>
+                <button className="filterButtonMenu" onClick={() => handleGenderClick('Descuentos')}>Descuentos</button>
+                <div className="headerFooter">
+                    <div className="soporte">
+                        <div className="title-headerFooter">Soporte</div>
+                        <Link to="/contact-us">Contact Us</Link>
+                        <Link to="/faq">FAQ</Link>
+                        <Link to="/terms">Terms and Conditions</Link>
+                    </div>
+                </div>
             </div>
 
             {showGenderSection && (
-                <div className={`genderSection ${activeMenu === 'sideMenu' ? 'open' : 'close'}`}>
-                    <h3>Productos de {showGenderSection}</h3>
+                <div 
+                    className={`genderSection ${activeMenu === 'sideMenu' ? 'open' : 'close'}`}
+                    style={{ backgroundColor: color }} 
+                >
+                    
+                    {/* Simulación de foto para cada sección */}
+                    <div 
+                        className="sectionImage"
+                        style={{
+                            backgroundColor: imageColor,
+                            width: '90%',
+                            height: '300px',
+                            margin: '10px auto',
+                            borderRadius: '8px',
+                        }}
+                    ></div>
+                    <h3 
+                    style={{
+                        color: 'black',
+                        paddingLeft: '1rem',
+                        paddingTop: '2rem'
+                    }}
+                    >
+                        Productos de {showGenderSection}</h3>
                     <div className="productNav">
                         {showGenderSection === 'Mujer' && (
                             <>
@@ -85,13 +139,6 @@ const HeaderMenu = () => {
                     </div>
                 </div>
             )}
-            
-            {/* Footer */}
-            <footer className="footerHeader">
-                <div className="footerHeader-content">
-                    <p>© 2024 Tu Tienda de Ropa. Todos los derechos reservados.</p>
-                </div>
-            </footer>
         </>
     );
 };

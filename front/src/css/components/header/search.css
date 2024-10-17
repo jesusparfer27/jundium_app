@@ -1,22 +1,77 @@
 /* Estilos para el componente HeaderSearch */
-.headerSearchActive {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem; /* Espacio entre el input y los botones */
+.searchContainer {
+    position: fixed;
+    top: -2px; /* Se ajusta para que quede justo debajo del header */
     width: 100%;
-    max-width: 800px; /* Ancho máximo */
-    padding: 1rem;
-    margin: auto; /* Centrado */
-    padding-top: 1.7rem;
-    padding-bottom: 1.7rem;
+    height: auto;
+    background-color: #f0f0f0; /* Fondo gris claro */
+    color: #333; /* Texto en gris oscuro */
+    padding-top: 2rem;
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Cambiado a flex-start para evitar el espacio extra */
+    gap: 1.5rem;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+}
+
+.searchContainer.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.searchContainer.slideOut {
+    opacity: 0;
+    transform: translateY(-10px); /* Desplazamiento al salir */
+}
+
+/* Primer div para la barra de búsqueda */
+.searchInputContainer {
+    display: flex;
+    flex-direction: column; /* Organizar en columnas */
+    width: 100%;
+    border-bottom: 1px solid black; /* Línea inferior */
+    padding: 10px; /* Espaciado alrededor */
+    align-items: center;
+}
+
+.searchContent {
+    width: 80%;
+    display: flex;
+    gap: 3rem;
+    justify-content: center;
+    
 }
 
 /* Estilos para el input de búsqueda */
-.inputSearch {
+.searchBar {
     padding: 0.5rem;
     border-radius: 0.25rem; /* Bordes redondeados */
     border: 1px solid #ccc; /* Borde gris claro */
+    width: 60%; /* Ancho completo */
+    margin-bottom: 10px; /* Espaciado entre el input y el botón */
+}
+
+/* Botón de eliminar */
+.clearButton {
+    border: 1px solid black;
+    color: black; /* Texto blanco */
+    border-radius: 0.25rem; /* Bordes redondeados */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Animación suave en hover */
+}
+
+/* Efecto hover en el botón de eliminar */
+.clearButton:hover {
+    background-color: black; /* Color más oscuro */
+    color: white;
+    border: none;
+}
+
+/* Segundo div para el texto adicional */
+.additionalTextContainer {
+    padding: 10px; /* Espaciado alrededor del texto */
     width: 100%; /* Ancho completo */
 }
 
@@ -46,4 +101,3 @@
     width: 100%;
     text-align: left;
 }
-
