@@ -29,8 +29,7 @@ const HeaderSearch = () => {
                         onChange={handleSearch}
                         className="searchBar"
                     />
-                <button className="closeButtonHeader" onClick={handleCloseSearch}>X</button>
-
+                    <button className="closeButtonHeader" onClick={handleCloseSearch}>X</button>
                 </div>
             </div>
 

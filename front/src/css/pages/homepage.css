@@ -6,8 +6,22 @@ body,
     box-sizing: border-box;
 }
 
-.scrollVideo {
-    margin-bottom: -8.7rem;
+/* Quita los estilos por defecto del NavLink */
+.myCustomClass {
+    text-decoration: none; /* Elimina la subrayado del enlace */
+    color: inherit; /* Mantiene el color actual del texto */
+}
+
+/* Estilos para cuando el enlace está activo */
+.myCustomActiveClass {
+    text-decoration: none;
+    color: #000; /* O cualquier color que prefieras para los enlaces activos */
+}
+
+
+.scrollImage {
+    margin-top: -30rem;
+    margin-bottom: -2rem;
     width: 100%;
     object-fit: cover;
 }
@@ -53,25 +67,12 @@ body,
     height: auto;
 }
 
-.homeVideo.fixed {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 10;
-}
-
-/* Estilos para el contenedor de video que se desplaza hasta 1000px */
-.videoScrollContainer {
-    height: 3600px;
-    position: relative;
-}
 
 .videoWrapper {
     position: sticky;
     height: auto;
     z-index: 10;
-   
+    max-height: auto;
 }
 
 .itemImage {
@@ -155,7 +156,7 @@ body,
 }
 
 .videoScrollContainer {
-    height: 3600px; /* Altura total de la sección */
+    height: 3600px;
     position: relative;
 }
 

@@ -1,30 +1,30 @@
 // CheckOutPage.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import '../css/pages/checkoutpage.css'; // Importar estilos CSS
+import InfoAccordion from '../components/checkout/ComponentCheckOut'; // Asegúrate de que esta importación sea correcta
+import CheckOutComponent from '../components/checkout/ComponentCheckOut'; // Importar el nuevo componente
+import Modal from '../components/checkout/ComponentCheckOut';
+import { HeaderContext } from '../context/HeaderContext'; // Importa el contexto
 
 export const CheckOutPage = () => {
-    // Estado inicial con dos productos
     const [cartItems, setCartItems] = useState([
         { id: 1, name: 'Producto 1', reference: 'REF123', color: 'Rojo', size: 'M', price: 20 },
         { id: 2, name: 'Producto 2', reference: 'REF456', color: 'Azul', size: 'L', price: 30 },
     ]);
 
-    // Estado para almacenar el total
     const [total, setTotal] = useState({
         price: 0,
-        verySpenses: 5, // Por ejemplo, un costo fijo de envío
+        verySpenses: 5,
         endingPrice: 0,
     });
 
-    // Estado para expandir secciones de información
     const [expandedSections, setExpandedSections] = useState({});
+    const { openMenu } = useContext(HeaderContext); // Accede a openMenu desde el contexto
 
-    // Función para eliminar un producto del carrito
     const removeItem = (id) => {
         setCartItems(cartItems.filter(item => item.id !== id));
     };
 
-    // Calcular el precio total cada vez que cambie el carrito
     useEffect(() => {
         const totalPrice = cartItems.reduce((sum, item) => sum + item.price, 0);
         setTotal({
@@ -34,7 +34,6 @@ export const CheckOutPage = () => {
         });
     }, [cartItems, total.verySpenses]);
 
-    // Función para alternar la expansión de secciones
     const toggleSection = (section) => {
         setExpandedSections(prevSections => ({
             ...prevSections,
@@ -42,10 +41,12 @@ export const CheckOutPage = () => {
         }));
     };
 
+    const handleOpenModal = () => {
+        openMenu('modal'); // Abre el modal
+    };
+
     return (
-        <section className="checkout-section">
-            {/* Div de la izquierda (70% de width) */}
-            <div className="columns-right"></div>
+        <section className="checkoutSection">
             <div className="left-column">
                 {/* Información sobre cambios */}
                 <div className="infoAboutChanges">
@@ -57,7 +58,7 @@ export const CheckOutPage = () => {
                 <div className="cartPrev">
                     <div>Mi selección: ({cartItems.length})</div>
                     <div>
-                        <button className="view-cart-button">Ver carrito</button>
+                        <button className="view-cart-button" onClick={handleOpenModal}>Ver carrito</button>
                     </div>
                 </div>
 
@@ -68,18 +69,14 @@ export const CheckOutPage = () => {
                     ) : (
                         cartItems.map(item => (
                             <div key={item.id} className="cart-item">
-                                {/* Imagen del producto */}
                                 <div className="product-image">
                                     <img src={`https://via.placeholder.com/150`} alt={item.name} />
                                 </div>
-                                {/* Información del producto */}
                                 <div className="infoProductCheckOut">
-                                    {/* Referencia y nombre */}
                                     <div className="product-header">
                                         <div className='divCosts'>{item.reference}</div>
                                         <div className='divCosts'>{item.name}</div>
                                     </div>
-                                    {/* Color y talla */}
                                     <div className="upperInformation">
                                         <div className="color-size">
                                             <div className='divCosts'>Color:</div>
@@ -90,7 +87,6 @@ export const CheckOutPage = () => {
                                             <div className='divCosts'>{item.size}</div>
                                         </div>
                                     </div>
-                                    {/* Cantidad y precio */}
                                     <div className="quantity-price">
                                         <div className='divCosts'>
                                             <select>
@@ -101,7 +97,6 @@ export const CheckOutPage = () => {
                                         </div>
                                         <div className='divCosts'>{item.price} €</div>
                                     </div>
-                                    {/* Botones de acción */}
                                     <div className="action-buttons">
                                         <button className="favorites-button" onClick={() => console.log(`Añadir ${item.name} a favoritos`)}>
                                             Añadir a favoritos
@@ -118,7 +113,7 @@ export const CheckOutPage = () => {
 
                 {/* Botón para realizar la compra */}
                 <div className="checkout-button-container">
-                    <button className="checkout-button">Realizar compra</button>
+                    <button className="checkout-button">Continuar</button>
                 </div>
             </div>
 
@@ -128,18 +123,18 @@ export const CheckOutPage = () => {
                     <div className='header-finalBuying'>
                         <div className="totalPrice">
                             <div className='finalPrice-CheckOut'>Subtotal</div>
-                            <div className='finalPrice-CheckOut'>{total.price} €</div>
+                            <div className='finalPrice-CheckOutRight'>{total.price} €</div>
                         </div>
                         <div className="deliverySpendings">
                             <div className='finalPrice-CheckOut'>Envío</div>
-                            <div className='finalPrice-CheckOut'>{total.verySpenses} €</div>
+                            <div className='finalPrice-CheckOutRight'>{total.verySpenses} €</div>
                         </div>
                         <div className="finalPriceCheckOut">
                             <div className='finalPrice-CheckOut'>Total</div>
-                            <div className='finalPrice-CheckOut'>{total.endingPrice} €</div>
+                            <div className='finalPrice-CheckOutRight'>{total.endingPrice} €</div>
                         </div>
                         <div className="buyingButtonContainer">
-                            <button>Comprar</button>
+                            <button>Continuar</button>
                         </div>
                     </div>
                 </div>
@@ -149,19 +144,30 @@ export const CheckOutPage = () => {
                     {['pedido', 'envio', 'devolucion', 'atencion'].map((section) => (
                         <div key={section} className="informationToggle">
                             <div className='groupInformation'>
-                                <img src={`path_to_image_${section}`} alt={`Información sobre ${section}`} />
-                                <div>
-                                    <div>{getSectionTitle(section)}</div>
-                                    {expandedSections[section] && <p>{getSectionContent(section)}</p>}
+                                <div className="iconAccordion">
+                                    <span className='Materyal-Symbol-icons'>Delete</span>
                                 </div>
-                                <button onClick={() => toggleSection(section)}>
-                                    {expandedSections[section] ? 'Cerrar' : 'Ver más'}
-                                </button>
+                                <div className='accordion-CheckOut'>
+                                    <div className='accordion-CheckOut'>{getSectionTitle(section)}</div>
+                                    {expandedSections[section] && (
+                                        <>
+                                            <p>{getSectionContent(section)}</p>
+                                            <InfoAccordion section={section} /> {/* Renderiza el componente aquí */}
+                                            <CheckOutComponent cartItems={cartItems} /> {/* Renderiza CheckOutComponent */}
+                                        </>
+                                    )}
+                                    <button onClick={() => toggleSection(section)}>
+                                        {expandedSections[section] ? 'Cerrar' : 'Ver más'}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     ))}
                 </div>
             </div>
+
+            {/* Modal para la vista del carrito */}
+            <Modal />
         </section>
     );
 };
@@ -179,10 +185,10 @@ const getSectionTitle = (section) => {
 
 const getSectionContent = (section) => {
     const contents = {
-        pedido: 'La plataforma coordina el pedido con la empresa para asegurar que los productos solicitados estén disponibles y se preparen para el envío. Una vez realizado el pedido, recibirás notificaciones sobre el estado del mismo.',
-        envio: 'El tiempo de entrega varía según la ubicación del cliente y la disponibilidad del producto en el almacén. Trabajamos con múltiples servicios de envío para garantizar una entrega rápida y eficiente.',
-        devolucion: 'Si necesitas devolver un producto, la plataforma facilita el proceso de devolución. Simplemente sigue las instrucciones en nuestra página de devoluciones para iniciar el trámite y recibir un reembolso.',
-        atencion: 'Si tienes alguna pregunta o problema con tu pedido, nuestro equipo de atención al cliente está disponible para ayudarte. Puedes contactarnos por correo electrónico, teléfono o chat en vivo.',
+        pedido: 'La plataforma coordina el pedido con la empresa...',
+        envio: 'El tiempo de entrega varía según la ubicación...',
+        devolucion: 'Si necesitas devolver un producto...',
+        atencion: 'Si tienes alguna pregunta o problema...',
     };
     return contents[section];
 };

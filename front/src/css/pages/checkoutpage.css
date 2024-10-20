@@ -1,27 +1,32 @@
-/* CheckOutPage.css */
-
-.checkout-section {
+.checkoutSection {
     display: flex;
-    
+    width: 100%;    
+}
+
+.columnFlex {
+    width: 33%;
+    background-color: white;
 }
 
 .left-column {
-    width: 70%;
+    width: 68%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #D9D9D9;
+    background-color: #f8f8f8;
     padding-top: 3rem;
+    gap: 1rem; /* Añadido para un gap entre los elementos internos */
 }
 
 .infoAboutChanges {
-    width: 80%;
+    width: 84%;
     display: flex;
+    justify-content: center;
     margin-bottom: 1rem;
 }
 
 .black-box {
-    width: 15%;
+    width: 8%;
     height: 80px;
     background-color: black;
 }
@@ -45,9 +50,13 @@
     padding-bottom: 1.5rem;
 }
 
+.cartPrev div {
+    font-size: 24px;
+}
+
 .view-cart-button {
-    background-color: black;
-    color: white;
+    background-color: transparent;
+    color: black;
     border: none;
     cursor: pointer;
 }
@@ -60,34 +69,33 @@
 
 .cart-item {
     display: flex;
-    width: 100%; /* Ocupa el 100% del ancho del contenedor */
+    width: 100%;
     border-bottom: 2px solid black;
     margin-bottom: 1rem;
 }
 
 .product-image {
-    width: 160%; /* Ajustar el ancho para que ocupe un 30% del contenedor */
+    width: 160%;
     padding: 10px;
     background-color: white;
     border-right: 2px solid black;
-
 }
 
 .product-image img {
     width: 100%;
-    height: 100%;
+    height: auto;
     object-fit: cover;
     border: 1px solid #ddd;
 }
 
 .infoProductCheckOut {
-    width: 100%; /* Ajustar para ocupar el restante 70% */
-    height: 100%;
-    /* padding-bottom: 2.7rem; */
+    width: 100%;
+    height: auto;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     background-color: white;
+    
 }
 
 .product-header {
@@ -96,15 +104,18 @@
     justify-content: space-between;
     border-bottom: 2px solid black;
     gap: 1rem;
-    padding-bottom: 0.5rem;
+    padding-bottom: 1rem;
     padding-top: 1.2rem;
+    padding-left: 1.5rem;
 }
 
 .upperInformation {
     display: flex;
     flex-direction: column;
+    gap: 1rem; /* Añadido para espacio entre color y talla */
     padding-bottom: 16rem;
-    
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
 }
 
 .color-size {
@@ -115,12 +126,15 @@
 .quantity-price {
     display: flex;
     justify-content: space-between;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
 }
 
 .action-buttons {
     display: flex;
     justify-content: space-between;
     border-top: 2px solid black;
+    
 }
 
 .favorites-button, .remove-button {
@@ -131,7 +145,6 @@
     padding-bottom: 1.7rem;
     padding-top: 1.7rem;
     cursor: pointer;
-    
 }
 
 .favorites-button {
@@ -147,18 +160,19 @@
     display: flex;
     justify-content: flex-end;
     width: 100%;
-    padding-top: 1.3rem;
+    padding-top: 1rem;
     padding-right: 16.5rem;
     padding-bottom: 3rem;
 }
 
 .checkout-button {
     width: 20%;
-    height: 80px;
+    padding-top: 1.2rem;
+    padding-bottom: 1.2rem;
     background-color: black;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 24px;
     cursor: pointer;
 }
 
@@ -168,8 +182,10 @@
 }
 
 .right-column {
-    width: 230%;
-    /* Puedes agregar estilos adicionales para la columna derecha si es necesario */
+    display: flex;
+    width: 100%;
+    padding-top: 2rem;
+    gap: 1rem; /* Añadido para un gap entre elementos */
 }
 
 .header-finalBuying {
@@ -177,79 +193,75 @@
     border-bottom: 1px solid black;
 }
 
-.totalPrice {
+.totalPrice, .deliverySpendings, .finalPriceCheckOut {
+    width: 90%;
     display: flex;
     justify-content: space-between;
-}
-
-.deliverySpendings {
-    padding-top: 1.2rem;
-    display: flex;
-    justify-content: space-between;
-}
-
-.deliverySpendings div{
-    padding-top: 0;
-    padding-bottom: 4rem;
-}
-
-.finalPrice {
-    padding-top: 5.1rem;
-    display: flex;
-    justify-content: space-between;
+    align-items: center;
+    padding: .8rem;
 }
 
 .finalPriceCheckOut {
-    display: flex;
-    justify-content: space-between;
-    
+    padding-top: 2rem;
 }
 
 .finalPrice-CheckOut {
     display: flex;
-    padding-left: 3.4rem;
-    padding-top: 2.2rem;
-    padding-right: 1rem;
-
+    align-items: flex-end;
+    padding-left: 2.4rem;
 }
-
 
 .buyingButtonContainer {
     width: 100%;
-    padding-top: 1.2rem;
-    padding-bottom: 1.2rem;
     display: flex;
     justify-content: center;
+    align-items: center;
+    padding-top: 1.2rem;
+    padding-bottom: 3rem;
 }
 
 .buyingButtonContainer button{
-    width: 80%;
-    border-radius: 7px;
-    padding-top: .3rem;
-    padding-bottom: .3rem;
-    border: none;
+    width: 85%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
     background-color: black;
     color: white;
-    padding-bottom: 0.5rem;
-    padding-top: 0.5rem;
-
+    border-radius: 22px;
 }
 
 .buyingButtonContainer button:hover{
-    background-color: white;
+    background-color: transparent;
     color: black;
     border: 1px solid black;
 }
 
-.divCosts {
-    padding-left: 1.2rem;
-    padding-right: 1.2rem;
-}
-
-.divCosts:nth-child(2) {
-    padding-top: .7rem;
-}
-
 .right-columnInformation {
-    width: 200%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.informationToggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 80%;
+    padding: 1rem;
+    border-bottom: 1px solid black;
+    cursor: pointer; /* Agregado para indicar que es interactivo */
+    transition: background-color 0.3s ease; /* Efecto de transición al fondo */
+}
+
+
+.groupInformation {
+    width: 80%;
+    justify-content: center;
+    display: flex;
+}
+
+.accordion-CheckOut {
+    padding-left: 3rem;
 }

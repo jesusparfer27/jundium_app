@@ -1,0 +1,35 @@
+/* src/css/components/modal/modal.css */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 500px;
+    height: auto;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    z-index: 1002; /* Asegúrate de que esté por encima del overlay */
+    display: none; /* Oculto por defecto */
+    flex-direction: column;
+    padding: 20px;
+    gap: 10px;
+    opacity: 0; /* Para la transición */
+    transition: opacity 0.3s ease; /* Transición para el fade in */
+}
+
+.modal.active {
+    display: flex; /* Mostrar cuando está activo */
+    opacity: 1; /* Aparecer con fade in */
+}
+
+.closeModal {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}

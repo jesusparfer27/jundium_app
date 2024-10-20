@@ -1,0 +1,121 @@
+.admin-panel {
+    width: 100%;
+    background-color: #D9D9D9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 4rem;
+}
+
+.createProductContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.editProductContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.createProductContainer, .editProductContainer {
+    width: 100%;
+    padding-top: 5rem;
+}
+
+.createProduct, .editProduct {
+    width: 90%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.introduceTypeOfProduct, .introduceName, .introducePrice,
+.introduceImage, .introduceMultimedia, .introduceSetSizes,
+.introduceSetColors, .introduceAddMaterials, .introduceAddDescription,
+.editProductReference, .editDiscount, .editSetOutOfStock {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.introduceTypeOfProduct label, .introduceName label, .introducePrice label, 
+.introduceImage label, .introduceMultimedia label, .introduceSetSizes label, 
+.introduceSetColors label, .introduceAddMaterials label, 
+.introduceAddDescription label, .editProductReference label, 
+.editDiscount label, .editSetOutOfStock label {
+    font-weight: bold;
+    width: 90%;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    padding-bottom: .5rem;
+}
+
+input, textarea {
+    width: 90%;
+    padding: 01rem;
+    font-size: 16px;
+    margin-bottom: 0.5rem;
+    border: 1px solid #ccc;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.submitEdition, .submitEditProduct {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.submitEdition,
+.submitEditProduct {
+    width: 91.5%;
+    justify-content: center;
+    padding-top: 2rem;
+}
+
+.editSetOutOfStock {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 90%;
+    padding-left: 5rem;
+}
+
+.editSetOutOfStock label {
+    width: 7%;
+    display: flex;
+    align-self: center;
+    padding-bottom: 0;
+}
+
+.editSetOutOfStock input {
+    width: 5%;
+}
+
+.submitCreateButton, .submitEditProductButton {
+    background-color: black;
+    color: white;
+    padding: 0.75rem 2rem;
+    border: 1px solid black;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    width: 100%;
+}
+
+.submitCreateButton:hover, .submitEditProductButton:hover {
+    background-color: #D9D9D9;
+    color: black;
+}
+
+.error-text {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    width: 90%;
+}

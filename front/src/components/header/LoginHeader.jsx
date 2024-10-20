@@ -1,5 +1,5 @@
 // src/components/LoginContainer.jsx
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HeaderContext } from '../../context/HeaderContext';
 import '../../css/components/header/login.css';
@@ -9,10 +9,21 @@ const LoginContainer = () => {
     const loginContainerRef = useRef(null);
     const navigate = useNavigate();
 
+    // Estado para los inputs de email y contraseña
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
     const handleLogin = (event) => {
         event.preventDefault(); // Previene el envío por defecto del formulario
-        navigate('/profile');
-        closeMenu();
+
+        // Verifica si el email y la contraseña están vacíos
+        if (email && password) {
+            navigate('/admin'); // Redirige a /admin si ambos campos están llenos
+        } else {
+            navigate('/profile'); // Redirige a /profile si los campos están vacíos
+        }
+
+        closeMenu(); // Cierra el menú
     };
 
     return (
@@ -34,11 +45,21 @@ const LoginContainer = () => {
                 </div>
                 <div className="inputField">
                     <label htmlFor="email">Email</label>
-                    <input type="text" id="email"/>
+                    <input
+                        type="text"
+                        id="email"
+                        value={email} // Estado para el valor del input
+                        onChange={(e) => setEmail(e.target.value)} // Actualiza el estado
+                    />
                 </div>
                 <div className="inputField">
                     <label htmlFor="password">Contraseña</label>
-                    <input type="password" id="password"/>
+                    <input
+                        type="password"
+                        id="password"
+                        value={password} // Estado para el valor del input
+                        onChange={(e) => setPassword(e.target.value)} // Actualiza el estado
+                    />
                     <a href="/recuperar-contraseña" className="forgotPassword">Recuperar contraseña</a>
                 </div>
                 <div className="additionalText">

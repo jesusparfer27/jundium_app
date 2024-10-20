@@ -15,6 +15,8 @@ import { CheckOutPage } from "../pages/CheckOutPage";
 import { EmailSignIn } from "../pages/EmailSignIn";
 import { Profile } from "../pages/Profile";
 import { SecondStepSignIn} from '../pages/SecondStepSignIn'
+import { Admin } from "../pages/Admin";
+import { MultifunctionalProductPage } from "../pages/MultifunctionalProductPage";
 
 // Crear las rutas
 const router = createBrowserRouter([
@@ -69,6 +71,14 @@ const router = createBrowserRouter([
             {
                 path: 'email-validation-2',
                 element: <SecondStepSignIn/>
+            },
+            {
+                path: 'admin',
+                element: <Admin/>
+            },
+            {
+                path: 'wish-list',
+                element: <MultifunctionalProductPage/>
             }
         ]
     }

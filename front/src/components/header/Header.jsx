@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { HeaderContext } from '../../context/HeaderContext';
 import '../../css/components/header/header.css';
 import HeaderMenu from './MenuHeader';
-import FavouriteContainer from './FavouriteHeader';
 import LoginContainer from './LoginHeader';
 import CartContainer from './CartHeader';
 import ContactContainer from './ContactHeader';
@@ -12,6 +11,7 @@ import HeaderSearch from './SearchHeader';
 const Header = () => {
     const { activeMenu, openMenu } = useContext(HeaderContext);
     const location = useLocation();
+    const navigate = useNavigate();
 
     // Determinar si estamos en la HomePage
     const isHomePage = location.pathname === '/';
@@ -46,7 +46,7 @@ const Header = () => {
                             </button>
                         </div>
                         <div className="like">
-                            <button className='button favButton' onClick={() => openMenu('favourite')}>
+                            <button className='button favButton' onClick={() => navigate('/wish-list')}>
                                 <span className="material-symbols-outlined">favorite</span>
                             </button>
                         </div>
@@ -66,7 +66,6 @@ const Header = () => {
 
             {/* Componentes de Contenedores */}
             {activeMenu === 'sideMenu' && <HeaderMenu />}
-            {activeMenu === 'favourite' && <FavouriteContainer />}
             {activeMenu === 'login' && <LoginContainer />}
             {activeMenu === 'cart' && <CartContainer />}
             {activeMenu === 'contact' && <ContactContainer />}

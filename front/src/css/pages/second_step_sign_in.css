@@ -1,62 +1,161 @@
-section {
-    background-color: #D9D9D9;
-  }
-  
-  .second-step-sign-in {
-    width: 100%;
-    margin: 0 auto;
-    padding: 2rem 0;
-  }
-  
-  .second-step-sign-in-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center; /* Añadido para centrar verticalmente */
-  }
-  
-  .header, .registro-proceso, .informacion-adicional, .politica-privacidad, .boton-continuar {
-    width: 90%; /* Ajustado al 90% para todos los divs */
-    padding: 1rem 0;
-  }
-  
-  .input-password {
-    background-color: white;
-    padding: 1rem;
-    margin-top: 0.5rem;
-  }
+.profile-section  {
+  background-color: #D9D9D9;
+}
 
-  .campos {
-    background-color: white;
-  }
-  
-  .campo {
-    margin-bottom: 1rem;
-  }
-  
-  .politica-privacidad {
-    display: flex;
-    background-color: white;
-    align-items: center;
-  }
-  
-  .boton-continuar {
-    text-align: center;
-    width: 100%;
-  }
-  
-  .submit-button2 {
-    padding: 0.75rem 2rem;
-    background-color: black;
-    color: white;
-    border: 1px solid black;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-    width: 90%;
-  }
-  
-  .submit-button:hover {
-    background-color: white;
-    color: black;
-  }
-  
+.header h2 {
+  padding-left: 0;
+  border-bottom: 1px solid black;
+  padding-bottom: 1.3rem;
+}
+
+.second-step-sign-in {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  background-color: #D9D9D9;
+
+}
+
+.second-step-sign-in-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Centrado verticalmente */
+  width: 100%;
+}
+
+.header, .registro-proceso, .informacion-adicional, .politica-privacidad, .boton-continuar {
+  width: 90%; /* Ajustado al 90% para todos los divs */
+  padding: 1rem 0; /* Padding general */
+}
+
+.registro-proceso {
+  padding: 0; /* Sin padding adicional */
+}
+
+.informacion-adicional {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
+
+.input-password,
+.campos {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centrar los elementos en el eje horizontal */
+}
+
+.input-password {
+  background-color: white;
+  margin-top: 0.5rem;
+  padding-bottom: 1.5rem;
+  padding-top: 1.5rem;
+}
+
+.input-field {
+  width: 90%; /* Ajustar el ancho a 90% para todos los campos */
+  margin-top: 0.5rem; /* Margen entre el label y el input/select */
+  justify-content: center; /* Centrar contenido en el input/select */
+  padding: 0.5rem; /* Añadir un poco de padding para mejorar la apariencia */
+}
+
+.password-validation {
+  width: 90%;
+  display: flex;
+}
+
+.input-password label {
+
+  align-self: self-end;
+  width: 95.5%;
+}
+
+.campos {
+  background-color: white;
+  width: 100%; /* Contenedor de campos al 100% */
+  padding-top: 2rem;
+}
+
+.campo {
+  margin-bottom: 1.5rem;
+  width: 100%; /* 100% de ancho */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centrar label en el centro de su contenedor */;
+}
+
+.campo label {
+  width: 100%; /* El label ocupa todo el ancho del contenedor */
+}
+
+.campo input,
+.campo select {
+  width: 90%; /* El input y select miden el 90% */
+  margin-top: 0.5rem; /* Margen entre el label y el input/select */
+  margin-bottom: 0.5rem;
+  justify-content: center; /* Centrar contenido en el input/select */
+}
+
+.campo select {
+  width: 91%;
+}
+
+.politica-privacidad {
+  display: flex;
+  background-color: white;
+  align-items: center;
+}
+
+.boton-continuar {
+  text-align: center;
+  width: 90%;
+  display: flex;
+  justify-content: flex-end; /* Alinear botón a la derecha */
+}
+
+.submit-button2 {
+  padding: 0.75rem 2rem;
+  background-color: black;
+  color: white;
+  border: 1px solid black;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  width: 40%;
+}
+
+.submit-button2:hover {
+  background-color: #D9D9D9;
+  color: black;
+}
+
+/* Estilos para el AccordionContainer */
+.accordion-container {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  background-color: white;
+  padding: 20px;
+  gap: 20px;
+}
+
+.campo label {
+  width: 90%;
+}
+
+/* Otros estilos específicos */
+.accordion-item {
+  border-bottom: 1px solid black;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.politica-privacidad {
+  margin-top: 2rem;
+  margin-bottom: .5rem;
+}
+
+.checkbox-terms {
+  margin-left: 3rem;
+  width:  3%;
+}

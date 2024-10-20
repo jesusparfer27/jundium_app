@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import SeasonVideo from '../assets/1321208-uhd_3840_2160_30fps.mp4';
 import { NavLink } from 'react-router-dom';
 import '../css/pages/homepage.css';
+import imageHome from '../assets/photos/pexels-sebastiaan9977-1311590.jpg'
 
 export const HomePage = () => {
     const [offset, setOffset] = useState(0);
@@ -48,19 +49,10 @@ export const HomePage = () => {
         <main>
             <section className="videoScrollContainer">
                 <div className="videoWrapper">
-                    <video
-                        width="100%"
-                        height="auto"
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        className="scrollVideo"
+                    <img
+                        className="scrollImage"
                         style={{ transform: `scale(${scale})`, transition: 'transform 0.1s ease' }} // Aplicar el estilo de zoom
-                    >
-                        <source src={SeasonVideo} type="video/mp4" />
-                        Tu navegador no soporta la reproducción de videos.
-                    </video>
+                        src={imageHome} />
                 </div>
             </section>
 
@@ -71,7 +63,7 @@ export const HomePage = () => {
                         <NavLink
                             to={`/product/${product.id}`}
                             key={product.id}
-                            className="dropItem"
+                            className={({ isActive }) => (isActive ? 'myCustomActiveClass' : 'myCustomClass')}
                         >
                             <div className="imageContainer">
                                 <img
@@ -81,7 +73,7 @@ export const HomePage = () => {
                                 />
                             </div>
                             <div className="itemDescription">
-                                <p>{product.name}</p>
+                                <p className='pHome'>{product.name}</p>
                             </div>
                         </NavLink>
                     ))}
@@ -105,7 +97,7 @@ export const HomePage = () => {
                     </NavLink>
                 </div>
             </section>
-            
+
             <section className="carruselHome">
                 <div className="leftTextContainer">
                     <p>Descubre nuestros productos destacados</p>
@@ -145,28 +137,28 @@ export const HomePage = () => {
             </section>
 
             <section className="newCollections">
-    <h1 className='h1Style'>Echa un vistazo a los nuevos drops</h1>
-    <div className="newDropsHome2">
-        {productsData.products.slice(0, 3).map((product) => (  // Cambié aquí
-            <NavLink
-                to={`/product/${product.id}`}
-                key={product.id}
-                className="dropItem"
-            >
-                <div className="imageContainer">
-                    <img
-                        src={product.image}
-                        alt={product.name}
-                        className="itemImage"
-                    />
+                <h1 className='h1Style'>Echa un vistazo a los nuevos drops</h1>
+                <div className="newDropsHome2">
+                    {productsData.products.slice(0, 3).map((product) => (  // Cambié aquí
+                        <NavLink
+                            to={`/product/${product.id}`}
+                            key={product.id}
+                            className="dropItem"
+                        >
+                            <div className="imageContainer">
+                                <img
+                                    src={product.image}
+                                    alt={product.name}
+                                    className="itemImage"
+                                />
+                            </div>
+                            <div className="itemDescription">
+                                <p>{product.name}</p>
+                            </div>
+                        </NavLink>
+                    ))}
                 </div>
-                <div className="itemDescription">
-                    <p>{product.name}</p>
-                </div>
-            </NavLink>
-        ))}
-    </div>
-</section>
+            </section>
 
 
         </main>

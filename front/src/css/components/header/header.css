@@ -98,8 +98,8 @@ html,
     top: 0;
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
     color: black; /* Texto siempre negro */
-    padding-top: 1.2rem;
-    padding-bottom: 1.2rem;
+    padding-top: .9rem;
+    padding-bottom: .9rem;
     border-bottom: 2px solid #dcdcdc;
     z-index: 11;
     
@@ -113,12 +113,17 @@ html,
     color: black; /* Asegúrate de que los textos e íconos sean negros */
 }
 
+.headerContainer .material-symbols-outlined,
+.headerContainer .logo{
+    font-size: 24px;
+}
+
 /* Alineación de los elementos del header */
 .headerLeft,
 .headerRight {
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: .5rem;
     padding-top: 0.7rem;
     padding-bottom: 0.7rem;
     padding-left: 3rem;
@@ -135,6 +140,7 @@ html,
 .logo {
     font-size: 16px;
     color: white; /* Color del logo en estado normal */
+    padding-left: 3rem;
 }
 
 /* Iconos y textos alineados */

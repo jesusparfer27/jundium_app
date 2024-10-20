@@ -1,36 +1,67 @@
+
+
 .profile-section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #D9D9D9;
+    z-index: 1;
 }
 
 .profile-image {
-    width: 100%;
-    height: 20vh;
-    background-image: url('path/to/your/image.jpg');
-    background-size: cover;
-    background-position: center;
+    max-width: 100%;
+    height: auto;
     position: relative;
-    background-color: red;
-    padding-bottom: 6.2rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    margin-bottom: -4rem; /* Ajustar según sea necesario */
+    margin-top: -8rem;
+}
+
+.profile-image img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    margin-top: -45rem;
+    margin-bottom: -5rem;
+}
+
+.backgroundPadding_Image {
+    position: relative;
+    padding: 2rem; /* Ajustar padding para crear el espacio entre la imagen y el contenido */
+    text-align: center; /* Centramos el texto */
+    margin-bottom: 4rem;
+    
 }
 
 .profile-initials {
     position: absolute;
-    bottom: -4.7rem;
+    top: 0; /* Top negativo para superponer sobre la imagen */
     left: 50%;
     transform: translateX(-50%);
-    z-index: 1;
     background-color: #fff;
     border-radius: 50%;
     width: 10rem;
     height: 10rem;
     display: flex;
+    margin-bottom: 4rem;
     justify-content: center;
     align-items: center;
     font-size: 2rem;
+    z-index: 2; /* Para que se superponga sobre la imagen */
 }
+
+.user_name {
+    font-size: 1.5rem; /* Ajustar tamaño de fuente si es necesario */
+    padding-top: 1rem; /* Espacio superior */
+    padding-bottom: 1rem; /* Espacio inferior */
+    text-align: center; /* Centrar el texto */
+    color: #333; /* Cambiar color si es necesario */
+}
+
+
 
 .userProfile {
     display: flex;
@@ -42,7 +73,8 @@
     background-color: #D9D9D9;
 }
 
-.profile-info, .order-wishlist {
+.profile-info,
+.order-wishlist {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -51,17 +83,12 @@
     gap: 1rem;
 }
 
-
-
 .order-wishlist {
     background-color: #D9D9D9;
 }
 
-
 .background-containerProfile {
     background-color: white;
-    padding-left: 2rem;
-
 }
 
 .headerProfile {
@@ -69,7 +96,33 @@
     padding-bottom: 0.5rem;
     text-align: start;
     padding-top: 2rem;
-    padding-left: 1.3rem;
+    padding-left: 3rem;
+    font-size: 1.5rem;
+}
+
+.separation_div {
+    border-bottom: 1px solid black;
+}
+
+.headerProfileOrders {
+    width: 80%;
+    padding-bottom: 0.5rem;
+    text-align: start;
+    padding-top: 2rem;
+    font-size: 1.5rem;
+    padding-bottom: 1.5rem;
+    padding-left: 3rem;
+}
+
+.headerProfileWishList {
+    width: 80%;
+    padding-bottom: 0.5rem;
+    text-align: start;
+    padding-top: 2rem;
+    font-size: 1.5rem;
+    padding-bottom: 1.5rem;
+    padding-left: 3rem;
+
 }
 
 .required-fields {
@@ -77,8 +130,7 @@
     margin-bottom: 1rem;
     border-top: 1px solid black;
     padding-top: 1.3rem;
-    padding-right: 1.3rem;
-
+    padding-right: 3rem;
 }
 
 .input-group .input-field {
@@ -94,18 +146,19 @@
 .input-field {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     width: 90%;
     padding-top: .5rem;
     padding-bottom: .5rem;
     gap: .8rem;
-    padding-left: 2.2rem;
 }
 
-input, select {
+input,
+select {
     padding-top: 0.8rem;
     padding-bottom: 0.8rem;
-    padding-left: 0.8rem;
-    padding-right: 0.8rem;
+    
+    padding-right: 2.3rem;
     border: 1px solid #ccc;
     border-radius: 5px;
     width: 100%;
@@ -116,16 +169,15 @@ select {
 }
 
 input {
-    width: 95%
+    width: 95%;
 }
 
 .accordionProfile {
     margin-bottom: 1rem;
-    padding-left: 2.2rem;
-
+    padding-left: 3.3rem;
 }
 
-.accordion-button {
+.accordion-buttonLocation {
     background-color: white;
     border: none;
     padding: 0.5rem;
@@ -152,13 +204,14 @@ input {
     display: flex;
     flex-direction: column;
     gap: .8rem;
-    padding-left: 2.2rem;
+    width: 40%;
 }
 
 .contact-item {
     display: flex;
     justify-content: flex-start;
     flex-direction: row-reverse;
+
 }
 
 .contact-label {
@@ -172,15 +225,15 @@ input {
 .birth-date {
     margin-top: 1rem;
     display: flex;
-    flex-direction: column  ;
+    flex-direction: column;
     justify-content: center;
     width: 60%;
-    padding-left: 2.2rem;
+    padding-left: 3.4rem;
 }
 
 .date-selectors {
     display: flex;
-    gap: 0.5rem; 
+    gap: 0.5rem;
 }
 
 .submit-buttonProfile {
@@ -207,23 +260,32 @@ input {
     border: 1px solid black;
 }
 
-.no-orders, .no-wishlist {
+.no-orders,
+.no-wishlist {
     margin-top: 1rem;
     margin-bottom: 1rem;
 }
 
 .go-to-store {
     margin-bottom: 2rem;
+    padding-top: 1.5rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
-.orders-list, .wishlist-list {
+.orders-list,
+.wishlist-list {
     display: flex;
     flex-direction: row;
     gap: 1rem;
+    justify-content: center;
     width: 100%;
+    padding-top: 2rem;
 }
 
-.order-item, .wishlist-item {
+.order-item,
+.wishlist-item {
     display: flex;
     gap: 1rem;
     padding: 1rem;
@@ -240,27 +302,42 @@ input {
     width: 40%;
 }
 
-.order-image, .wishlist-image {
+.order-image,
+.wishlist-image {
     flex: 1;
     max-width: 80px;
 }
 
-.order-image img, .wishlist-image img {
+.order-image img,
+.wishlist-image img {
     width: 100%;
     border-radius: 5px;
 }
 
-.order-name, .wishlist-name {
+.order-name,
+.wishlist-name {
     flex: 2;
     display: flex;
     align-items: center;
     font-size: 1.2rem;
 }
 
-.order-price, .wishlist-price {
+.order-price,
+.wishlist-price {
     flex: 1;
     display: flex;
     align-items: center;
     font-weight: bold;
 }
+
+.submit-buttonProfile_Orders_WishList {
+    width: 90%;
+    background-color: black;
+    color: white;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-radius: 22px;
+}
+
+
 
