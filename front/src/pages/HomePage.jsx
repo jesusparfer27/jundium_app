@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import SeasonVideo from '../assets/1321208-uhd_3840_2160_30fps.mp4';
+import SeasonVideo from '../assets/home-video-season.mp4';
 import { NavLink } from 'react-router-dom';
 import '../css/pages/homepage.css';
 import imageHome from '../assets/photos/pexels-sebastiaan9977-1311590.jpg'
@@ -47,6 +47,7 @@ export const HomePage = () => {
 
     return (
         <main>
+            <article className='stickyContainer-1'>
             <section className="videoScrollContainer">
                 <div className="videoWrapper">
                     <img
@@ -81,46 +82,58 @@ export const HomePage = () => {
             </section>
 
             <section>
-                <div className="container_video">
-                    <NavLink to="/video" className="videoLink">
-                        <video
-                            width="100%"
-                            height="auto"
-                            autoPlay
-                            muted
-                            loop
-                            playsInline
-                        >
-                            <source src={SeasonVideo} type="video/mp4" />
-                            Tu navegador no soporta la reproducción de videos.
-                        </video>
-                    </NavLink>
+    <div className="container_videoSession-2">
+        <NavLink to="/video" className="videoLink">
+            <div className="videoContentWrapper">
+                <video
+                    className="videoElement"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                >
+                    <source src={SeasonVideo} type="video/mp4" />
+                    Tu navegador no soporta la reproducción de videos.
+                </video>
+                <div className="textOverlay">
+                    <h2>Explora lo nuevo de la temporada</h2>
+                    <p>Descubre las últimas colecciones que hemos preparado para ti.</p>
                 </div>
-            </section>
+            </div>
+        </NavLink>
+    </div>
+</section>
+</article>
 
+<article className='stickyContainer-2'>
             <section className="carruselHome">
-                <div className="leftTextContainer">
-                    <p>Descubre nuestros productos destacados</p>
-                </div>
-                <div className="rightCarouselContainer">
-                    <div className="carousel" style={{ transform: `translateX(-${offset}%)`, transition: 'transform 0.1s linear' }}>
-                        {[...productsData.products, ...productsData.products].map((product, index) => (
-                            <div key={index} className="carouselItem">
-                                <img
-                                    src={product.image}
-                                    alt={product.name}
-                                    className="carouselImage"
-                                />
-                                <p>{product.name}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
+    <div className="leftTextContainer">
+        <p>Descubre nuestros productos destacados</p>
+    </div>
+    <div className="rightCarouselContainer">
+        <div className="carousel" style={{ transform: `translateX(-${offset}%)`, transition: 'transform 0.1s linear' }}>
+            {[...productsData.products, ...productsData.products].map((product, index) => (
+                <NavLink
+                    to={`/product/${product.id}`}
+                    key={index}
+                    className="carouselItem"
+                >
+                    <img
+                        src={product.image}
+                        alt={product.name}
+                        className="carouselImage"
+                    />
+                    <p>{product.name}</p>
+                </NavLink>
+            ))}
+        </div>
+    </div>
+</section>
+
 
             <section>
                 <div className="container_video">
-                    <NavLink to="/video" className="videoLink">
+                    <NavLink to="/video" className="videoLink2">
                         <video
                             width="100%"
                             height="auto"
@@ -149,7 +162,7 @@ export const HomePage = () => {
                                 <img
                                     src={product.image}
                                     alt={product.name}
-                                    className="itemImage"
+                                    className="itemImageDrops"
                                 />
                             </div>
                             <div className="itemDescription">
@@ -159,6 +172,7 @@ export const HomePage = () => {
                     ))}
                 </div>
             </section>
+            </article>
 
 
         </main>

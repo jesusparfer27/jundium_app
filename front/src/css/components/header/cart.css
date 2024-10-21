@@ -21,6 +21,10 @@
     animation: slideInVertical 0.3s ease forwards;
 }
 
+.checkoutSection {
+    padding-top: 5.9rem;
+}
+
 .closeContainerCart {
     background: none;
     border: none;

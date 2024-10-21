@@ -1,6 +1,6 @@
 /* multifunctional_product_page.css */
 .wishlistSection {
-
+    padding-top: 4rem;
     background-color: #f9f9f9;
 }
 
@@ -60,6 +60,8 @@
     padding-left: 1.5rem;
     padding-top: 1.5rem;
 }
+
+
 
 
 .removeButtonContainer {

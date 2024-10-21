@@ -8,17 +8,17 @@ body,
 
 /* Quita los estilos por defecto del NavLink */
 .myCustomClass {
-    text-decoration: none; /* Elimina la subrayado del enlace */
-    color: inherit; /* Mantiene el color actual del texto */
+    text-decoration: none;
+    color: inherit;
 }
 
 /* Estilos para cuando el enlace está activo */
 .myCustomActiveClass {
     text-decoration: none;
-    color: #000; /* O cualquier color que prefieras para los enlaces activos */
+    color: #000;
 }
 
-
+/* Estilos para la imagen con desplazamiento */
 .scrollImage {
     margin-top: -30rem;
     margin-bottom: -2rem;
@@ -41,6 +41,7 @@ body,
     padding-bottom: 1.4rem;
 }
 
+/* Estilo para la cuadrícula de nuevos drops */
 .newDropsHome {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -48,13 +49,13 @@ body,
     justify-items: center;
     margin: 0 auto;
     width: 100%;
-    min-height: 800px; /* Incrementa la altura mínima para hacerla más alta */
-    gap: 2rem; /* Añade un espacio entre los elementos para mejor separación */
-    padding: 2rem; /* Añade padding para dar más espacio alrededor del contenido */
-    border-radius: 10px; /* Bordes redondeados para darle un toque moderno */
+    min-height: 800px;
+    gap: 2rem;
+    padding: 2rem;
+    border-radius: 10px;
 }
 
-/* Estilos para el video link */
+/* Estilos para el enlace de video */
 .videoLink {
     display: block;
     margin: 2rem 0;
@@ -67,26 +68,92 @@ body,
     height: auto;
 }
 
-
-.videoWrapper {
+.container_videoSession-2 {
+    
+    top: 0; /* Mantén el video en la parte superior de la ventana */
+    width: 100%;
+    height: 100vh; /* Asegúrate de que ocupe toda la altura de la ventana */
+    z-index: 1; /* Coloca el contenedor detrás de otros elementos */
+    overflow: hidden; /* Evita que se desborde */
+    object-position: bottom;
     position: sticky;
-    height: auto;
-    z-index: 10;
-    max-height: auto;
 }
 
+.videoContentWrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.videoElement {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0; /* Video en una capa inferior */
+}
+
+.textOverlay {
+    position: absolute;
+    bottom: 20%; /* Ajusta la posición según sea necesario */
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    z-index: 2; /* El texto queda encima del video */
+    text-align: center;
+}
+
+/* Contenedor de video con posición fija */
+.videoWrapper {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    overflow: hidden;
+}
+
+/* Estilo para la imagen de los productos */
 .itemImage {
     width: 20vw;
     height: 485px;
 }
 
+/* Estilo para el contenedor stickyContainer-1 */
+.stickyContainer-1 {
+    position: sticky;
+    bottom: 0;
+    z-index: 1; /* Z-index menor para estar debajo de stickyContainer-2 */
+    background-color: white; /* Ajustar el fondo según sea necesario */
+}
+
+/* Estilo para el contenedor stickyContainer-2 */
+.stickyContainer-2 {
+    position: sticky;
+    top: 0;
+    z-index: 2; /* Z-index mayor para estar por encima de stickyContainer-1 */
+    background-color: white; /* Ajustar el fondo según sea necesario */
+}
+
+.sticky-bottom {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+}
+
+/* Ocultar stickyContainer-1 cuando stickyContainer-2 está visible */
+.stickyContainer-1.hidden {
+    z-index: 0; /* Cambiar a un z-index más bajo para estar debajo */
+}
+
+
+/* Contenedor del carrusel en la página principal */
 .carruselHome {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 2rem;
+    z-index: 9999;
 }
 
+/* Estilo para el contenedor de texto a la izquierda */
 .leftTextContainer {
     width: 30%;
     display: flex;
@@ -96,6 +163,7 @@ body,
     text-align: right;
 }
 
+/* Estilo para el contenedor del carrusel a la derecha */
 .rightCarouselContainer {
     width: 65%;
     display: flex;
@@ -109,17 +177,19 @@ body,
 .carousel {
     display: flex;
     gap: 2rem;
-    animation: scroll 60s linear infinite; /* Mueve el carrusel más despacio (60s) */
+    animation: scroll 60s linear infinite;
     position: relative;
 }
 
+/* Elemento individual del carrusel */
 .carouselItem {
     flex: 0 0 auto;
-    width: 300px; /* Elementos más anchos */
-    height: 400px; /* Elementos más altos */
+    width: 300px;
+    height: 400px;
     text-align: center;
 }
 
+/* Estilo de imagen del carrusel */
 .carouselImage {
     width: 100%;
     height: 100%;
@@ -155,51 +225,56 @@ body,
     background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
 }
 
+/* Contenedor para el scroll de video */
 .videoScrollContainer {
     height: 3600px;
     position: relative;
 }
 
-.videoWrapper {
-    position: sticky;
-    top: 0;
-    height: auto;
-    z-index: 10;
-    overflow: hidden; /* Asegura que el contenido no se desborde */
-}
-
+/* Contenedor para los productos recientes */
 .containerProductsLast {
-    display: grid; /* Cambia a grid para usar gap */
-    grid-template-columns: repeat(3, 1fr); /* Ajusta según el número de productos que desees mostrar por fila */
-    gap: 2rem; /* Espacio entre los elementos */
-    justify-items: center; /* Centrar elementos si es necesario */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    justify-items: center;
 }
 
+/* Estilos para los productos */
 .product {
-    width: 100%; /* Mantener el ancho al 100% del contenedor */
+    width: 100%;
     height: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: transparent; /* Asegúrate de que el color gris no afecte a todos los productos */
+    background-color: transparent;
 }
 
+/* Simulación de imagen */
 .imageSimulator {
-    width: 100%; /* Ajusta el ancho a 100% */
+    width: 100%;
     height: 400px;
-    background-color: gray; /* Esto afectará solo a la simulación de imagen */
-    border-radius: 8px; /* Añadir bordes redondeados si lo deseas */
+    background-color: gray;
+    border-radius: 8px;
 }
 
+/* Estilo para los ítems de drops */
 .dropItem {
     justify-content: center;
+    text-decoration: none;
+    color: black;
 }
 
-
+/* Sección adicional para nuevos drops */
 .newDropsHome2 {
     display: flex;
     gap: 3rem;
     justify-content: center;
     padding-bottom: 3.6rem;
+}
+
+/* Estilo para la imagen de los drops */
+.itemImageDrops {
+    width: 100%;
+    height: 700px;
 }
