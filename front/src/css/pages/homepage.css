@@ -9,19 +9,26 @@ body,
 /* Quita los estilos por defecto del NavLink */
 .myCustomClass {
     text-decoration: none;
-    color: inherit;
+    color: black;
+
+}
+
+.pHome {
+    color: black;
+    text-decoration: none;
 }
 
 /* Estilos para cuando el enlace está activo */
 .myCustomActiveClass {
     text-decoration: none;
-    color: #000;
+    color: black;
 }
 
 /* Estilos para la imagen con desplazamiento */
 .scrollImage {
     margin-top: -30rem;
-    margin-bottom: -2rem;
+    margin-bottom: -14rem;
+    height: 140vh;
     width: 100%;
     object-fit: cover;
 }
@@ -30,6 +37,7 @@ body,
 .newCollections {
     padding: 2rem 9.4rem;
     text-align: center;
+    z-index: 1;
 }
 
 .h1Style {
@@ -68,29 +76,32 @@ body,
     height: auto;
 }
 
+/* Estilos para container_videoSession-2 */
 .container_videoSession-2 {
-    
-    top: 0; /* Mantén el video en la parte superior de la ventana */
+    top: 0;
     width: 100%;
-    height: 100vh; /* Asegúrate de que ocupe toda la altura de la ventana */
-    z-index: 1; /* Coloca el contenedor detrás de otros elementos */
-    overflow: hidden; /* Evita que se desborde */
-    object-position: bottom;
+    height: 120vh;
+    overflow: hidden;
     position: sticky;
+    z-index: 1; /* Asegúrate de que el z-index sea menor */
 }
 
-.videoContentWrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
+/* Sección posterior a container_videoSession-2 */
+.carruselHome,
+.container_image_autumn,
+.newCollections,
+.newDropsHome2 {
+    z-index: 2; /* Valor más alto para superponer por encima de container_videoSession-2 */
+    position: relative; /* Asegura que el z-index sea aplicado correctamente */
+    background-color: white;
 }
 
 .videoElement {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: 0; /* Video en una capa inferior */
 }
+
 
 .textOverlay {
     position: absolute;
@@ -98,15 +109,13 @@ body,
     left: 50%;
     transform: translateX(-50%);
     color: #fff;
-    z-index: 2; /* El texto queda encima del video */
-    text-align: center;
 }
 
 /* Contenedor de video con posición fija */
 .videoWrapper {
     position: sticky;
     top: 0;
-    z-index: 10;
+    padding-top: 12rem;
     overflow: hidden;
 }
 
@@ -114,35 +123,8 @@ body,
 .itemImage {
     width: 20vw;
     height: 485px;
+    
 }
-
-/* Estilo para el contenedor stickyContainer-1 */
-.stickyContainer-1 {
-    position: sticky;
-    bottom: 0;
-    z-index: 1; /* Z-index menor para estar debajo de stickyContainer-2 */
-    background-color: white; /* Ajustar el fondo según sea necesario */
-}
-
-/* Estilo para el contenedor stickyContainer-2 */
-.stickyContainer-2 {
-    position: sticky;
-    top: 0;
-    z-index: 2; /* Z-index mayor para estar por encima de stickyContainer-1 */
-    background-color: white; /* Ajustar el fondo según sea necesario */
-}
-
-.sticky-bottom {
-    position: sticky;
-    bottom: 0;
-    z-index: 1;
-}
-
-/* Ocultar stickyContainer-1 cuando stickyContainer-2 está visible */
-.stickyContainer-1.hidden {
-    z-index: 0; /* Cambiar a un z-index más bajo para estar debajo */
-}
-
 
 /* Contenedor del carrusel en la página principal */
 .carruselHome {
@@ -150,7 +132,15 @@ body,
     justify-content: space-between;
     align-items: center;
     padding: 2rem;
-    z-index: 9999;
+}
+
+.imageAutumn {
+    object-fit: cover;
+    width: 60%;
+    padding-left: 20rem;
+    padding-top: -2rem;
+    height: 100vh;
+    margin-top: 24.5rem;
 }
 
 /* Estilo para el contenedor de texto a la izquierda */
@@ -169,25 +159,47 @@ body,
     display: flex;
     align-items: center;
     overflow: hidden;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
     position: relative;
     margin-left: 2rem;
+    background-color: white;
 }
 
 /* Carrusel animado en bucle infinito */
 .carousel {
     display: flex;
     gap: 2rem;
-    animation: scroll 60s linear infinite;
+    animation: scroll 120s linear infinite;
     position: relative;
 }
 
 /* Elemento individual del carrusel */
 .carouselItem {
     flex: 0 0 auto;
-    width: 300px;
-    height: 400px;
+    width: 600px;
+    height: 700px;
     text-align: center;
+    color: black;
+    text-decoration: none;
 }
+
+/* Sección de video sticky */
+.container_image_autumn.stickyVideo {
+    top: 0;  /* Fija la parte superior */
+    width: 100%;  /* Ancho completo */
+    height: 120vh;  /* Altura ajustable según tus necesidades */
+    overflow: hidden;  /* Ocultar el desbordamiento */
+    position: sticky;  /* Hacer que se quede fijo al desplazarse */
+    z-index: 1;  /* Asegúrate de que el z-index sea menor */
+}
+
+/* Asegúrate de que el último section tenga un z-index más alto */
+.newCollections.lastSection {
+    position: relative;  /* Asegúrate de que el z-index se aplique correctamente */
+    z-index: 2;  /* Valor más alto para que se superponga por encima de otros elementos */
+}
+
 
 /* Estilo de imagen del carrusel */
 .carouselImage {
@@ -227,8 +239,9 @@ body,
 
 /* Contenedor para el scroll de video */
 .videoScrollContainer {
-    height: 3600px;
+    height: 2000px;
     position: relative;
+    z-index: -1;
 }
 
 /* Contenedor para los productos recientes */
