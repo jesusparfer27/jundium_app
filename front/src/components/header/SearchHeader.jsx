@@ -1,6 +1,6 @@
 import React, { useContext, useRef } from 'react';
 import { HeaderContext } from '../../context/HeaderContext';
-import PhotoMockup from '../../assets/photos/pexels-d-ng-thanh-tu-2922122-5693888.jpg';
+// import PhotoMockup from '../../assets/photos/pexels-d-ng-thanh-tu-2922122-5693888.jpg';
 import '../../css/components/header/search.css';
 
 const HeaderSearch = () => {

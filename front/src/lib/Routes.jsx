@@ -1,20 +1,14 @@
+// routes.js
 
 import { createBrowserRouter } from "react-router-dom";
 import App from '../App';
-
-// Importar las páginas
 import { HomePage } from "../pages/HomePage";
-import { WomanCollection } from "../pages/womanItems/WomanCollection";
-import { WomanBags } from "../pages/womanItems/WomanBags";
-import { WomanShoes } from "../pages/womanItems/WomanShoes";
-import { ManCollection } from "../pages/manItems/ManCollection";
-import { ManBags } from "../pages/manItems/ManBags";
-import { ManShoes } from "../pages/manItems/ManShoes";
-import { ProductPage } from "../pages/ProductPage";
+import  ProductsPage  from "../pages/ProductsPage";
+import { ShowingProductPage } from "../pages/ShowingProduct";
 import { CheckOutPage } from "../pages/CheckOutPage";
 import { EmailSignIn } from "../pages/EmailSignIn";
 import { Profile } from "../pages/Profile";
-import { SecondStepSignIn} from '../pages/SecondStepSignIn'
+import { SecondStepSignIn } from '../pages/SecondStepSignIn'
 import { Admin } from "../pages/Admin";
 import { MultifunctionalProductPage } from "../pages/MultifunctionalProductPage";
 
@@ -29,56 +23,36 @@ const router = createBrowserRouter([
                 element: <HomePage />
             },
             {
-                path: 'woman-collection',
-                element: <WomanCollection />
+                path: 'products/:category', // Aquí se agrega el parámetro de categoría
+                element: <ProductsPage />
             },
             {
-                path: 'woman-bags',
-                element: <WomanBags />
-            },
-            {
-                path: 'woman-shoes',
-                element: <WomanShoes />
-            },
-            {
-                path: 'man-collection',
-                element: <ManCollection />
-            },
-            {
-                path: 'man-bags',
-                element: <ManBags />
-            },
-            {
-                path: 'man-shoes',
-                element: <ManShoes />
-            },
-            {
-                path: 'product/:id', // Corregido aquí
-                element: <ProductPage />
+                path: 'product/:id',
+                element: <ShowingProductPage />
             },
             {
                 path: 'check-out',
-                element: <CheckOutPage/>
+                element: <CheckOutPage />
             },
             {
                 path: 'email-validation',
-                element: <EmailSignIn/>
+                element: <EmailSignIn />
             },
             {
                 path: 'profile',
-                element: <Profile/>
+                element: <Profile />
             },
             {
                 path: 'email-validation-2',
-                element: <SecondStepSignIn/>
+                element: <SecondStepSignIn />
             },
             {
                 path: 'admin',
-                element: <Admin/>
+                element: <Admin />
             },
             {
                 path: 'wish-list',
-                element: <MultifunctionalProductPage/>
+                element: <MultifunctionalProductPage />
             }
         ]
     }

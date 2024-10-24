@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../css/pages/multifunctional_product_page.css';
 import { useNavigate } from 'react-router-dom';
-import imageFavourite from '../assets/photos/pexels-kaip-996329.jpg'
+// import imageFavourite from ''
 
 export const MultifunctionalProductPage = () => {
     const [likedProducts, setLikedProducts] = useState([

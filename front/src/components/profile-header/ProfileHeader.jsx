@@ -1,5 +1,5 @@
 import React from 'react';
-import pictureProfile from '../../assets/photos/pexels-kaip-996329.jpg';
+// import pictureProfile from '../../assets/photos/pexels-kaip-996329.jpg';
 import '../../css/components/profile-header/profileheader.css';
 
 const ProfileImage = ({ initials, userName, isAdmin }) => {

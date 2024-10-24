@@ -1,31 +1,53 @@
 import React, { useEffect, useState } from 'react';
-import SeasonVideo from '../assets/home-video-season.mp4';
 import { NavLink } from 'react-router-dom';
 import '../css/pages/homepage.css';
-import autumnImage from '../assets/autumn-session-home.jpg';
-import winterImage from '../assets/winter-session-home.jpg';
+
+// IMAGES
+// HOME-SECTIONS
+import SeasonVideo from '../assets/home-sections/home-video-season.mp4';
+import AutumnImage from '../assets/home-sections/autumn-session-home.jpg';
+import winterImage from '../assets/home-sections/winter-session-home.jpg';
+
+// HOME-ARTICLES
+import WomanBags from '../assets/different-articles/example-bags-woman-home.jpg';
+import ManBags from '../assets/different-articles/example-bags-men-home.jpg';
+import WomanTshirts from '../assets/different-articles/example-tshirts-woman-home.jpg';
+import ManTshirts from '../assets/different-articles/example-tshirts-man-home.jpg';
+import WomanJackets from '../assets/different-articles/example-jackets-woman-home.jpg';
+import ManJackets from '../assets/different-articles/example-jackets-men-home.jpg';
+import WomanShoes from '../assets/different-articles/example-shoes-woman-home.jpg';
+import ManShoes from '../assets/different-articles/example-shoes-man-home.jpg';
+
+// HOME-NEW-SEASON
+import SummerSeason from '../assets/new-season/summer-season-square-home.jpg';
+import SpringSeason from '../assets/new-season/spring-season-square-home.jpg';
+import WinterSeason from '../assets/new-season/winter-season-square-home.jpg';
 
 export const HomePage = () => {
     const [offset, setOffset] = useState(0);
     const [scale, setScale] = useState(1); // Estado para el zoom
 
-    const productsData = {
-        products: [
-            { id: 1, name: "Camiseta Blanca", image: "https://via.placeholder.com/150?text=Camiseta+Blanca", category: "Ropa", description: "Camiseta blanca clásica, de algodón 100%." },
-            { id: 2, name: "Pantalones Vaqueros", image: "https://via.placeholder.com/150?text=Pantalones+Vaqueros", category: "Ropa", description: "Pantalones vaqueros ajustados de corte moderno." },
-            { id: 3, name: "Zapatillas Deportivas", image: "https://via.placeholder.com/150?text=Zapatillas+Deportivas", category: "Calzado", description: "Zapatillas deportivas ligeras y cómodas." },
-            { id: 4, name: "Chaqueta de Cuero", image: "https://via.placeholder.com/150?text=Chaqueta+de+Cuero", category: "Ropa", description: "Chaqueta de cuero negra con forro cálido." },
-            { id: 5, name: "Bolso de Mano", image: "https://via.placeholder.com/150?text=Bolso+de+Mano", category: "Accesorios", description: "Bolso de mano elegante, perfecto para eventos." },
-            { id: 6, name: "Gorra Azul", image: "https://via.placeholder.com/150?text=Gorra+Azul", category: "Accesorios", description: "Gorra azul clásica con ajuste trasero." },
-            { id: 7, name: "Vestido Rojo", image: "https://via.placeholder.com/150?text=Vestido+Rojo", category: "Ropa", description: "Vestido rojo elegante, ideal para ocasiones especiales." },
-            { id: 8, name: "Reloj Deportivo", image: "https://via.placeholder.com/150?text=Reloj+Deportivo", category: "Accesorios", description: "Reloj deportivo resistente al agua, con múltiples funciones." }
-        ]
-    };
+    const categoriesData = [
+        { id: 1, name: "Bolsos de Mujer", image: WomanBags, endpoint: "/categories/woman-bags" },
+        { id: 2, name: "Bolsos de Hombre", image: ManBags, endpoint: "/categories/man-bags" },
+        { id: 3, name: "Camisetas de Mujer", image: WomanTshirts, endpoint: "/categories/woman-tshirts" },
+        { id: 4, name: "Camisetas de Hombre", image: ManTshirts, endpoint: "/categories/man-tshirts" },
+        { id: 5, name: "Chaquetas de Mujer", image: WomanJackets, endpoint: "/categories/woman-jackets" },
+        { id: 6, name: "Chaquetas de Hombre", image: ManJackets, endpoint: "/categories/man-jackets" },
+        { id: 7, name: "Zapatos de Mujer", image: WomanShoes, endpoint: "/categories/woman-shoes" },
+        { id: 8, name: "Zapatos de Hombre", image: ManShoes, endpoint: "/categories/man-shoes" }
+    ];
+
+    const seasonsData = [
+        { id: 1, name: "Verano", image: SummerSeason, endpoint: "/seasons/summer" },
+        { id: 2, name: "Primavera", image: SpringSeason, endpoint: "/seasons/spring" },
+        { id: 3, name: "Invierno", image: WinterSeason, endpoint: "/seasons/winter" },
+    ];
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setOffset((prevOffset) => (prevOffset >= 100 ? 0 : prevOffset + 100 / productsData.products.length));
-        }, 3000); // Cambia la velocidad del desplazamiento a tu gusto
+            setOffset((prevOffset) => (prevOffset >= 100 ? 0 : prevOffset + 100 / categoriesData.length));
+        }, 3000);
 
         return () => clearInterval(interval);
     }, []);
@@ -33,7 +55,7 @@ export const HomePage = () => {
     useEffect(() => {
         const handleScroll = () => {
             const offsetY = window.scrollY;
-            const newScale = 1 + (offsetY > 100 ? (offsetY - 100) / 7000 : 0); // Ajusta el divisor para modificar la intensidad del zoom
+            const newScale = 1 + (offsetY > 100 ? (offsetY - 100) / 7000 : 0);
             setScale(newScale);
         };
 
@@ -44,6 +66,50 @@ export const HomePage = () => {
         };
     }, []);
 
+    const renderCategories = (data) => (
+        data.map((category) => (
+            <NavLink
+                to={`/products?category=${category.name}`} // Cambié a usar query params para categoría
+                key={category.id}
+                className={({ isActive }) => (isActive ? 'myCustomActiveClass' : 'myCustomClass')}
+            >
+                <div className="imageContainer">
+                    <img
+                        src={category.image}
+                        alt={category.name}
+                        className="itemImage"
+                        loading="lazy" // Mejora el rendimiento de carga
+                    />
+                </div>
+                <div className="itemDescription">
+                    <p className='pHome'>{category.name}</p>
+                </div>
+            </NavLink>
+        ))
+    );
+
+    const renderSeasons = (data) => (
+        data.map((season) => (
+            <NavLink
+                to={season.endpoint}
+                key={season.id}
+                className="dropItem"
+            >
+                <div className="imageContainer">
+                    <img
+                        src={season.image}
+                        alt={season.name}
+                        className="itemImageDrops"
+                        loading="lazy" // Mejora el rendimiento de carga
+                    />
+                </div>
+                <div className="itemDescription">
+                    <p>{season.name}</p>
+                </div>
+            </NavLink>
+        ))
+    );
+
     return (
         <main>
             <section className="videoScrollContainer">
@@ -53,6 +119,7 @@ export const HomePage = () => {
                         style={{ transform: `scale(${scale})`, transition: 'transform 0.1s ease' }}
                         src={winterImage}
                         alt="Imagen de fondo"
+                        loading="lazy" // Mejora el rendimiento de carga
                     />
                 </div>
             </section>
@@ -60,24 +127,7 @@ export const HomePage = () => {
             <section className="newCollections">
                 <h1 className='h1Style'>Echa un vistazo a los nuevos drops</h1>
                 <div className="newDropsHome">
-                    {productsData.products.map((product) => (
-                        <NavLink
-                            to={`/product/${product.id}`}
-                            key={product.id}
-                            className={({ isActive }) => (isActive ? 'myCustomActiveClass' : 'myCustomClass')}
-                        >
-                            <div className="imageContainer">
-                                <img
-                                    src={product.image}
-                                    alt={product.name}
-                                    className="itemImage"
-                                />
-                            </div>
-                            <div className="itemDescription">
-                                <p className='pHome'>{product.name}</p>
-                            </div>
-                        </NavLink>
-                    ))}
+                    {renderCategories(categoriesData)}
                 </div>
             </section>
 
@@ -91,6 +141,7 @@ export const HomePage = () => {
                                 muted
                                 loop
                                 playsInline
+                                onError={() => console.error('Error al cargar el video')} // Manejo de error
                             >
                                 <source src={SeasonVideo} type="video/mp4" />
                                 Tu navegador no soporta la reproducción de videos.
@@ -110,19 +161,19 @@ export const HomePage = () => {
                 </div>
                 <div className="rightCarouselContainer">
                     <div className="carousel" style={{ transform: `translateX(-${offset}%)` }}>
-                        {/* Repetimos los productos para crear un efecto de carrusel infinito */}
-                        {[...productsData.products, ...productsData.products].map((product) => (
+                        {categoriesData.map((category) => (
                             <NavLink
-                                to={`/product/${product.id}`}
-                                key={product.id} // Cambia a product.id para evitar claves duplicadas
-                                className="carouselItem" // Aquí solo asignamos una clase específica para el carrusel
+                                to={`/products?category=${category.name}`} // Cambié a usar query params para categoría
+                                key={category.id}
+                                className="carouselItem"
                             >
                                 <img
-                                    src={product.image}
-                                    alt={product.name}
+                                    src={category.image}
+                                    alt={category.name}
                                     className="carouselImage"
+                                    loading="lazy" // Mejora el rendimiento de carga
                                 />
-                                <p>{product.name}</p>
+                                <p>{category.name}</p>
                             </NavLink>
                         ))}
                     </div>
@@ -132,37 +183,24 @@ export const HomePage = () => {
             <section className="container_image_autumn stickyVideo">
                 <div>
                     <NavLink to="/video" className="videoLink2">
-                        <img className='imageAutumn' 
-                             style={{ transform: `scale(${scale})`, transition: 'transform 0.1s ease' }} 
-                             src={autumnImage} 
-                             alt="Imagen de otoño" />
+                        <img className='imageAutumn'
+                            style={{ transform: `scale(${scale})`, transition: 'transform 0.1s ease' }}
+                            src={AutumnImage}
+                            alt="Imagen de otoño" 
+                            loading="lazy" // Mejora el rendimiento de carga
+                        />
                     </NavLink>
                 </div>
             </section>
 
             <section className="newCollections lastSection">
-                <h1 className='h1Style'>Echa un vistazo a los nuevos drops</h1>
+                <h1 className='h1Style'>Echa un vistazo a las nuevas temporadas</h1>
                 <div className="newDropsHome2">
-                    {productsData.products.slice(0, 3).map((product) => (
-                        <NavLink
-                            to={`/product/${product.id}`}
-                            key={product.id}
-                            className="dropItem"
-                        >
-                            <div className="imageContainer">
-                                <img
-                                    src={product.image}
-                                    alt={product.name}
-                                    className="itemImageDrops"
-                                />
-                            </div>
-                            <div className="itemDescription">
-                                <p>{product.name}</p>
-                            </div>
-                        </NavLink>
-                    ))}
+                    {renderSeasons(seasonsData)}
                 </div>
             </section>
         </main>
     );
 };
+
+export default HomePage;
