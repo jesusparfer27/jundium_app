@@ -1,0 +1,149 @@
+
+
+.contactContainer {
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ccc;
+}
+
+.closeContainer {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.filterMenuContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.filterContainer {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.filterAccordion {
+    margin: 10px 0;
+}
+
+.filterHeader {
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+    display: flex;
+}
+
+.headerContent {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.filterContent {
+    padding: 10px;
+    width: 100%;
+}
+
+.custom-label {
+    width: 100%;
+}
+
+.checkboxes {
+    width: 100%;
+}
+
+.sizeFilter {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+.sizeButton, .colorButton {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.sizeButton.active, .colorButton.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.colorFilter {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+.colorBox {
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.divider {
+    border-bottom: 1px solid black;
+}
+
+.removeFiltersButton {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.removeFiltersButton:hover {
+    background-color: #0056b3;
+}
+
+.submitButton {
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.submitButton:hover {
+    background-color: #218838;
+}
+
+.material-symbols-outlined {
+    color: black;
+    font-size: 24px;
+}
+
+.filtersSection {
+    width: 100%;
+}
+
+.collectionFilter {
+    display: flex;
+    flex-direction: column;
+    max-height: 150px; /* Altura máxima para el scroll */
+    overflow-y: auto; /* Habilita el scrollbar */
+}
+
+.priceFilter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+input[type="range"] {
+    width: 100%; /* Asegura que el slider ocupe todo el ancho */
+}

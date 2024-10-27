@@ -9,6 +9,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    
+}
+
+.heroSection {
+    background-color: white;
 }
 
 .scrollVideo {
@@ -22,17 +27,21 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* 4 columnas */
     gap: 0; /* Sin espacio entre los elementos */
+    
 }
 
-.productItem {
+.productItem_ProductPage {
     width: 100%; /* Ocupará el 25% del ancho del contenedor */
-    height: 400px; /* Altura de cada producto */
-    border: 1px solid #ccc; /* Estilo de borde opcional */
+    height: auto; /* Altura de cada producto */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
+}
+
+.productItem_ProductPage img {
+    height: 550px;
 }
 
 .featuredProduct {
@@ -65,7 +74,6 @@
     padding: 10px 15px; /* Espaciado interno */
     margin: 0 5px; /* Espaciado entre botones */
     cursor: pointer; /* Cambiar cursor al pasar el mouse */
-    border-radius: 5px; /* Bordes redondeados */
     transition: background-color 0.3s; /* Transición de color */
 }
 
@@ -124,3 +132,44 @@
     object-fit: cover;
 }
 
+.likeIcon {
+    position: absolute; /* Cambia de relative a absolute */
+    top: 0; /* Sitúa el ícono en la parte superior */
+    right: 0; /* Opcional: sitúa el ícono en la esquina superior derecha */
+    z-index: 10; /* Asegúrate de que esté encima de la imagen */
+    padding: 10px; /* Opcional: agrega un poco de espacio alrededor del ícono */
+}
+
+.productImageWrapper {
+    position: relative; /* Necesario para que .likeIcon se posicione dentro de este contenedor */
+}
+
+.imageProducts_Container {
+    padding-bottom: -10rem;
+}
+
+.productsPage {
+    background-color: white;
+    
+}
+
+.imageProducts_Container img{
+    max-width: 100%;
+    margin-top: -10rem;
+    z-index: -99;
+}
+
+.container_ImageEffect {
+    overflow: hidden;
+    position: relative;
+    margin-bottom: -.4rem;
+}
+
+.likeIcon span {
+    font-size: 22px;
+    color: black;
+}
+
+.productPage {
+    
+}

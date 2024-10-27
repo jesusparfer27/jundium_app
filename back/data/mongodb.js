@@ -82,7 +82,7 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    base_price: {
+    base_price: { // Aquí se ha añadido el campo base_price
         type: Number,
         required: true
     },

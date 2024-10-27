@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { HeaderContext } from '../../context/HeaderContext';
 import '../../css/components/header/header.css';
@@ -7,18 +7,22 @@ import LoginContainer from './LoginHeader';
 import CartContainer from './CartHeader';
 import ContactContainer from './ContactHeader';
 import HeaderSearch from './SearchHeader';
+import { FilterProducts } from './FilterProducts';
 
 const Header = () => {
     const { activeMenu, openMenu } = useContext(HeaderContext);
     const location = useLocation();
     const navigate = useNavigate();
+    const [isProductsPage, setIsProductsPage] = useState(false);
 
-    // Determinar si estamos en la HomePage
-    const isHomePage = location.pathname === '/';
+    // Determinar si estamos en ProductsPage
+    useEffect(() => {
+        setIsProductsPage(location.pathname === '/products');
+    }, [location.pathname]);
 
     return (
         <>
-            <header>
+            <header className={`headerContainer ${isProductsPage ? 'productsPageActive' : ''}`}>
                 <div className="headerContainer">
                     <div className="headerLeft">
                         <div className="headerMenu">
@@ -61,7 +65,20 @@ const Header = () => {
                             </button>
                         </div>
                     </div>
+
+                    {/* Mostrar el botón de filtro solo en ProductsPage */}
+
                 </div>
+                {isProductsPage && (
+                    <div className="headerFilter_Container">
+                        <div className="headerFilter">
+                            <button className='button_filterButton' onClick={() => openMenu('button_filterButton')}>
+                                <span className="material-symbols-outlined">filter_list</span>
+                                <h3 className='h3Style'>Filtrar</h3>
+                            </button>
+                        </div>
+                    </div>
+                )}
             </header>
 
             {/* Componentes de Contenedores */}
@@ -70,6 +87,7 @@ const Header = () => {
             {activeMenu === 'cart' && <CartContainer />}
             {activeMenu === 'contact' && <ContactContainer />}
             {activeMenu === 'searchBar' && <HeaderSearch />}
+            {activeMenu === 'button_filterButton' && <FilterProducts/>}
         </>
     );
 };

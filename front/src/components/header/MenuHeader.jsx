@@ -118,28 +118,30 @@ const HeaderMenu = () => {
                     <div className="productNav">
                         {showGenderSection === 'Mujer' && (
                             <>
-                                <Link to="/products?category=woman&subCategory=bags" onClick={handleLinkClick}>Bolsos</Link>
-                                <Link to="/products?category=woman&subCategory=collection" onClick={handleLinkClick}>Winter Collection</Link>
-                                <Link to="/products?category=woman&subCategory=shoes" onClick={handleLinkClick}>Zapatos</Link>
+                                <Link to={`/products?type=bolso&gender=mujer`} onClick={handleLinkClick}>Bolsos</Link>
+                                <Link to={`/products?type=camiseta&gender=mujer`} onClick={handleLinkClick}>Camisetas</Link>
+                                <Link to={`/products?type=abrigo&gender=mujer`} onClick={handleLinkClick}>Chaquetas</Link>
+                                <Link to={`/products?type=zapatillas&gender=mujer`} onClick={handleLinkClick}>Zapatos</Link>
                             </>
                         )}
                         {showGenderSection === 'Hombre' && (
                             <>
-                                <Link to="/products?category=man&subCategory=bags" onClick={handleLinkClick}>Bolsos</Link>
-                                <Link to="/products?category=man&subCategory=clothing" onClick={handleLinkClick}>Ropa</Link>
-                                <Link to="/products?category=man&subCategory=shoes" onClick={handleLinkClick}>Zapatos</Link>
+                                <Link to={`/products?type=bolso&gender=hombre`} onClick={handleLinkClick}>Bolsos</Link>
+                                <Link to={`/products?type=camiseta&gender=hombre`} onClick={handleLinkClick}>Camisetas</Link>
+                                <Link to={`/products?type=chaqueta&gender=hombre`} onClick={handleLinkClick}>Chaquetas</Link>
+                                <Link to={`/products?type=zapatillas&gender=hombre`} onClick={handleLinkClick}>Zapatos</Link>
                             </>
                         )}
                         {showGenderSection === 'Colecciones' && (
                             <>
-                                <Link to="/products?category=collections&subCategory=new-arrivals" onClick={handleLinkClick}>Nuevas Llegadas</Link>
-                                <Link to="/products?category=collections&subCategory=seasonal" onClick={handleLinkClick}>Colección de Temporada</Link>
+                                <Link to={`/products?gender=hombre`} onClick={handleLinkClick}>Nuevas Llegadas</Link>
+                                <Link to={`/products?gender=mujer`} onClick={handleLinkClick}>Colección de Temporada</Link>
                             </>
                         )}
                         {showGenderSection === 'Descuentos' && (
                             <>
-                                <Link to="/products?category=discounts&subCategory=special-offers" onClick={handleLinkClick}>Ofertas Especiales</Link>
-                                <Link to="/products?category=discounts&subCategory=clearance" onClick={handleLinkClick}>Liquidaciones</Link>
+                                <Link to={`/products?type=discounts&gender=all`} onClick={handleLinkClick}>Ofertas Especiales</Link>
+                                <Link to={`/products?type=clearance&gender=all`} onClick={handleLinkClick}>Liquidaciones</Link>
                             </>
                         )}
                     </div>

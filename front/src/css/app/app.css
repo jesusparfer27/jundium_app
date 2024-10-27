@@ -1,26 +1,47 @@
-@font-face {
-    font-family: 'AntonioFont'; /* Nombre que usarás para la fuente */
-    src: url('../../font/static/Antonio-Light.ttf') format('woff2'), /* Ajusta la ruta según sea necesario */
-         url('../../font//static//Antonio-SemiBold.ttf') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
-/* Aplica la fuente globalmente */
 * {
-    font-family: 'AntonioFont', sans-serif; /* O la fuente de respaldo que prefieras */
+    font-family: 'AntonioFont', sans-serif;
+    -webkit-font-smoothing: antialiased; /* Mejora la suavidad en navegadores WebKit */
+    -moz-osx-font-smoothing: grayscale;  /* Mejora la suavidad en navegadores Firefox */
+    text-rendering: optimizeLegibility;  /* Optimiza la legibilidad */
 }
 
-
-
+/* Aplicación global de estilos más finos */
 body,
 *::before,
 *::after {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    font-weight: 200; /* Ajuste de peso más ligero para darle un toque delicado */
+    line-height: 1.6; /* Mejora la legibilidad con una altura de línea cómoda */
+    letter-spacing: 0.5px; /* Un poco de espacio entre letras para un aspecto más aireado */
 }
 
+/* Estilos adicionales para títulos y párrafos */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 300; /* Aumentar el peso de los títulos */
+    line-height: 1.4; /* Altura de línea más ajustada para los títulos */
+    letter-spacing: 1px; /* Un poco más de espacio en los títulos */
+}
+
+p {
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.8;
+    letter-spacing: 0.3px; /* Espaciado más sutil en párrafos */
+}
+
+/* Estilos específicos para enlaces */
+a {
+    text-decoration: none;
+    color: inherit;
+    font-weight: 300;
+    transition: color 0.3s ease; /* Transición suave al cambiar de color */
+}
+
+a:hover {
+    color: #333; /* Cambia el color en el hover para resaltar */
+}
 /* src/css/pages/homepage.css */
 
 /* Capa de fondo que cubre la aplicación */

@@ -1,7 +1,19 @@
 import React, { useContext, useRef } from 'react';
+import { NavLink } from 'react-router-dom';
 import { HeaderContext } from '../../context/HeaderContext';
-// import PhotoMockup from '../../assets/photos/pexels-d-ng-thanh-tu-2922122-5693888.jpg';
 import '../../css/components/header/search.css';
+
+import ManSectionHeader from '../../assets/header-sections/example-menu-header-man-section.jpg';
+import WomanSectionHeader from '../../assets/header-sections/example-menu-header-woman-section.jpg';
+import CollectionsSectionHeader from '../../assets/header-sections/example-menu-home-collections.jpg';
+import DiscountSectionHeader from '../../assets/header-sections/example-menu-header-man-section.jpg';
+
+const categoriesData = [
+    { id: 1, name: "Otoño collection", image: ManSectionHeader, collection: "Otoño 2024" },
+    { id: 2, name: "Invierno collection", image: WomanSectionHeader, collection: "Invierno 2024" },
+    { id: 3, name: "Primavera collection", image: CollectionsSectionHeader, collection: "Primavera 2024" },
+    { id: 4, name: "Verano collection", image: DiscountSectionHeader, collection: "Verano 2024" }
+];
 
 const HeaderSearch = () => {
     const { activeMenu, openMenu } = useContext(HeaderContext);
@@ -12,7 +24,7 @@ const HeaderSearch = () => {
     };
 
     const handleCloseSearch = () => {
-        openMenu(null); // o 'openMenu('')' si quieres establecer otro estado
+        openMenu(null);
     };
 
     return (
@@ -20,9 +32,8 @@ const HeaderSearch = () => {
             ref={searchRef}
             className={`searchContainer ${activeMenu === 'searchBar' ? 'active' : ''}`}
         >
-            {/* Primer div para la barra de búsqueda */}
             <div className={`searchInputContainer ${activeMenu === 'searchBar' ? 'slideInVertical' : 'slideOutVertical'}`}>
-                <div className="searchContent flexRow"> {/* Agregar flexRow para alinear en fila */}
+                <div className="searchContent flexRow">
                     <input
                         type="text"
                         placeholder="Inserte su búsqueda..."
@@ -33,51 +44,46 @@ const HeaderSearch = () => {
                 </div>
             </div>
 
-            {/* Segundo div para el texto adicional */}
             <div className={`additionalTextContainer ${activeMenu === 'searchBar' ? 'slideInWithDelay' : 'slideOutWithDelay'}`}>
                 <div className="flexRow">
-                    {/* Div para lo más buscado por género */}
                     <div className="popularSearches">
                         <div className="genderSearch">
                             <div className="maleSearch">
                                 <h4>Hombre</h4>
                                 <ul>
-                                    <li><a href="/category/camisetas">Camisetas</a></li>
-                                    <li><a href="/category/zapatos">Zapatos</a></li>
-                                    <li><a href="/category/pantalones">Pantalones</a></li>
+                                    <li><NavLink to="/category/camisetas">Camisetas</NavLink></li>
+                                    <li><NavLink to="/category/zapatos">Zapatos</NavLink></li>
+                                    <li><NavLink to="/category/pantalones">Pantalones</NavLink></li>
                                 </ul>
                             </div>
                             <div className="femaleSearch">
                                 <h4>Mujer</h4>
                                 <ul>
-                                    <li><a href="/category/vestidos">Vestidos</a></li>
-                                    <li><a href="/category/tacones">Tacones</a></li>
-                                    <li><a href="/category/accesorios">Accesorios</a></li>
+                                    <li><NavLink to="/category/vestidos">Vestidos</NavLink></li>
+                                    <li><NavLink to="/category/tacones">Tacones</NavLink></li>
+                                    <li><NavLink to="/category/accesorios">Accesorios</NavLink></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
 
-                    {/* Div para la cuadrícula de productos */}
                     <div className="productGridHeader">
                         <h3>Productos Destacados</h3>
                         <div className="gridContainer">
-                            <div className="productItemHeader">
-                                <img src={PhotoMockup} alt="Producto 1" />
-                                <p>Producto 1</p>
-                            </div>
-                            <div className="productItemHeader">
-                                <img src={PhotoMockup} alt="Producto 2" />
-                                <p>Producto 2</p>
-                            </div>
-                            <div className="productItemHeader">
-                                <img src={PhotoMockup} alt="Producto 3" />
-                                <p>Producto 3</p>
-                            </div>
-                            <div className="productItemHeader">
-                                <img src={PhotoMockup} alt="Producto 4" />
-                                <p>Producto 4</p>
-                            </div>
+                            {categoriesData.map((category) => (
+                                <NavLink
+                                    to={`/products?${category.collection ? `collection=${encodeURIComponent(category.collection)}` : `type=${encodeURIComponent(category.type)}`}`}
+                                    key={category.id}
+                                    className="productItemHeader"
+                                >
+                                    <img
+                                        src={category.image}
+                                        alt={category.name}
+                                        className='searchHeader_Image'
+                                    />
+                                    <p>{category.name}</p>
+                                </NavLink>
+                            ))}
                         </div>
                     </div>
                 </div>

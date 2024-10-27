@@ -23,35 +23,35 @@ const router = createBrowserRouter([
                 element: <HomePage />
             },
             {
-                path: 'products/:category', // Aquí se agrega el parámetro de categoría
+                path: '/products', // Aquí se agrega el parámetro de categoría
                 element: <ProductsPage />
             },
             {
-                path: 'product/:id',
+                path: '/products/:id',
                 element: <ShowingProductPage />
             },
             {
-                path: 'check-out',
+                path: '/check-out',
                 element: <CheckOutPage />
             },
             {
-                path: 'email-validation',
+                path: '/email-validation',
                 element: <EmailSignIn />
             },
             {
-                path: 'profile',
+                path: '/profile',
                 element: <Profile />
             },
             {
-                path: 'email-validation-2',
+                path: '/email-validation-2',
                 element: <SecondStepSignIn />
             },
             {
-                path: 'admin',
+                path: '/admin',
                 element: <Admin />
             },
             {
-                path: 'wish-list',
+                path: '/wish-list',
                 element: <MultifunctionalProductPage />
             }
         ]

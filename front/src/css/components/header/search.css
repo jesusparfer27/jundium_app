@@ -96,7 +96,7 @@
 
 /* Segundo div para el texto adicional */
 .additionalTextContainer {
-    border-bottom: 2px solid black;
+    border-bottom: 1px solid black;
     width: 100%; /* Ancho completo */
 }
 
@@ -215,9 +215,10 @@
     width: 100%;
 }
 
+
 /* Estilo para la imagen */
 .productItemHeader img {
-    width: 30%; /* La imagen ocupa un 80% del ancho disponible */
+    width: 55%; /* La imagen ocupa un 80% del ancho disponible */
     height: auto;
     object-fit: cover;
     border-radius: 0.5rem;

@@ -98,9 +98,9 @@ html,
     top: 0;
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
     color: black; /* Texto siempre negro */
-    padding-top: .9rem;
-    padding-bottom: .9rem;
-    border-bottom: 2px solid #dcdcdc;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    border-bottom: 1px solid #dcdcdc;
     z-index: 11;
     
 }
@@ -129,6 +129,8 @@ html,
     padding-left: 3rem;
     padding-right: 3rem;
 }
+
+
 
 .headerCentral {
     display: flex;
@@ -168,6 +170,58 @@ html,
 .filterMenu,
 .genderMenu {
     transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+}
+
+.headerFilter_Container {
+    width: 100%;
+    background-color: white;
+    display: flex;
+    margin-top: 5.2rem;
+    padding: 0.5rem 0;
+    height: 40px;
+}
+
+/* Estilos para el botón de filtro */
+.headerFilter {
+    display: flex;
+    width: 97%;
+    justify-content: flex-end;
+}
+
+.button_filterButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    border: 1px solid black;
+    border-radius: 22px;
+    width: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 16px;
+    color: black;
+    margin-top: 0.5rem;
+    cursor: pointer;
+}
+
+.button_filterButton:hover {
+    border: 2px solid black;
+}
+
+
+.headerFilter h3 {
+    font-size: 16px;
+}
+
+.button_filterButton {
+   
+  
 }
 
 /* Línea separadora en el header */

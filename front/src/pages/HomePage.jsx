@@ -28,14 +28,14 @@ export const HomePage = () => {
     const [scale, setScale] = useState(1); // Estado para el zoom
 
     const categoriesData = [
-        { id: 1, name: "Bolsos de Mujer", image: WomanBags, endpoint: "/categories/woman-bags" },
-        { id: 2, name: "Bolsos de Hombre", image: ManBags, endpoint: "/categories/man-bags" },
-        { id: 3, name: "Camisetas de Mujer", image: WomanTshirts, endpoint: "/categories/woman-tshirts" },
-        { id: 4, name: "Camisetas de Hombre", image: ManTshirts, endpoint: "/categories/man-tshirts" },
-        { id: 5, name: "Chaquetas de Mujer", image: WomanJackets, endpoint: "/categories/woman-jackets" },
-        { id: 6, name: "Chaquetas de Hombre", image: ManJackets, endpoint: "/categories/man-jackets" },
-        { id: 7, name: "Zapatos de Mujer", image: WomanShoes, endpoint: "/categories/woman-shoes" },
-        { id: 8, name: "Zapatos de Hombre", image: ManShoes, endpoint: "/categories/man-shoes" }
+        { id: 1, name: "Bolsos de Mujer", image: WomanBags, type: "bolso", gender: "mujer" },
+        { id: 2, name: "Bolsos de Hombre", image: ManBags, type: "bolso", gender: "hombre" },
+        { id: 3, name: "Camisetas de Mujer", image: WomanTshirts, type: "camiseta", gender: "mujer" },
+        { id: 4, name: "Camisetas de Hombre", image: ManTshirts, type: "camiseta", gender: "hombre" },
+        { id: 5, name: "Chaquetas de Mujer", image: WomanJackets, type: "abrigo", gender: "mujer" },
+        { id: 6, name: "Chaquetas de Hombre", image: ManJackets, type: "abrigo", gender: "hombre" },
+        { id: 7, name: "Zapatos de Mujer", image: WomanShoes, type: "zapatillas", gender: "mujer" },
+        { id: 8, name: "Zapatos de Hombre", image: ManShoes, type: "zapatillas", gender: "hombre" }
     ];
 
     const seasonsData = [
@@ -69,7 +69,7 @@ export const HomePage = () => {
     const renderCategories = (data) => (
         data.map((category) => (
             <NavLink
-                to={`/products?category=${category.name}`} // Cambié a usar query params para categoría
+                to={`/products?type=${encodeURIComponent(category.type)}&gender=${encodeURIComponent(category.gender)}`} // Usar query params para el tipo y género
                 key={category.id}
                 className={({ isActive }) => (isActive ? 'myCustomActiveClass' : 'myCustomClass')}
             >
@@ -163,7 +163,7 @@ export const HomePage = () => {
                     <div className="carousel" style={{ transform: `translateX(-${offset}%)` }}>
                         {categoriesData.map((category) => (
                             <NavLink
-                                to={`/products?category=${category.name}`} // Cambié a usar query params para categoría
+                                to={`/products?type=${encodeURIComponent(category.type)}&gender=${encodeURIComponent(category.gender)}`} // Usar query params para el tipo y género
                                 key={category.id}
                                 className="carouselItem"
                             >

@@ -1,6 +1,7 @@
 .productSection {
     display: flex;
     border-bottom: 2px solid #000; /* Borde inferior para el div de producto */
+    padding-top: 6rem;
 }
 
 .imageContainer {
@@ -10,39 +11,47 @@
     margin-bottom: 8rem;
 }
 
-.productImage {
-    width: 100%; /* Ocupa todo el ancho */
-    height: 500px; /* Altura fija para las imágenes */
+.paraphHidden_Accordion {
+    padding-top: 0;
 }
 
-.productImage img {
+.productImage_ShowingPage {
+    width: 100%; /* Ocupa todo el ancho */
+    height: 100%; /* Altura fija para las imágenes */
+}
+
+.productImage_ShowingPage img {
     width: 100%;
-    height: 100%;
+    height: auto;
     object-fit: cover; /* Mantiene la proporción de las imágenes */
 }
 
-.infoProduct {
-    width: 30%; /* Cambiado a 35% */
-    padding: 2rem;
-    align-content: center;
+.infoProduct_Container {
+    width: 100%;
     display: flex;
-    right: 0;
-    margin-right: 4rem;
-    flex-direction: column; /* Alinear los elementos en columna */
-    justify-content: flex-start; /* Centrar verticalmente los elementos */
-    margin-top: 14rem;
+}
+
+
+.infoProduct_Row {
+    position: sticky;
+    top: 200px; /* El elemento se fijará al alcanzar el top de la página */
+    background-color: white;
+    padding: 1rem;
+    z-index: 10;
+    height: 60vh;
+}
+
+.h2_ShowingPage {
+    padding: 0;
+}
+
+.infoProduct_ShowingProduct {
+    width: 100%; /* Cambiado a 35% */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 12rem;
     background-color: white; /* Fondo blanco para la información */
-    transition: position 0.3s; /* Añadir transición suave */
-    z-index: 10; /* Asegúrate de que esté por encima de otros elementos */
-}
-
-.infoProduct.fixed {
-    position: fixed; /* Mantener fijo en el viewport */
-    top: 20px; /* Espacio desde la parte superior */
-}
-
-h2 {
-    color: #000; /* Título negro */
 }
 
 .accordion {
@@ -51,6 +60,7 @@ h2 {
     padding: 0.5rem;
     cursor: pointer;
     margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .accordionContent {
@@ -61,12 +71,42 @@ h2 {
     background-color: black; /* Fondo negro */
     color: white; /* Texto blanco */
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 1rem 1rem;
+    width: 100%;
+    border-radius: 22px;
     margin-top: 1rem;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
+
+
 .addToCart:hover {
-    background-color: #333; /* Cambio a un negro más oscuro */
+    background-color: transparent; /* Cambio a un negro más oscuro */
+    color: black;
+    border: 1px solid black;
+}
+
+.label_Size,
+.label_Color {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.select_Size,
+.select_Color {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.option_Size,
+.option_Color {
+    padding: 0.5rem;
+    background-color: #fff;
+    color: #000;
 }
