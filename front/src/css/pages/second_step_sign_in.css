@@ -8,6 +8,15 @@
   padding-bottom: 1.3rem;
 }
 
+.error-message {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  text-align: start;
+  width: 91.5%;
+}
+
+
 .second-step-sign-in {
   width: 100%;
   margin: 0 auto;

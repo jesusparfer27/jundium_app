@@ -17,7 +17,7 @@ export const FilterProducts = () => {
 
     const [filters, setFilters] = useState({
         size: [],
-        color: [],
+        color: [], // Filtro de color
         collection: [],
         priceRange: [0, 100],
         type: [],
@@ -26,7 +26,7 @@ export const FilterProducts = () => {
 
     const [openAccordions, setOpenAccordions] = useState({
         size: false,
-        color: false,
+        color: false, // Acordeón de color
         collection: false,
         price: false,
         type: false,
@@ -72,7 +72,7 @@ export const FilterProducts = () => {
         try {
             const queryParams = new URLSearchParams();
             if (filters.size.length) queryParams.append('size', filters.size.join(','));
-            if (filters.color.length) queryParams.append('color', filters.color.join(','));
+            if (filters.color.length) queryParams.append('color', filters.color.join(',')); // Filtro de color
             if (filters.collection.length) queryParams.append('collection', filters.collection.join(','));
             if (filters.type.length) queryParams.append('type', filters.type.join(','));
             if (filters.gender.length) queryParams.append('gender', filters.gender.join(','));
@@ -114,10 +114,14 @@ export const FilterProducts = () => {
         handleFilterChange('size', size);
     };
 
+    const handleColorChange = (color) => {
+        handleFilterChange('color', color);
+    };
+
     const handleSubmit = () => {
         const queryParams = new URLSearchParams();
         if (filters.size.length) queryParams.append('size', filters.size.join(','));
-        if (filters.color.length) queryParams.append('color', filters.color.join(','));
+        if (filters.color.length) queryParams.append('color', filters.color.join(',')); // Filtro de color
         if (filters.collection.length) queryParams.append('collection', filters.collection.join(','));
         if (filters.type.length) queryParams.append('type', filters.type.join(','));
         if (filters.gender.length) queryParams.append('gender', filters.gender.join(','));
@@ -165,37 +169,28 @@ export const FilterProducts = () => {
                         </div>
                     )}
                 </div>
-                {/* Filtro por Tipo */}
+                {/* Filtro por Color */}
                 <div className="filterAccordion">
-                    <div className="filterHeader" onClick={() => toggleAccordion('type')}>
-                        <span>Por Tipo</span>
+                    <div className="filterHeader" onClick={() => toggleAccordion('color')}>
+                        <span>Por Color</span>
                         <span className="material-symbols-outlined">
-                            {openAccordions.type ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}
+                            {openAccordions.color ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}
                         </span>
                     </div>
-                    {openAccordions.type && (
+                    {openAccordions.color && (
                         <div className="filterContent">
-                            {loading && <p>Cargando tipos de productos...</p>}
-                            {error && <p>Error: {error}</p>}
-                            {!loading && !error && productTypes.length === 0 && (
-                                <p>No hay tipos de productos disponibles.</p>
-                            )}
-                            {!loading && !error && productTypes.length > 0 && (
-                                <>
-                                    {productTypes.map(({ id, type }) => (
-                                        <div className='checkboxes' key={id}>
-                                            <label className="custom-label">
-                                                <input 
-                                                    type="checkbox" 
-                                                    checked={filters.type.includes(type)} 
-                                                    onChange={() => handleFilterChange('type', type)} 
-                                                />
-                                                {type}
-                                            </label>
-                                        </div>
-                                    ))}
-                                </>
-                            )}
+                            <div className='checkboxes'>
+                                {['Rojo', 'Azul', 'Verde', 'Negro', 'Blanco'].map((color, index) => (
+                                    <label className="custom-label" key={index}>
+                                        <input 
+                                            type="checkbox" 
+                                            checked={filters.color.includes(color)} 
+                                            onChange={() => handleColorChange(color)} 
+                                        />
+                                        {color}
+                                    </label>
+                                ))}
+                            </div>
                         </div>
                     )}
                 </div>

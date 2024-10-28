@@ -7,11 +7,13 @@ export const SecondStepSignIn = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     password: '',
+    confirmPassword: '',
     genero: '',
     nombre: '',
     apellido: '',
     aceptar: false
   });
+  const [error, setError] = useState(''); // Estado para el mensaje de error
 
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
@@ -19,23 +21,39 @@ export const SecondStepSignIn = () => {
       ...formData,
       [id]: type === 'checkbox' ? checked : value
     });
+    if (error) setError(''); // Limpia el error al cambiar cualquier campo
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const { password, genero, nombre, apellido, aceptar } = formData;
+const handleSubmit = (e) => {
+  e.preventDefault();
+  const { password, confirmPassword, genero, nombre, apellido, aceptar } = formData;
 
-    // Validaciones básicas
-    if (!password || !genero || !nombre || !apellido || !aceptar) {
-      alert('Por favor, completa todos los campos y acepta la política de privacidad.');
-      return;
-    }
+  // Validaciones básicas
+  if (!password || !confirmPassword || !genero || !nombre || !apellido || !aceptar) {
+    setError('Por favor, completa todos los campos y acepta la política de privacidad.');
+    return;
+  }
 
-    // Navegar al perfil
-    navigate('/profile');
-  };
+  // Verificar si la contraseña es suficientemente fuerte
+  if (password.length < 8) {
+    setError('La contraseña debe tener al menos 8 caracteres.');
+    return;
+  }
 
-  // Suponiendo que necesitas pasar datos al AccordionContainer
+  // Verificar si las contraseñas coinciden
+  if (password !== confirmPassword) {
+    setError('Las contraseñas no coinciden.');
+    return;
+  }
+
+  // Almacenar datos en localStorage
+  localStorage.setItem('userData', JSON.stringify({ ...formData, password }));
+
+  // Navegar al perfil
+  navigate('/profile');
+};
+
+
   const accordionData = [
     { titulo: 'Sección 1', contenido: 'Contenido de la sección 1' },
     { titulo: 'Sección 2', contenido: 'Contenido de la sección 2' }
@@ -60,6 +78,15 @@ export const SecondStepSignIn = () => {
               value={formData.password}
               onChange={handleChange}
             />
+            <label htmlFor="confirmPassword">Confirmar Contraseña</label>
+            <input
+              className='password-validation input-field'
+              type="password"
+              id="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+            />
+            {error && <p className="error-message">{error}</p>} {/* Muestra el mensaje de error */}
           </div>
         </div>
         <div className="informacion-adicional">
@@ -71,7 +98,7 @@ export const SecondStepSignIn = () => {
               <label htmlFor="genero">Género</label>
               <select
                 id="genero"
-                className="input-field" // Clase específica para estilos
+                className="input-field"
                 value={formData.genero}
                 onChange={handleChange}
               >
@@ -86,7 +113,7 @@ export const SecondStepSignIn = () => {
               <input
                 type="text"
                 id="nombre"
-                className="input-field" // Clase específica para estilos
+                className="input-field"
                 value={formData.nombre}
                 onChange={handleChange}
               />
@@ -96,7 +123,7 @@ export const SecondStepSignIn = () => {
               <input
                 type="text"
                 id="apellido"
-                className="input-field" // Clase específica para estilos
+                className="input-field"
                 value={formData.apellido}
                 onChange={handleChange}
               />

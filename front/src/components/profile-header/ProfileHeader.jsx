@@ -1,6 +1,6 @@
 import React from 'react';
-// import pictureProfile from '../../assets/photos/pexels-kaip-996329.jpg';
 import '../../css/components/profile-header/profileheader.css';
+import pictureProfile from '../../assets/profile-picture/example-profile-picture.jpg'
 
 const ProfileImage = ({ initials, userName, isAdmin }) => {
     const displayInitials = isAdmin ? 'ADMIN' : initials;

@@ -71,7 +71,6 @@
 
 /* Estilo para los inputs */
 .inputField input {
-    padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
@@ -123,10 +122,6 @@
 
 }
 
-.inputField input {
-    padding-top: 1.7rem;
-}
-
 .buttonSubmitSignIn:hover {
     background-color: black;
     color: white;
@@ -154,6 +149,7 @@
 .extraText {
     width: 70%;
 }
+
 
 .registerButton {
     width: 70%

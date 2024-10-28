@@ -14,11 +14,6 @@ const connectDB = async () => {
 
 // Schema de Usuario
 const userSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        required: true,
-        unique: true
-    },
     first_name: {
         type: String,
         required: true
@@ -37,8 +32,13 @@ const userSchema = new mongoose.Schema({
         unique: true
     },
     phone_number: {
+        type: String
+    },
+
+    gender: {
         type: String,
-        required: false
+        enum: ['masculino', 'femenino', 'otro'],
+        required: true
     },
     address: {
         street: String,
@@ -48,7 +48,26 @@ const userSchema = new mongoose.Schema({
     },
     roles: {
         type: [String],
-        default: ["user"] // Por defecto, todos los usuarios son "user", pero puede incluir "admin"
+        default: ["user"],
+        enum: ["user", "admin"]
+    },
+    permissions: {
+        manage_users: {
+            type: Boolean,
+            default: false
+        },
+        manage_products: {
+            type: Boolean,
+            default: false
+        },
+        view_reports: {
+            type: Boolean,
+            default: false
+        },
+        manage_orders: {
+            type: Boolean,
+            default: false
+        }
     },
     wishlist: {
         type: [mongoose.Schema.Types.ObjectId],
@@ -67,10 +86,43 @@ const userSchema = new mongoose.Schema({
         default: false
     }
 }, {
-    timestamps: true, // Añade createdAt y updatedAt
+    timestamps: true,
     versionKey: false,
     strict: false
 });
+
+// Función para crear un usuario administrador
+const createAdminUser = async () => {
+    const adminUser = new User({
+        username: "admin_javier",
+        first_name: "Javier",
+        last_name: "Fernandez",
+        email: "admin.javier@example.com",
+        password: "$2b$10$YwA2uJcKx9JQkL7F8OtKTOlD8QWz7N/MN6J2x0Og5FJTwX6y9YxLi", // Debe estar cifrada
+        phone_number: "+34 600 987 654",
+        address: {
+            street: "Avenida del Sol, 22",
+            city: "Barcelona",
+            postal_code: "08002",
+            country: "España"
+        },
+        roles: ["admin", "user"],
+        permissions: {
+            manage_users: true,
+            manage_products: true,
+            view_reports: true,
+            manage_orders: true
+        },
+        newsletter_subscription: false
+    });
+
+    try {
+        await adminUser.save();
+        console.log("Usuario administrador creado correctamente.");
+    } catch (error) {
+        console.error("Error creando usuario administrador:", error.message);
+    }
+};
 
 // Schema de Producto
 const productSchema = new mongoose.Schema({
@@ -176,8 +228,8 @@ const productSchema = new mongoose.Schema({
 });
 
 // Modelos
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema, 'accounts');
 const Product = mongoose.model('Product', productSchema);
 
 // Exportar la conexión y los modelos
-export { connectDB, User, Product };
+export { connectDB, User, Product, createAdminUser };

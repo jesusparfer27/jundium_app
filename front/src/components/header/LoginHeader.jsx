@@ -1,4 +1,3 @@
-// src/components/LoginContainer.jsx
 import React, { useContext, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HeaderContext } from '../../context/HeaderContext';
@@ -13,17 +12,51 @@ const LoginContainer = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleLogin = (event) => {
-        event.preventDefault(); // Previene el envío por defecto del formulario
+    const { VITE_API_BACKEND, VITE_ACCOUNTS_ENDPOINT } = import.meta.env;
 
-        // Verifica si el email y la contraseña están vacíos
-        if (email && password) {
-            navigate('/admin'); // Redirige a /admin si ambos campos están llenos
-        } else {
-            navigate('/profile'); // Redirige a /profile si los campos están vacíos
-        }
-
+    const handleSignIn = () => {
+        navigate('/email-validation'); // Redirige a /email-validation
         closeMenu(); // Cierra el menú
+    };
+    
+    const handleLogin = async (event) => {
+        event.preventDefault(); // Previene el envío por defecto del formulario
+    
+        // Verifica si el email y la contraseña están llenos
+        if (!email || !password) {
+            alert('Por favor, completa todos los campos.');
+            return;
+        }
+    
+        try {
+            // Crear la URL completa para la solicitud
+            const url = `${VITE_API_BACKEND}/login`;
+    
+            // Realizar la solicitud POST
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }), // Datos de inicio de sesión
+            });
+    
+            // Analizar la respuesta
+            const data = await response.json();
+    
+            if (response.ok) {
+                // Guardar el token en localStorage y redirigir al perfil de admin
+                localStorage.setItem('authToken', data.token);
+                navigate('/profile');
+                closeMenu(); // Cierra el menú solo si el inicio de sesión es exitoso
+            } else {
+                // Mostrar mensaje de error si el inicio de sesión falla
+                alert(data.message || 'El correo electrónico o contraseña no son correctos.');
+            }
+        } catch (error) {
+            console.error('Error en la solicitud de inicio de sesión:', error);
+            alert('Hubo un problema con el inicio de sesión. Inténtalo nuevamente.');
+        }
     };
 
     return (
@@ -37,9 +70,7 @@ const LoginContainer = () => {
                     <h2 className='logInH2'>Iniciar Sesión</h2>
                     <button className="closeContainerLogin" onClick={closeMenu}>X</button>
                 </div>
-                <div className="accountText">
-                    <p>Ya tengo cuenta</p>
-                </div>
+
                 <div className="mandatoryFields">
                     <p>Campos obligatorios *</p>
                 </div>
@@ -50,6 +81,7 @@ const LoginContainer = () => {
                         id="email"
                         value={email} // Estado para el valor del input
                         onChange={(e) => setEmail(e.target.value)} // Actualiza el estado
+                        className='inputLogin_Header'
                     />
                 </div>
                 <div className="inputField">
@@ -59,6 +91,7 @@ const LoginContainer = () => {
                         id="password"
                         value={password} // Estado para el valor del input
                         onChange={(e) => setPassword(e.target.value)} // Actualiza el estado
+                        className='inputLogin_Header'
                     />
                     <a href="/recuperar-contraseña" className="forgotPassword">Recuperar contraseña</a>
                 </div>
@@ -79,7 +112,7 @@ const LoginContainer = () => {
                     <p>Otro texto aquí</p>
                 </div>
                 <div className="registerButton">
-                    <button className='buttonSubmitSignIn'>Registrarse</button>
+                    <button className='buttonSubmitSignIn' onClick={handleSignIn}>Registrarse</button>
                 </div>
             </div>
         </div>

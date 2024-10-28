@@ -7,7 +7,7 @@ connectDB();
 
 export const registerUser = async (req, res, next) => {
     try {
-        const { email, password, name, image = 'https://picsum.photos/200' } = req.body;
+        const { email, password, first_name, second_name, gender} = req.body;
         console.log("Datos recibidos:", req.body);
 
         // Verificar si el usuario ya existe
@@ -23,8 +23,9 @@ export const registerUser = async (req, res, next) => {
         const newUser = new User({
             email,
             password: hashedPassword,
-            name,
-            image // Asegurarse de que este campo exista en el esquema
+            first_name,
+            second_name,
+            gender
         });
 
         // Guardar el usuario en la base de datos
