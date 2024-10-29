@@ -29,10 +29,8 @@ const LoginContainer = () => {
         }
     
         try {
-            // Crear la URL completa para la solicitud
-            const url = `${VITE_API_BACKEND}/login`;
+            const url = `${VITE_API_BACKEND}/login`; // URL para la solicitud
     
-            // Realizar la solicitud POST
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -41,16 +39,14 @@ const LoginContainer = () => {
                 body: JSON.stringify({ email, password }), // Datos de inicio de sesión
             });
     
-            // Analizar la respuesta
             const data = await response.json();
     
             if (response.ok) {
-                // Guardar el token en localStorage y redirigir al perfil de admin
+                // Guardar el token en localStorage y redirigir al perfil
                 localStorage.setItem('authToken', data.token);
                 navigate('/profile');
                 closeMenu(); // Cierra el menú solo si el inicio de sesión es exitoso
             } else {
-                // Mostrar mensaje de error si el inicio de sesión falla
                 alert(data.message || 'El correo electrónico o contraseña no son correctos.');
             }
         } catch (error) {
@@ -58,6 +54,7 @@ const LoginContainer = () => {
             alert('Hubo un problema con el inicio de sesión. Inténtalo nuevamente.');
         }
     };
+    
 
     return (
         <div

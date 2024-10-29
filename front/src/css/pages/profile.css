@@ -7,6 +7,13 @@
     z-index: 1;
 }
 
+.active-user-info {
+    margin: 1rem 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+}
+
 .profile-image {
     max-width: 100%;
     height: auto;

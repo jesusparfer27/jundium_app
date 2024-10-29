@@ -23,7 +23,7 @@ export const EmailSignIn = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`${VITE_API_BACKEND}/sign-in`);
+                const response = await fetch(`${VITE_API_BACKEND}/users`);
                 if (!response.ok) {
                     throw new Error('Error en la respuesta de la API');
                 }
@@ -42,6 +42,7 @@ export const EmailSignIn = () => {
         setEmailExists(false);
         setEmailRequired(false);
     };
+    
 
     const handleEmailConfirmChange = (event) => {
         setEmailConfirm(event.target.value);
@@ -54,24 +55,26 @@ export const EmailSignIn = () => {
 
     const handleSubmit = async () => {
         setSubmitAttempted(true);
-
+    
         if (!email) {
             setEmailRequired(true);
             return;
         }
-
+    
         if (!validateEmail(email)) {
             setEmailExists(false);
             // manejar el error de email no válido aquí si es necesario
             return;
         }
-
+    
         if (email === emailConfirm) {
             if (apiData) {
+                // Verificar localmente si el email ya existe
                 const exists = apiData.some(user => user.email === email);
                 setEmailExists(exists);
-
+    
                 if (!exists) {
+                    // Email no existe, guardar en localStorage y continuar al siguiente paso
                     localStorage.setItem('userEmail', email);
                     navigate('/email-validation-2');
                 }
@@ -80,6 +83,7 @@ export const EmailSignIn = () => {
             setEmailExists(false);
         }
     };
+    
 
     return (
         <section className="email-signin-section">

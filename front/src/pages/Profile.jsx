@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import * as jwt_decode from 'jwt-decode'; // Asegúrate de importar esto
 import '../css/pages/profile.css';
 import ProfileImage from '../components/profile-header/ProfileHeader';
 
 export const Profile = () => {
     const [wishlistItems, setWishlistItems] = useState([]);
     const [orderItems, setOrderItems] = useState([]);
-    const [isAccordionOpen, setIsAccordionOpen] = useState(false); // Estado para controlar el acordeón
+    const [isAccordionOpen, setIsAccordionOpen] = useState(false);
     const [userInfo, setUserInfo] = useState({
         gender: '',
         firstName: '',
@@ -18,34 +20,86 @@ export const Profile = () => {
             whatsapp: false,
         },
     });
+    const [token, setToken] = useState(localStorage.getItem('token')); // Estado para el token
 
-    useEffect(() => {
-        const mockWishlist = [
-            { id: 1, imageUrl: 'path/to/image1.jpg', name: 'Producto 1', price: '$100' },
-            { id: 2, imageUrl: 'path/to/image2.jpg', name: 'Producto 2', price: '$150' },
-        ];
-        const mockOrders = [
-            { id: 3, imageUrl: 'path/to/image3.jpg', name: 'Pedido 1', price: '$200' },
-            { id: 4, imageUrl: 'path/to/image4.jpg', name: 'Pedido 2', price: '$250' },
-        ];
+    const { VITE_API_BACKEND } = import.meta.env;
+    const navigate = useNavigate();
 
-        setWishlistItems(mockWishlist);
-        setOrderItems(mockOrders);
-    }, []);
+    // useEffect(() => {
+    //     // Verifica si hay un token. Si no, redirige a la página de inicio.
+    //     if (!token) {
+    //         navigate('/'); // Redirige a la página de inicio si no hay token
+    //         return; // Detiene la ejecución del resto del código
+    //     }
 
-    const handleAccordionToggle = () => {
-        setIsAccordionOpen(!isAccordionOpen);
+    //     fetchUserData(token); // Pasa el token a la función de obtención de datos del usuario
+    // }, [navigate, token]); // Ahora incluye 'token' como dependencia
+
+    const fetchUserData = async (token) => {
+        try {
+            const token = localStorage.getItem('token');
+            console.log("Token en estado:", token); // Agrega este log
+
+            const decodedToken = jwt_decode(token);
+            const userId = decodedToken.id;
+
+            const response = await fetch(`${VITE_API_BACKEND}/users/${userId}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            if (response.ok) {
+                const userData = await response.json();
+                console.log("Datos del usuario:", userData);
+                setUserInfo(prevState => ({
+                    ...prevState,
+                    firstName: userData.first_name || '',
+                    lastName: userData.last_name || '',
+                    gender: userData.gender || '',
+                    country: userData.country || '',
+                    birthDate: userData.birthDate || { day: '', month: '', year: '' },
+                    contactPreferences: {
+                        email: userData.contactPreferences?.email || false,
+                        phone: userData.contactPreferences?.phone || false,
+                        whatsapp: userData.contactPreferences?.whatsapp || false,
+                    },
+                }));
+            } else {
+                console.error("Error al obtener los datos del usuario:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error en la solicitud:", error);
+        }
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('token'); // Elimina el token de localStorage
+        setToken(null); // Actualiza el estado del token a null
+        navigate('/'); // Redirige a la página de inicio
     };
 
     const handleUserInfoChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        if (name.includes('contactPreferences')) {
-            const preference = name.split('.')[1];
+        const { name, value } = e.target;
+    
+        // Maneja la actualización de los campos anidados como 'birthDate' y 'contactPreferences'
+        if (name.startsWith('birthDate.')) {
+            const key = name.split('.')[1]; // Obtiene 'day', 'month' o 'year'
+            setUserInfo((prevState) => ({
+                ...prevState,
+                birthDate: {
+                    ...prevState.birthDate,
+                    [key]: value,
+                },
+            }));
+        } else if (name.startsWith('contactPreferences.')) {
+            const key = name.split('.')[1]; // Obtiene el nombre de la preferencia
             setUserInfo((prevState) => ({
                 ...prevState,
                 contactPreferences: {
                     ...prevState.contactPreferences,
-                    [preference]: checked,
+                    [key]: e.target.checked, // Usamos checked para los checkboxes
                 },
             }));
         } else {
@@ -55,12 +109,17 @@ export const Profile = () => {
             }));
         }
     };
+    
+
+    
 
     return (
         <section className="profile-section">
-            <ProfileImage initials="IN" userName="Jesus Parfer" />
-
+            <ProfileImage initials="IN" userName={`${userInfo.firstName} ${userInfo.lastName}`} />
             <div className="userProfile">
+                <div className="active-user-info">
+                    <h2>{`${userInfo.firstName} ${userInfo.lastName}`}</h2>
+                </div>
                 <div className="profile-info">
                     <div className="headerProfile">Mi perfil:</div>
                     <div className="required-fields">Campos obligatorios</div>
@@ -114,7 +173,7 @@ export const Profile = () => {
                     <div className="accordionProfile">
                         <button
                             className="accordion-buttonLocation"
-                            onClick={handleAccordionToggle}
+                            // onClick={handleAccordionToggle}
                         >
                             {isAccordionOpen ? 'Ocultar ubicación' : 'Agregar ubicación'}
                         </button>
@@ -126,39 +185,20 @@ export const Profile = () => {
                     </div>
 
                     <div className="contact-preferences">
-                        <div className="contact-item">
-                            <label htmlFor="email" className="contact-label">
-                                Contactable por email
-                            </label>
-                            <input
-                                type="checkbox"
-                                name="contactPreferences.email"
-                                checked={userInfo.contactPreferences.email}
-                                onChange={handleUserInfoChange}
-                            />
-                        </div>
-                        <div className="contact-item">
-                            <label htmlFor="phone" className="contact-label">
-                                Contactable por teléfono
-                            </label>
-                            <input
-                                type="checkbox"
-                                name="contactPreferences.phone"
-                                checked={userInfo.contactPreferences.phone}
-                                onChange={handleUserInfoChange}
-                            />
-                        </div>
-                        <div className="contact-item">
-                            <label htmlFor="whatsapp" className="contact-label">
-                                Contactable vía WhatsApp
-                            </label>
-                            <input
-                                type="checkbox"
-                                name="contactPreferences.whatsapp"
-                                checked={userInfo.contactPreferences.whatsapp}
-                                onChange={handleUserInfoChange}
-                            />
-                        </div>
+                        {Object.keys(userInfo.contactPreferences).map((pref) => (
+                            <div className="contact-item" key={pref}>
+                                <label htmlFor={pref} className="contact-label">
+                                    Contactable por {pref}
+                                </label>
+                                <input
+                                    type="checkbox"
+                                    name={`contactPreferences.${pref}`}
+                                    checked={userInfo.contactPreferences[pref]}
+                                    onChange={handleUserInfoChange}
+                                />
+                            </div>
+                        ))}
+
                     </div>
 
                     <div className="birth-date">
@@ -169,6 +209,7 @@ export const Profile = () => {
                                 value={userInfo.birthDate.day}
                                 onChange={handleUserInfoChange}
                             >
+                                <option value="">Día</option>
                                 {[...Array(31)].map((_, i) => (
                                     <option key={i + 1} value={i + 1}>
                                         {i + 1}
@@ -180,6 +221,7 @@ export const Profile = () => {
                                 value={userInfo.birthDate.month}
                                 onChange={handleUserInfoChange}
                             >
+                                <option value="">Mes</option>
                                 {[...Array(12)].map((_, i) => (
                                     <option key={i + 1} value={i + 1}>
                                         {i + 1}
@@ -191,6 +233,7 @@ export const Profile = () => {
                                 value={userInfo.birthDate.year}
                                 onChange={handleUserInfoChange}
                             >
+                                <option value="">Año</option>
                                 {[...Array(75)].map((_, i) => (
                                     <option key={1950 + i} value={1950 + i}>
                                         {1950 + i}
@@ -202,6 +245,11 @@ export const Profile = () => {
 
                     <div className="submit-buttonProfile">
                         <button>Guardar cambios</button>
+                    </div>
+
+                    {/* Botón de cerrar sesión */}
+                    <div className="logout-buttonProfile">
+                        <button onClick={handleLogout} className="logout-button">Cerrar sesión</button>
                     </div>
                 </div>
 

@@ -1,13 +1,13 @@
 import { connectDB } from '../data/mongodb.js';
 import { User } from '../data/mongodb.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken'; // Importa jsonwebtoken para generar el token
+import { JWT_SECRET } from '../config/mongo.config.js';
 
-// Conectar a la base de datos
-connectDB();
 
 export const registerUser = async (req, res, next) => {
     try {
-        const { email, password, first_name, second_name, gender} = req.body;
+        const { email, password, first_name, last_name, gender } = req.body;
         console.log("Datos recibidos:", req.body);
 
         // Verificar si el usuario ya existe
@@ -24,22 +24,21 @@ export const registerUser = async (req, res, next) => {
             email,
             password: hashedPassword,
             first_name,
-            second_name,
+            last_name,
             gender
         });
 
         // Guardar el usuario en la base de datos
         await newUser.save();
 
-        // Buscar al usuario guardado para confirmar
-        const user = await User.findOne({ email });
+        // Generar un token de autenticación con el ID del usuario
+        const token = jwt.sign({ userId: newUser._id }, JWT_SECRET, { expiresIn: '24h' });
 
-        // Crear una respuesta exitosa
-        console.log("Usuario registrado exitosamente:", newUser);
-        res.status(200).json({
-            data: user,
+        // Enviar el token en la respuesta para mantener la sesión abierta
+        res.status(201).json({
             message: "Registro completo",
-            success: true
+            success: true,
+            token // Incluye el token en la respuesta
         });
     } catch (error) {
         console.error("Error al registrar el usuario:", error);

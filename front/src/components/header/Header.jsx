@@ -20,6 +20,17 @@ const Header = () => {
         setIsProductsPage(location.pathname === '/products');
     }, [location.pathname]);
 
+    // Función para manejar el clic en el botón de login
+    const handleLoginClick = () => {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            openMenu('login'); // Solo abrir el menú de login si no hay token
+        } else {
+            navigate('/profile'); // Redirigir a /profile si ya está logueado
+        }
+    };
+    
+
     return (
         <>
             <header className={`headerContainer ${isProductsPage ? 'productsPageActive' : ''}`}>
@@ -55,7 +66,7 @@ const Header = () => {
                             </button>
                         </div>
                         <div className="logIn">
-                            <button className='button logInButton' onClick={() => openMenu('login')}>
+                            <button className='button logInButton' onClick={handleLoginClick}>
                                 <span className="material-symbols-outlined">person</span>
                             </button>
                         </div>
@@ -65,10 +76,8 @@ const Header = () => {
                             </button>
                         </div>
                     </div>
-
-                    {/* Mostrar el botón de filtro solo en ProductsPage */}
-
                 </div>
+
                 {isProductsPage && (
                     <div className="headerFilter_Container">
                         <div className="headerFilter">
@@ -87,7 +96,7 @@ const Header = () => {
             {activeMenu === 'cart' && <CartContainer />}
             {activeMenu === 'contact' && <ContactContainer />}
             {activeMenu === 'searchBar' && <HeaderSearch />}
-            {activeMenu === 'button_filterButton' && <FilterProducts/>}
+            {activeMenu === 'button_filterButton' && <FilterProducts />}
         </>
     );
 };
