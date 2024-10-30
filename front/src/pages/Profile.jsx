@@ -1,124 +1,70 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import * as jwt_decode from 'jwt-decode'; // Asegúrate de importar esto
 import '../css/pages/profile.css';
 import ProfileImage from '../components/profile-header/ProfileHeader';
+import { HeaderContext } from '../context/HeaderContext';
+import { useUser } from '../hooks/useUser';
 
 export const Profile = () => {
     const [wishlistItems, setWishlistItems] = useState([]);
     const [orderItems, setOrderItems] = useState([]);
     const [isAccordionOpen, setIsAccordionOpen] = useState(false);
-    const [userInfo, setUserInfo] = useState({
-        gender: '',
-        firstName: '',
-        lastName: '',
-        country: '',
-        birthDate: { day: '', month: '', year: '' },
-        contactPreferences: {
-            email: false,
-            phone: false,
-            whatsapp: false,
-        },
-    });
-    const [token, setToken] = useState(localStorage.getItem('token')); // Estado para el token
-
-    const { VITE_API_BACKEND } = import.meta.env;
+    const { openMenu } = useContext(HeaderContext);
     const navigate = useNavigate();
+    const token = localStorage.getItem('authToken');
+    const { user, loading, error, fetchUserDetails } = useUser();
 
-    // useEffect(() => {
-    //     // Verifica si hay un token. Si no, redirige a la página de inicio.
-    //     if (!token) {
-    //         navigate('/'); // Redirige a la página de inicio si no hay token
-    //         return; // Detiene la ejecución del resto del código
-    //     }
+    useEffect(() => {
+        const loadUser = async () => {
+            await fetchUserDetails(); // Carga los datos del usuario
+        };
 
-    //     fetchUserData(token); // Pasa el token a la función de obtención de datos del usuario
-    // }, [navigate, token]); // Ahora incluye 'token' como dependencia
+        loadUser();
+    }, [fetchUserDetails]);
 
-    const fetchUserData = async (token) => {
-        try {
-            const token = localStorage.getItem('token');
-            console.log("Token en estado:", token); // Agrega este log
+    useEffect(() => {
+        if (token) {
+            console.log("Token encontrado:", token);
+        } else {
+            console.log("No hay token en localStorage.");
+        }
+    }, [token]);
 
-            const decodedToken = jwt_decode(token);
-            const userId = decodedToken.id;
+    useEffect(() => {
+        if (error) {
+            console.error('Error fetching user data:', error);
+            openMenu('login');
+        }
+    }, [error, openMenu]);
 
-            const response = await fetch(`${VITE_API_BACKEND}/users/${userId}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
+    const handleUserInfoChange = (e) => {
+        const { name, value, checked } = e.target;
 
-            if (response.ok) {
-                const userData = await response.json();
-                console.log("Datos del usuario:", userData);
-                setUserInfo(prevState => ({
-                    ...prevState,
-                    firstName: userData.first_name || '',
-                    lastName: userData.last_name || '',
-                    gender: userData.gender || '',
-                    country: userData.country || '',
-                    birthDate: userData.birthDate || { day: '', month: '', year: '' },
-                    contactPreferences: {
-                        email: userData.contactPreferences?.email || false,
-                        phone: userData.contactPreferences?.phone || false,
-                        whatsapp: userData.contactPreferences?.whatsapp || false,
-                    },
-                }));
-            } else {
-                console.error("Error al obtener los datos del usuario:", response.statusText);
-            }
-        } catch (error) {
-            console.error("Error en la solicitud:", error);
+        if (name.startsWith('birthDate.') || name.startsWith('contactPreferences.')) {
+            const [section, key] = name.split('.');
+            user[section] = {
+                ...user[section],
+                [key]: section === 'birthDate' ? value : checked,
+            };
+        } else {
+            user[name] = value;
         }
     };
 
     const handleLogout = () => {
-        localStorage.removeItem('token'); // Elimina el token de localStorage
-        setToken(null); // Actualiza el estado del token a null
-        navigate('/'); // Redirige a la página de inicio
+        localStorage.removeItem('authToken');
+        console.log("Sesión eliminada correctamente de localStorage.");
+        navigate('/');
     };
-
-    const handleUserInfoChange = (e) => {
-        const { name, value } = e.target;
-    
-        // Maneja la actualización de los campos anidados como 'birthDate' y 'contactPreferences'
-        if (name.startsWith('birthDate.')) {
-            const key = name.split('.')[1]; // Obtiene 'day', 'month' o 'year'
-            setUserInfo((prevState) => ({
-                ...prevState,
-                birthDate: {
-                    ...prevState.birthDate,
-                    [key]: value,
-                },
-            }));
-        } else if (name.startsWith('contactPreferences.')) {
-            const key = name.split('.')[1]; // Obtiene el nombre de la preferencia
-            setUserInfo((prevState) => ({
-                ...prevState,
-                contactPreferences: {
-                    ...prevState.contactPreferences,
-                    [key]: e.target.checked, // Usamos checked para los checkboxes
-                },
-            }));
-        } else {
-            setUserInfo((prevState) => ({
-                ...prevState,
-                [name]: value,
-            }));
-        }
-    };
-    
-
-    
 
     return (
         <section className="profile-section">
-            <ProfileImage initials="IN" userName={`${userInfo.firstName} ${userInfo.lastName}`} />
+            {loading && <div>Cargando datos del usuario...</div>} {/* Indicador de carga */}
+            {error && <div>Error al cargar los datos del usuario: {error.message}</div>} {/* Mensaje de error */}
+            <ProfileImage initials="IN" userName={`${user?.firstName || ''} ${user?.lastName || ''}`} />
             <div className="userProfile">
                 <div className="active-user-info">
-                    <h2>{`${userInfo.firstName} ${userInfo.lastName}`}</h2>
+                    <h2>{`${user?.firstName || ''} ${user?.lastName || ''}`}</h2>
                 </div>
                 <div className="profile-info">
                     <div className="headerProfile">Mi perfil:</div>
@@ -128,7 +74,7 @@ export const Profile = () => {
                             <label>Género</label>
                             <select
                                 name="gender"
-                                value={userInfo.gender}
+                                value={user?.gender || ''}
                                 onChange={handleUserInfoChange}
                             >
                                 <option value="">Seleccionar</option>
@@ -142,7 +88,7 @@ export const Profile = () => {
                             <input
                                 type="text"
                                 name="firstName"
-                                value={userInfo.firstName}
+                                value={user?.firstName || ''}
                                 onChange={handleUserInfoChange}
                             />
                         </div>
@@ -151,7 +97,7 @@ export const Profile = () => {
                             <input
                                 type="text"
                                 name="lastName"
-                                value={userInfo.lastName}
+                                value={user?.lastName || ''}
                                 onChange={handleUserInfoChange}
                             />
                         </div>
@@ -159,7 +105,7 @@ export const Profile = () => {
                             <label>País</label>
                             <select
                                 name="country"
-                                value={userInfo.country}
+                                value={user?.country || ''}
                                 onChange={handleUserInfoChange}
                             >
                                 <option value="">Seleccionar</option>
@@ -173,7 +119,7 @@ export const Profile = () => {
                     <div className="accordionProfile">
                         <button
                             className="accordion-buttonLocation"
-                            // onClick={handleAccordionToggle}
+                            onClick={() => setIsAccordionOpen(!isAccordionOpen)}
                         >
                             {isAccordionOpen ? 'Ocultar ubicación' : 'Agregar ubicación'}
                         </button>
@@ -185,7 +131,7 @@ export const Profile = () => {
                     </div>
 
                     <div className="contact-preferences">
-                        {Object.keys(userInfo.contactPreferences).map((pref) => (
+                        {user?.contactPreferences && Object.keys(user.contactPreferences).map((pref) => (
                             <div className="contact-item" key={pref}>
                                 <label htmlFor={pref} className="contact-label">
                                     Contactable por {pref}
@@ -193,12 +139,11 @@ export const Profile = () => {
                                 <input
                                     type="checkbox"
                                     name={`contactPreferences.${pref}`}
-                                    checked={userInfo.contactPreferences[pref]}
+                                    checked={user.contactPreferences[pref] || false}
                                     onChange={handleUserInfoChange}
                                 />
                             </div>
                         ))}
-
                     </div>
 
                     <div className="birth-date">
@@ -206,7 +151,7 @@ export const Profile = () => {
                         <div className="date-selectors">
                             <select
                                 name="birthDate.day"
-                                value={userInfo.birthDate.day}
+                                value={user?.birthDate?.day || ''}
                                 onChange={handleUserInfoChange}
                             >
                                 <option value="">Día</option>
@@ -218,7 +163,7 @@ export const Profile = () => {
                             </select>
                             <select
                                 name="birthDate.month"
-                                value={userInfo.birthDate.month}
+                                value={user?.birthDate?.month || ''}
                                 onChange={handleUserInfoChange}
                             >
                                 <option value="">Mes</option>
@@ -230,7 +175,7 @@ export const Profile = () => {
                             </select>
                             <select
                                 name="birthDate.year"
-                                value={userInfo.birthDate.year}
+                                value={user?.birthDate?.year || ''}
                                 onChange={handleUserInfoChange}
                             >
                                 <option value="">Año</option>
@@ -247,13 +192,13 @@ export const Profile = () => {
                         <button>Guardar cambios</button>
                     </div>
 
-                    {/* Botón de cerrar sesión */}
                     <div className="logout-buttonProfile">
                         <button onClick={handleLogout} className="logout-button">Cerrar sesión</button>
                     </div>
                 </div>
 
                 <div className="order-wishlist">
+                    {/* Orders */}
                     <div className="background-containerProfile">
                         <div className="separation_div">
                             <div className="headerProfileOrders">Mis pedidos:</div>
@@ -276,16 +221,17 @@ export const Profile = () => {
                         <div className="go-to-store">
                             <button
                                 className="submit-buttonProfile_Orders_WishList"
-                                onClick={() => (window.location.href = '/home')}
+                                onClick={() => navigate('/home')}
                             >
                                 Ir a tienda
                             </button>
                         </div>
                     </div>
 
+                    {/* Wishlist */}
                     <div className="background-containerProfile">
                         <div className="separation_div">
-                            <div className="headerProfileWishList">Mi Wishlist:</div>
+                            <div className="headerProfileOrders">Lista de deseos:</div>
                         </div>
                         {wishlistItems.length > 0 ? (
                             <div className="wishlist-list">
@@ -300,12 +246,12 @@ export const Profile = () => {
                                 ))}
                             </div>
                         ) : (
-                            <div className="no-wishlist">No hay artículos disponibles</div>
+                            <div className="no-wishlist">Aún no hay elementos en la lista de deseos</div>
                         )}
                         <div className="go-to-store">
                             <button
                                 className="submit-buttonProfile_Orders_WishList"
-                                onClick={() => (window.location.href = '/home')}
+                                onClick={() => navigate('/home')}
                             >
                                 Ir a tienda
                             </button>

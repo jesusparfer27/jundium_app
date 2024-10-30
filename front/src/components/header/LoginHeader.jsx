@@ -12,7 +12,7 @@ const LoginContainer = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const { VITE_API_BACKEND, VITE_ACCOUNTS_ENDPOINT } = import.meta.env;
+    const { VITE_API_BACKEND } = import.meta.env;
 
     const handleSignIn = () => {
         navigate('/email-validation'); // Redirige a /email-validation
@@ -20,32 +20,27 @@ const LoginContainer = () => {
     };
     
     const handleLogin = async (event) => {
-        event.preventDefault(); // Previene el envío por defecto del formulario
-    
-        // Verifica si el email y la contraseña están llenos
+        event.preventDefault();
+        
         if (!email || !password) {
             alert('Por favor, completa todos los campos.');
             return;
         }
     
         try {
-            const url = `${VITE_API_BACKEND}/login`; // URL para la solicitud
-    
+            const url = `${VITE_API_BACKEND}/login`;
             const response = await fetch(url, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }), // Datos de inicio de sesión
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password }),
             });
     
             const data = await response.json();
     
             if (response.ok) {
-                // Guardar el token en localStorage y redirigir al perfil
-                localStorage.setItem('authToken', data.token);
+                localStorage.setItem('authToken', data.token); // Asegúrate de usar el nombre correcto aquí
                 navigate('/profile');
-                closeMenu(); // Cierra el menú solo si el inicio de sesión es exitoso
+                closeMenu();
             } else {
                 alert(data.message || 'El correo electrónico o contraseña no son correctos.');
             }
@@ -54,7 +49,6 @@ const LoginContainer = () => {
             alert('Hubo un problema con el inicio de sesión. Inténtalo nuevamente.');
         }
     };
-    
 
     return (
         <div

@@ -21,15 +21,22 @@ const Header = () => {
     }, [location.pathname]);
 
     // Función para manejar el clic en el botón de login
-    const handleLoginClick = () => {
-        const token = localStorage.getItem('authToken');
-        if (!token) {
-            openMenu('login'); // Solo abrir el menú de login si no hay token
-        } else {
-            navigate('/profile'); // Redirigir a /profile si ya está logueado
-        }
-    };
-    
+// Función para manejar el clic en el botón de login
+useEffect(() => {
+    const isProducts = location.pathname === '/products';
+    if (isProducts !== isProductsPage) {
+        setIsProductsPage(isProducts);
+    }
+}, [location.pathname, setIsProductsPage]);
+
+const handleLoginClick = () => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+        openMenu('login');
+    } else {
+        navigate('/profile');
+    }
+};
 
     return (
         <>

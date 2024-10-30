@@ -10,14 +10,11 @@ connectDB();
 // Controlador para obtener todos los usuarios
 export const getUsers = async (req, res, next) => {
     try {
-        // Consultar la base de datos para obtener todos los usuarios
-        const users = await User.find({}, {
-            // Excluir campos sensibles
-            password: 0,
-            // Aquí puedes añadir más campos a excluir si es necesario
-        });
+        const users = await User.find({}, { password: 0 }); // Excluir campos sensibles
 
-        // Verificar si se encontraron usuarios
+        // Log de usuarios obtenidos
+        console.log("Usuarios obtenidos:", users);
+
         if (users.length === 0) {
             return res.status(404).json({
                 message: "No se encontraron usuarios",
@@ -25,7 +22,6 @@ export const getUsers = async (req, res, next) => {
             });
         }
 
-        // Enviar la lista de usuarios como respuesta
         res.status(200).json({
             data: users,
             message: "Usuarios obtenidos exitosamente",
@@ -45,7 +41,6 @@ export const postUsers = async (req, res, next) => {
     try {
         const { nombre, email, password } = req.body;
 
-        // Verificar que los campos requeridos estén presentes
         if (!nombre || !email || !password) {
             return res.status(400).json({
                 message: "Faltan campos obligatorios",
@@ -53,7 +48,6 @@ export const postUsers = async (req, res, next) => {
             });
         }
 
-        // Verificar si el usuario ya existe en la base de datos
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(409).json({
@@ -62,20 +56,16 @@ export const postUsers = async (req, res, next) => {
             });
         }
 
-        // Encriptar la contraseña
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Crear el nuevo usuario
         const newUser = new User({
             nombre,
             email,
             password: hashedPassword
         });
 
-        // Guardar el usuario en la base de datos
         await newUser.save();
 
-        // Enviar la respuesta al cliente
         res.status(201).json({
             data: { id: newUser._id, nombre: newUser.nombre, email: newUser.email },
             message: "Usuario creado exitosamente",
@@ -93,40 +83,30 @@ export const postUsers = async (req, res, next) => {
 
 export const loginUser = async (req, res, next) => {
     try {
-        // Buscar al usuario por el correo electrónico
         const { email, password } = req.body;
-        console.log("Procesando inicio de sesión");
 
-        // Buscar el usuario en la base de datos
         const user = await User.findOne({ email });
-        console.log("Usuario encontrado:", user);
-
-        // Verificar si el usuario existe
         if (!user) {
             return res.status(400).json({
-                msg: "Usuario no encontrado",
+                message: "Usuario no encontrado",
                 success: false,
             });
         }
 
-        // Comparar la contraseña ingresada con la almacenada (hasheada)
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
-
         if (!isPasswordCorrect) {
             return res.status(401).json({
-                msg: "Correo electrónico o contraseña incorrectos",
+                message: "Correo electrónico o contraseña incorrectos",
                 success: false,
             });
         }
 
-        // Crear y firmar un token
         const token = jwt.sign(
-            { email: user.email, id: user._id },  // Puedes incluir otros datos aquí si quieres
+            { email: user.email, id: user._id },
             JWT_SECRET, // Asegúrate de tener JWT_SECRET en tu archivo de configuración
-            { expiresIn: '1h' }  // El token expira en 1 hora
+            { expiresIn: '1h' }
         );
 
-        // Respuesta exitosa con el token y datos del usuario
         res.status(200).json({
             data: user,
             message: "Login correcto",
@@ -135,34 +115,53 @@ export const loginUser = async (req, res, next) => {
     } catch (error) {
         console.error("Error al iniciar sesión:", error);
         res.status(500).json({
-            msg: "Error en el servidor",
+            message: "Error en el servidor",
             success: false,
             error: error.message,
         });
     }
 };
 
-export const getUserById = async (req, res, next) => {
+export const getUserById = async (req, res) => {
+    const token = req.headers['authorization']?.split(' ')[1];
+    if (!token) {
+        return res.status(401).send('Token no proporcionado');
+    }
+
     try {
-        const { id } = req.params;
-        const user = await User.findById(id, { password: 0 });
+        const decoded = jwt.verify(token, JWT_SECRET); // Usa la variable de entorno aquí
+        const userId = decoded.id;
+
+        const user = await User.findById(userId);
         if (!user) {
-            return res.status(404).json({
-                message: "Usuario no encontrado",
-                success: false
-            });
+            return res.status(404).send('Usuario no encontrado');
         }
-        res.status(200).json({
-            data: user,
-            message: "Usuario obtenido exitosamente",
-            success: true
-        });
+
+        return res.status(200).json(user);
     } catch (error) {
-        console.error("Error al obtener el usuario:", error);
-        res.status(500).json({
-            message: "Error en el servidor",
-            success: false,
-            error: error.message
-        });
+        console.error('Error al obtener el usuario:', error);
+        return res.status(500).send('Error en el servidor');
+    }
+};
+
+export const getMe = async (req, res) => {
+    const token = req.headers['authorization']?.split(' ')[1];
+    if (!token) {
+        return res.status(401).send('Token no proporcionado');
+    }
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        const userId = decoded.id;
+
+        const user = await User.findById(userId, { password: 0 }); // Excluir el campo de la contraseña
+        if (!user) {
+            return res.status(404).send('Usuario no encontrado');
+        }
+
+        return res.status(200).json(user);
+    } catch (error) {
+        console.error('Error al obtener el usuario:', error);
+        return res.status(500).send('Error en el servidor');
     }
 };

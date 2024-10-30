@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import getProducts, { getProductById } from "../controllers/product.controller.js";
-import { getUsers, loginUser, getUserById } from '../controllers/users.controller.js';
+import { getUsers, loginUser, getUserById, getMe } from '../controllers/users.controller.js';
 import { authenticateToken } from '../middlewares/auth.js';
 import { registerUser } from '../controllers/register.controller.js';
 // Otras importaciones de controladores...
@@ -9,8 +9,8 @@ const router = Router();
 
 // Ruta para obtener todos los productos
 router.get("/products", getProducts); // Aquí defines tu ruta
-router.get("/products/:id", getProductById); // Nueva ruta para obtener un producto por ID
-
+router.get("/products/:id", authenticateToken, getProductById); // Nueva ruta para obtener un producto por ID
+router.get("/me", authenticateToken, getMe);
 router.get("/users", getUsers);
 router.get("/users/:id", getUserById);
 
