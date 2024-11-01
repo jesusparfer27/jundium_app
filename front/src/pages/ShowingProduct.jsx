@@ -9,7 +9,7 @@ export const ShowingProductPage = () => {
     const [accordionOpen, setAccordionOpen] = useState(false);
     const [selectedVariant, setSelectedVariant] = useState(null); // Estado para la variante seleccionada
 
-    const { VITE_API_BACKEND, VITE_IMAGES_BASE_URL } = import.meta.env;
+    const { VITE_API_BACKEND, VITE_IMAGES_BASE_URL, VITE_PRODUCTS_ENDPOINT } = import.meta.env;
 
     const toggleAccordion = () => {
         setAccordionOpen(!accordionOpen);
@@ -24,32 +24,34 @@ export const ShowingProductPage = () => {
     };
 
     useEffect(() => {
-        const fetchProductById = async () => {
-            setLoading(true);
+        const fetchProductById = async (productId) => {
             try {
-                const response = await fetch(`${VITE_API_BACKEND}/products/${id}`, {
+                const token = localStorage.getItem('authToken'); // O la forma en que estás almacenando tu token
+                const response = await fetch(`${VITE_API_BACKEND}${VITE_PRODUCTS_ENDPOINT}/${productId}`, {
                     method: 'GET',
                     headers: {
+                        'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
                     },
                 });
+                console.log(token)
 
                 if (!response.ok) {
-                    throw new Error(`Network response was not ok: ${response.statusText}`);
+                    throw new Error(`Error: ${response.statusText}`);
                 }
 
-                const data = await response.json();
-                setProduct(data);
-                const mainVariant = data.variants.find((variant) => variant.is_main);
-                setSelectedVariant(mainVariant);
+                const productData = await response.json();
+                setProduct(productData);
+                setLoading(false); // Cambiar el estado de carga a falso después de obtener los datos
             } catch (error) {
                 console.error('Error al obtener el producto:', error);
-            } finally {
-                setLoading(false);
+                setLoading(false); // Asegúrate de cambiar el estado de carga a falso en caso de error
             }
         };
 
-        fetchProductById();
+        if (id) { // Asegúrate de que id no sea undefined
+            fetchProductById(id); // Pasar el id correcto a la función
+        }
     }, [id]);
 
     if (loading) return <div>Cargando producto...</div>;
@@ -113,9 +115,7 @@ export const ShowingProductPage = () => {
                             ))}
                         </select>
 
-
                         <button className="addToCart">Añadir al carrito</button>
-
                     </div>
                 </div>
             </div>

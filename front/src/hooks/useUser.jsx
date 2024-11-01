@@ -1,33 +1,85 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useMemo } from "react";
 
-// Crear un contexto de Usuario que abarque toda la aplicación
 const UserContext = createContext();
 
-// Crear un provider y exportarlo para usarlo en main.jsx
 export function UserProvider({ children }) {
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(false); // Estado de carga
-    const { VITE_API_URL } = import.meta.env;
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const VITE_API_BACKEND = import.meta.env.VITE_API_BACKEND;
 
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
             setUser(JSON.parse(storedUser));
+            fetchUserDetails();
+        } else {
+            setLoading(false); // Si no hay usuario, no necesitas seguir cargando
         }
     }, []);
 
-    useEffect(() => {
-        if (user) {
-            console.log("Usuario loggeado:", user);
-        } else {
-            console.log("No hay usuario loggeado.");
-        }
-    }, [user]);
+    const fetchOrderItems = async () => {
+        const token = localStorage.getItem('authToken');
+        if (!token) return;
 
-    // Función para iniciar sesión
-    const login = async (userData) => {
         try {
-            const response = await fetch(`${VITE_API_URL}/login`, {
+            const response = await fetch(`${VITE_API_BACKEND}/orders`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            const data = await response.json();
+            return data; // Devuelve los pedidos
+        } catch (err) {
+            console.error('Error loading orders:', err);
+        }
+    };
+
+    const fetchWishlistItems = async () => {
+        const token = localStorage.getItem('authToken');
+        if (!token) return;
+
+        try {
+            const response = await fetch(`${VITE_API_BACKEND}/wishlist`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            const data = await response.json();
+            return data; // Devuelve los elementos de la wishlist
+        } catch (err) {
+            console.error('Error loading wishlist:', err);
+        }
+    };
+
+    const updateUserDetails = async (userData) => {
+        const token = localStorage.getItem('authToken');
+        if (!token) return;
+
+        try {
+            const response = await fetch(`${VITE_API_BACKEND}/user/update`, {
+                method: 'PUT',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData),
+            });
+            if (!response.ok) throw new Error('Error al actualizar los datos');
+
+            const updatedUser = await response.json();
+            setUser(updatedUser);
+            localStorage.setItem("user", JSON.stringify(updatedUser));
+        } catch (err) {
+            setError(err.message);
+            console.error('Error updating user details:', err);
+        }
+    };
+
+    const login = async (userData) => {
+        setError(null); // Resetear error al intentar login
+        try {
+            const response = await fetch(`${VITE_API_BACKEND}/login`, {
                 method: "POST",
                 headers: {
                     'Content-type': 'application/json'
@@ -36,28 +88,25 @@ export function UserProvider({ children }) {
             });
 
             const responseData = await response.json();
-            console.log("Respuesta del servidor:", responseData);
 
             if (response.ok) {
                 const usuario = responseData.data;
                 setUser(usuario);
                 localStorage.setItem("user", JSON.stringify(usuario));
                 localStorage.setItem('authToken', responseData.token);
-                await fetchUserDetails(); // Llama a fetchUserDetails para obtener detalles del usuario
-                return null; // Sin errores
             } else {
                 throw new Error(responseData.message || "Error en el servidor");
             }
         } catch (e) {
+            setError(e.message || "Error en el servidor");
             console.error('Error en el inicio de sesión:', e);
-            return e.message || "Error en el servidor";
         }
     };
 
-    // Función para registrarse
     const register = async (userData) => {
+        setError(null); // Resetear error al intentar registro
         try {
-            const response = await fetch(`${VITE_API_URL}/register`, {
+            const response = await fetch(`${VITE_API_BACKEND}/register`, {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json"
@@ -68,57 +117,56 @@ export function UserProvider({ children }) {
             const responseData = await response.json();
 
             if (response.ok) {
-                const usuario = responseData.data;
-                setUser(usuario);
-                localStorage.setItem("user", JSON.stringify(usuario));
+                const user = responseData.data;
+                setUser(user);
+                localStorage.setItem("user", JSON.stringify(user));
                 localStorage.setItem('authToken', responseData.token);
-                return null; // Sin errores
             } else {
                 throw new Error(responseData.message || "Error en el registro");
             }
         } catch (e) {
+            setError(e.message || "Error en el servidor");
             console.error('Error en el registro:', e);
-            return e.message || "Error en el servidor";
         }
     };
 
-    // Función para obtener el usuario logueado
     const fetchUserDetails = async () => {
         const token = localStorage.getItem('authToken');
         if (!token) {
-            console.warn("No token found. User details cannot be retrieved.");
-            return null; // Sin token, no hay usuario que recuperar
+            console.warn("No se encontró el token en localStorage.");
+            setLoading(false);
+            return;
         }
-
-        setLoading(true); // Estado de carga
-
+    
         try {
-            const response = await fetch(`${VITE_API_URL}/users/me`, {
+            if (!VITE_API_BACKEND) {
+                throw new Error("VITE_API_BACKEND no está definido.");
+            }
+    
+            const response = await fetch(`${VITE_API_BACKEND}/me`, {
                 method: "GET",
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
-
+    
             if (!response.ok) {
-                const errorMessage = `Error al obtener los detalles del usuario: ${response.status} ${response.statusText}`;
-                throw new Error(errorMessage);
+                throw new Error(`Error al obtener detalles del usuario: ${response.status}`);
             }
-
+    
             const responseData = await response.json();
-            setUser(responseData);
-            localStorage.setItem("user", JSON.stringify(responseData));
-
+            console.log("Detalles del usuario traídos:", responseData);
+            // Asigna la data completa al usuario
+            setUser(responseData.data); // Asegúrate de acceder correctamente a los datos
+            localStorage.setItem("user", JSON.stringify(responseData.data)); // Almacena el objeto correcto
         } catch (error) {
-            console.error("Error al obtener el usuario:", error.message);
-            // Aquí podrías manejar el error, como mostrar un mensaje al usuario
+            console.error("Error al obtener los detalles del usuario:", error.message);
         } finally {
-            setLoading(false); // Finaliza el estado de carga
+            setLoading(false);
         }
     };
 
-    // Función para cerrar sesión
     const logout = () => {
         localStorage.removeItem("user");
         localStorage.removeItem('authToken');
@@ -126,14 +174,26 @@ export function UserProvider({ children }) {
         console.log("User logged out");
     };
 
+    const value = useMemo(() => ({
+        user,
+        loading,
+        error,
+        login,
+        logout,
+        register,
+        fetchUserDetails,
+        updateUserDetails,
+        fetchWishlistItems,
+        fetchOrderItems,
+    }), [user, loading, error]);
+
     return (
-        <UserContext.Provider value={{ user, loading, login, logout, register, fetchUserDetails }}>
+        <UserContext.Provider value={value}>
             {children}
         </UserContext.Provider>
     );
 }
 
-// Crear un Custom Hook para usar nuestro contexto de Usuario
 export function useUser() {
     return useContext(UserContext);
 }

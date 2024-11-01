@@ -14,7 +14,7 @@ export const PORT = process.env.PORT || 3027;
 
 export const FULL_DOMAIN = `${HOST}:${PORT}`
 
-export const JWT_SECRET = process.env.JWT_SECRET || 'utiliza_una_jwt_SeGuRa_no_esta'
+export const JWT_SECRET = process.env.JWT_SECRET || 'S4jIRHqt'
 
 // Configuración de MongoDB
 export const mongodbUri = process.env.MONGODB_URI;

@@ -4,10 +4,13 @@ import { mongodbUri } from '../config/mongo.config.js';
 // Conexión a MongoDB
 const connectDB = async () => {
     try {
-        await mongoose.connect(mongodbUri);
+        await mongoose.connect(mongodbUri, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
         console.log("MongoDB conectado correctamente");
-    } catch (e) {
-        console.log("Error conectando a MongoDB ", e.message);
+    } catch (error) {
+        console.error("Error conectando a MongoDB: ", error);
         process.exit(1);
     }
 };
@@ -29,12 +32,17 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        validate: {
+            validator: function(v) {
+                return /^\S+@\S+\.\S+$/.test(v); // Validación simple de email
+            },
+            message: props => `${props.value} no es un correo válido!`
+        }
     },
     phone_number: {
         type: String
     },
-
     gender: {
         type: String,
         enum: ['masculino', 'femenino', 'otro'],
@@ -69,17 +77,14 @@ const userSchema = new mongoose.Schema({
             default: false
         }
     },
-    wishlist: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'Product'
-    },
+    wishlist: [{ product_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' } }],
     orders: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'Order'
     },
     cart: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'Product'
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Cart'
     },
     newsletter_subscription: {
         type: Boolean,
@@ -91,39 +96,6 @@ const userSchema = new mongoose.Schema({
     strict: false
 });
 
-// Función para crear un usuario administrador
-const createAdminUser = async () => {
-    const adminUser = new User({
-        username: "admin_javier",
-        first_name: "Javier",
-        last_name: "Fernandez",
-        email: "admin.javier@example.com",
-        password: "$2b$10$YwA2uJcKx9JQkL7F8OtKTOlD8QWz7N/MN6J2x0Og5FJTwX6y9YxLi", // Debe estar cifrada
-        phone_number: "+34 600 987 654",
-        address: {
-            street: "Avenida del Sol, 22",
-            city: "Barcelona",
-            postal_code: "08002",
-            country: "España"
-        },
-        roles: ["admin", "user"],
-        permissions: {
-            manage_users: true,
-            manage_products: true,
-            view_reports: true,
-            manage_orders: true
-        },
-        newsletter_subscription: false
-    });
-
-    try {
-        await adminUser.save();
-        console.log("Usuario administrador creado correctamente.");
-    } catch (error) {
-        console.error("Error creando usuario administrador:", error.message);
-    }
-};
-
 // Schema de Producto
 const productSchema = new mongoose.Schema({
     name: {
@@ -134,7 +106,7 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    base_price: { // Aquí se ha añadido el campo base_price
+    base_price: {
         type: Number,
         required: true
     },
@@ -156,7 +128,7 @@ const productSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        required: true // Por ejemplo, "Camiseta", "Bolso", "Vestido"
+        required: true
     },
     gender: {
         type: String,
@@ -227,9 +199,118 @@ const productSchema = new mongoose.Schema({
     strict: false
 });
 
+// Schema de Wishlist
+
+const wishlistSchema = new mongoose.Schema({
+    user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Account' },
+    items: [
+        {
+            product_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+            added_at: { type: Date, default: Date.now }
+        }
+    ]
+}, { timestamps: true });
+
+
+// Schema de Orders
+const orderSchema = new mongoose.Schema({
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    date: {
+        type: Date,
+        default: Date.now
+    },
+    total: {
+        type: Number,
+        required: true
+    },
+    status: {
+        type: String,
+        enum: ['Pending', 'Delivered', 'Cancelled', 'Shipped'],
+        default: 'Pending'
+    },
+    items: [
+        {
+            product_id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Product',
+                required: true
+            },
+            quantity: {
+                type: Number,
+                required: true,
+                default: 1
+            },
+            price: {
+                type: Number,
+                required: true
+            }
+        }
+    ],
+    payment_methods: [
+        {
+            card_type: {
+                type: String,
+                required: true
+            },
+            card_number: {
+                type: String,
+                required: true
+            },
+            expiry_date: {
+                type: String,
+                required: true
+            }
+        }
+    ]
+}, {
+    timestamps: true,
+    versionKey: false
+});
+
+// Schema de Cart
+const cartSchema = new mongoose.Schema({
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    items: [
+        {
+            product_id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Product',
+                required: true
+            },
+            quantity: {
+                type: Number,
+                required: true,
+                default: 1
+            }
+        }
+    ],
+    total_price: {
+        type: Number,
+        default: 0
+    },
+    created_at: {
+        type: Date,
+        default: Date.now
+    }
+}, {
+    timestamps: true,
+    versionKey: false
+});
+
 // Modelos
 const User = mongoose.model('User', userSchema, 'accounts');
 const Product = mongoose.model('Product', productSchema);
+const Wishlist = mongoose.model('Wishlist', wishlistSchema);
+const Order = mongoose.model('Order', orderSchema);
+const Cart = mongoose.model('Cart', cartSchema);
 
 // Exportar la conexión y los modelos
-export { connectDB, User, Product, createAdminUser };
+export { connectDB, User, Product, Wishlist, Order, Cart };

@@ -8,13 +8,9 @@ import jwt from 'jsonwebtoken';
 connectDB();
 
 // Controlador para obtener todos los usuarios
-export const getUsers = async (req, res, next) => {
+export const getUsers = async (req, res) => {
     try {
         const users = await User.find({}, { password: 0 }); // Excluir campos sensibles
-
-        // Log de usuarios obtenidos
-        console.log("Usuarios obtenidos:", users);
-
         if (users.length === 0) {
             return res.status(404).json({
                 message: "No se encontraron usuarios",
@@ -37,11 +33,12 @@ export const getUsers = async (req, res, next) => {
     }
 };
 
-export const postUsers = async (req, res, next) => {
+// Controlador para registrar un usuario
+export const postUsers = async (req, res) => {
     try {
-        const { nombre, email, password } = req.body;
+        const { first_name, last_name, email, password } = req.body; // Cambiado aquí
 
-        if (!nombre || !email || !password) {
+        if (!first_name || !last_name || !email || !password) { // Cambiado aquí
             return res.status(400).json({
                 message: "Faltan campos obligatorios",
                 success: false
@@ -59,7 +56,8 @@ export const postUsers = async (req, res, next) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = new User({
-            nombre,
+            first_name, // Asegúrate de que estás utilizando el nombre correcto
+            last_name,  // Añade también last_name aquí
             email,
             password: hashedPassword
         });
@@ -67,7 +65,7 @@ export const postUsers = async (req, res, next) => {
         await newUser.save();
 
         res.status(201).json({
-            data: { id: newUser._id, nombre: newUser.nombre, email: newUser.email },
+            data: { id: newUser._id, first_name: newUser.first_name, last_name: newUser.last_name, email: newUser.email },
             message: "Usuario creado exitosamente",
             success: true
         });
@@ -81,13 +79,22 @@ export const postUsers = async (req, res, next) => {
     }
 };
 
-export const loginUser = async (req, res, next) => {
+
+// Controlador para iniciar sesión
+export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
 
+        if (!email || !password) {
+            return res.status(400).json({
+                message: "Por favor, proporciona email y contraseña.",
+                success: false,
+            });
+        }
+
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({
+            return res.status(404).json({
                 message: "Usuario no encontrado",
                 success: false,
             });
@@ -103,14 +110,19 @@ export const loginUser = async (req, res, next) => {
 
         const token = jwt.sign(
             { email: user.email, id: user._id },
-            JWT_SECRET, // Asegúrate de tener JWT_SECRET en tu archivo de configuración
+            JWT_SECRET,
             { expiresIn: '1h' }
         );
 
         res.status(200).json({
-            data: user,
+            data: {
+                id: user._id,
+                email: user.email,
+                first_name: user.first_name
+            },
             message: "Login correcto",
-            token
+            success: true,
+            token,
         });
     } catch (error) {
         console.error("Error al iniciar sesión:", error);
@@ -122,46 +134,64 @@ export const loginUser = async (req, res, next) => {
     }
 };
 
+// Controlador para obtener un usuario por ID
 export const getUserById = async (req, res) => {
     const token = req.headers['authorization']?.split(' ')[1];
     if (!token) {
-        return res.status(401).send('Token no proporcionado');
-    }
-
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET); // Usa la variable de entorno aquí
-        const userId = decoded.id;
-
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).send('Usuario no encontrado');
-        }
-
-        return res.status(200).json(user);
-    } catch (error) {
-        console.error('Error al obtener el usuario:', error);
-        return res.status(500).send('Error en el servidor');
-    }
-};
-
-export const getMe = async (req, res) => {
-    const token = req.headers['authorization']?.split(' ')[1];
-    if (!token) {
-        return res.status(401).send('Token no proporcionado');
+        return res.status(401).json({ message: 'Token no proporcionado', success: false });
     }
 
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
         const userId = decoded.id;
 
-        const user = await User.findById(userId, { password: 0 }); // Excluir el campo de la contraseña
+        const user = await User.findById(userId, { password: 0 });
         if (!user) {
-            return res.status(404).send('Usuario no encontrado');
+            return res.status(404).json({ message: 'Usuario no encontrado', success: false });
         }
 
-        return res.status(200).json(user);
+        return res.status(200).json({
+            data: user,
+            message: "Usuario obtenido correctamente",
+            success: true
+        });
+    } catch (error) {
+        console.error("Error al obtener el usuario:", error);
+        return res.status(500).json({
+            message: 'Error en el servidor',
+            success: false,
+            error: error.message
+        });
+    }
+};
+
+// Controlador para obtener los detalles del usuario actual
+export const getMe = async (req, res) => {
+    const token = req.headers['authorization']?.split(' ')[1];
+    if (!token) {
+        return res.status(401).json({ message: 'Token no proporcionado', success: false });
+    }
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        const userId = decoded.id;
+
+        const user = await User.findById(userId, { password: 0 });
+        if (!user) {
+            return res.status(404).json({ message: 'Usuario no encontrado', success: false });
+        }
+
+        return res.status(200).json({
+            data: user,
+            message: "Usuario actual obtenido correctamente",
+            success: true
+        });
     } catch (error) {
         console.error('Error al obtener el usuario:', error);
-        return res.status(500).send('Error en el servidor');
+        return res.status(500).json({
+            message: 'Error en el servidor',
+            success: false,
+            error: error.message
+        });
     }
 };

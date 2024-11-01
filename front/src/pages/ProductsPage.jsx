@@ -14,7 +14,6 @@ export const ProductsPage = () => {
 
     const { VITE_API_BACKEND, VITE_PRODUCTS_ENDPOINT, VITE_IMAGES_BASE_URL } = import.meta.env;
 
-    // Obtener los parámetros de la URL
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const typeParam = searchParams.get('type');
@@ -22,15 +21,14 @@ export const ProductsPage = () => {
     const collectionParam = searchParams.get('collection');
 
     const fetchProducts = async () => {
-        setLoading(true); // Iniciar el loading
-        setError(null);   // Reiniciar el error
+        setLoading(true);
+        setError(null);
 
         try {
             const response = await fetch(`${VITE_API_BACKEND}${VITE_PRODUCTS_ENDPOINT}`);
             if (!response.ok) throw new Error('Error al cargar los productos');
             const data = await response.json();
 
-            // Filtrar los productos según los parámetros de tipo, género y colección
             const filteredProducts = data.filter(product =>
                 (!typeParam || product.type === typeParam) &&
                 (!genderParam || product.gender === genderParam) &&
@@ -41,12 +39,34 @@ export const ProductsPage = () => {
         } catch (err) {
             setError(err.message);
         } finally {
-            setLoading(false); // Finalizar el loading
+            setLoading(false);
+        }
+    };
+
+    const handleAddToWishlist = async (productId) => {
+        try {
+            const response = await fetch(`${VITE_API_BACKEND}/wishlist/${productId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}` // Asegúrate de que el token de autenticación esté en localStorage
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error(errorData.message); // Manejo del error
+                return;
+            }
+
+            const result = await response.json();
+            console.log(`Producto ${productId} agregado a la wishlist:`, result); // Log del producto agregado
+        } catch (error) {
+            console.error('Error al agregar a la wishlist:', error);
         }
     };
 
     useEffect(() => {
-        // Verificar si las variables de entorno están definidas
         if (!VITE_API_BACKEND || !VITE_PRODUCTS_ENDPOINT || !VITE_IMAGES_BASE_URL) {
             setError("Error: Variables de entorno no configuradas correctamente.");
             setLoading(false);
@@ -54,7 +74,7 @@ export const ProductsPage = () => {
         }
 
         fetchProducts();
-    }, [typeParam, genderParam, collectionParam]); // Ejecuta fetchProducts cuando cambien los parámetros
+    }, [typeParam, genderParam, collectionParam]);
 
     if (loading) return <div className="loading">Cargando productos...</div>;
     if (error) return <div className="error">Error al cargar productos: {error}</div>;
@@ -69,7 +89,6 @@ export const ProductsPage = () => {
             <section className="productsPage">
                 <div className="heroSection">
                     <div className="heroImage">
-                        {/* Puedes agregar aquí un contenido adicional para la sección hero si lo deseas */}
                     </div>
                 </div>
                 <div className="productsContainer">
@@ -78,7 +97,7 @@ export const ProductsPage = () => {
                             products.map((product) => (
                                 <NavLink
                                     to={`/products/${product._id}`}
-                                    key={product._id} // Usar _id como clave única
+                                    key={product._id}
                                     className="productItem_ProductPage"
                                 >
                                     <div className="productImageWrapper">
@@ -88,12 +107,12 @@ export const ProductsPage = () => {
                                                 product.variants[0] &&
                                                 product.variants[0].image
                                                     ? `${VITE_IMAGES_BASE_URL}${product.variants[0].image.find(img => img.endsWith('.jpg') || img.endsWith('.png')) || product.variants[0].image[0]}`
-                                                    : "ruta/a/imagen/por/defecto.jpg" // Imagen por defecto si no hay imágenes disponibles
+                                                    : "ruta/a/imagen/por/defecto.jpg"
                                             }
                                             alt={product.name || 'Producto sin nombre'}
                                             className="productImage"
                                         />
-                                        <div className="likeIcon">
+                                        <div className="likeIcon" onClick={() => handleAddToWishlist(product._id)}>
                                             <span className="material-symbols-outlined">favorite</span>
                                         </div>
                                     </div>

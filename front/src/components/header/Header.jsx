@@ -22,21 +22,21 @@ const Header = () => {
 
     // Función para manejar el clic en el botón de login
 // Función para manejar el clic en el botón de login
-useEffect(() => {
-    const isProducts = location.pathname === '/products';
-    if (isProducts !== isProductsPage) {
-        setIsProductsPage(isProducts);
-    }
-}, [location.pathname, setIsProductsPage]);
+    useEffect(() => {
+        setIsProductsPage(location.pathname === '/products');
+    }, [location.pathname]); // Esto está correcto
 
-const handleLoginClick = () => {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-        openMenu('login');
-    } else {
-        navigate('/profile');
-    }
-};
+    // Función para manejar el clic en el botón de login
+    const handleLoginClick = () => {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            openMenu('login'); // Solo abrir si no hay token
+        } else {
+            navigate('/profile');
+        }
+    };
+
+
 
     return (
         <>

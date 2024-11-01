@@ -11,24 +11,106 @@ export const Profile = () => {
     const [isAccordionOpen, setIsAccordionOpen] = useState(false);
     const { openMenu } = useContext(HeaderContext);
     const navigate = useNavigate();
-    const token = localStorage.getItem('authToken');
     const { user, loading, error, fetchUserDetails } = useUser();
+    const [isUserLoaded, setIsUserLoaded] = useState(false);
+    const { VITE_API_BACKEND, VITE_IMAGES_BASE_URL } = import.meta.env;
 
     useEffect(() => {
         const loadUser = async () => {
-            await fetchUserDetails(); // Carga los datos del usuario
+            const token = localStorage.getItem('authToken');
+            if (!token || user) return; // Si ya hay un usuario, no cargues de nuevo
+
+            try {
+                await fetchUserDetails(); // Esto debería establecer el usuario en el contexto
+                setIsUserLoaded(true);
+            } catch (err) {
+                console.error('Error fetching user data:', err);
+                openMenu('login');
+            }
         };
 
         loadUser();
-    }, [fetchUserDetails]);
+    }, [user, fetchUserDetails, openMenu]);
+
+    const handleSaveChanges = async () => {
+        const token = localStorage.getItem('authToken');
+        if (!token) return;
+    
+        try {
+            const response = await fetch(`${VITE_API_BACKEND}/user/update`, {
+                method: 'PUT',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(user), // Suponiendo que `user` contenga los datos actualizados
+            });
+            if (!response.ok) throw new Error('Error al guardar los cambios');
+    
+            const updatedUser = await response.json();
+            console.log('Datos de usuario actualizados:', updatedUser);
+            // Aquí podrías actualizar el estado del usuario con el nuevo objeto
+        } catch (err) {
+            console.error('Error al guardar cambios:', err);
+        }
+    };
 
     useEffect(() => {
-        if (token) {
-            console.log("Token encontrado:", token);
-        } else {
-            console.log("No hay token en localStorage.");
-        }
-    }, [token]);
+        const fetchWishlistItems = async () => {
+            const token = localStorage.getItem('authToken');
+            if (!token) return;
+        
+            try {
+                const response = await fetch(`${VITE_API_BACKEND}/wishlist`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+        
+                if (!response.ok) {
+                    throw new Error('Error fetching wishlist items');
+                }
+        
+                const data = await response.json();
+                // Cambia esta línea para acceder a `wishlist.items`
+                setWishlistItems(data.wishlist.items); // Establece los elementos de la wishlist
+        
+                // Comprobar si no hay elementos en la wishlist
+                if (data.wishlist.items.length === 0) {
+                    console.warn('No se encontraron artículos en la lista de deseos.'); // Registra una advertencia en la consola
+                }
+        
+                console.log("Datos de la wishlist del usuario logueado:", data.wishlist.items); // Log de los datos recibidos
+            } catch (err) {
+                console.error('Error al cargar la wishlist:', err);
+            }
+        };
+        
+    
+        fetchWishlistItems();
+    }, [VITE_API_BACKEND]);
+
+    useEffect(() => {
+        const fetchOrderItems = async () => {
+            const token = localStorage.getItem('authToken');
+            if (!token) return;
+
+            try {
+                const response = await fetch(`${VITE_API_BACKEND}/orders`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                const data = await response.json();
+                setOrderItems(data); // Establece los elementos de los pedidos
+                console.log("Datos de los pedidos del usuario logueado:", data); // Log de los datos recibidos
+            } catch (err) {
+                console.error('Error al cargar los pedidos:', err);
+            }
+        };
+
+        fetchOrderItems();
+    }, [VITE_API_BACKEND]);
 
     useEffect(() => {
         if (error) {
@@ -57,14 +139,19 @@ export const Profile = () => {
         navigate('/');
     };
 
+    console.log("Usuario logeado:", user); // Para revisar en la consola
+    console.log("Nombre del usuario logeado:", user?.first_name); // Agrega este console.log
+
+    const firstVariantImage = wishlistItems[0]?.product_id?.variants[0]?.image[0];
+
     return (
         <section className="profile-section">
             {loading && <div>Cargando datos del usuario...</div>} {/* Indicador de carga */}
             {error && <div>Error al cargar los datos del usuario: {error.message}</div>} {/* Mensaje de error */}
-            <ProfileImage initials="IN" userName={`${user?.firstName || ''} ${user?.lastName || ''}`} />
+            <ProfileImage initials="IN" userName={`${user?.first_name || ''} ${user?.last_name || ''}`} />
             <div className="userProfile">
                 <div className="active-user-info">
-                    <h2>{`${user?.firstName || ''} ${user?.lastName || ''}`}</h2>
+                    <h2>{`${user?.first_name || ''} ${user?.last_name || ''}`}</h2>
                 </div>
                 <div className="profile-info">
                     <div className="headerProfile">Mi perfil:</div>
@@ -88,7 +175,7 @@ export const Profile = () => {
                             <input
                                 type="text"
                                 name="firstName"
-                                value={user?.firstName || ''}
+                                value={user?.first_name || ''}
                                 onChange={handleUserInfoChange}
                             />
                         </div>
@@ -97,7 +184,7 @@ export const Profile = () => {
                             <input
                                 type="text"
                                 name="lastName"
-                                value={user?.lastName || ''}
+                                value={user?.last_name || ''}
                                 onChange={handleUserInfoChange}
                             />
                         </div>
@@ -189,7 +276,7 @@ export const Profile = () => {
                     </div>
 
                     <div className="submit-buttonProfile">
-                        <button>Guardar cambios</button>
+                    <button onClick={handleSaveChanges}>Guardar cambios</button>
                     </div>
 
                     <div className="logout-buttonProfile">
@@ -203,62 +290,44 @@ export const Profile = () => {
                         <div className="separation_div">
                             <div className="headerProfileOrders">Mis pedidos:</div>
                         </div>
-                        {orderItems.length > 0 ? (
                             <div className="orders-list">
-                                {orderItems.map(order => (
+                                {orderItems.map((order) => (
                                     <div key={order.id} className="order-item">
-                                        <div className="order-image">
-                                            <img src={order.imageUrl} alt={order.name} />
-                                        </div>
-                                        <div className="order-name">{order.name}</div>
-                                        <div className="order-price">{order.price}</div>
+                                        <p>Pedido ID: {order.id}</p>
+                                        <p>Fecha: {new Date(order.date).toLocaleDateString()}</p>
+                                        <p>Total: ${order.total}</p>
                                     </div>
                                 ))}
                             </div>
-                        ) : (
-                            <div className="no-orders">Aún no hay pedidos disponibles</div>
-                        )}
-                        <div className="go-to-store">
-                            <button
-                                className="submit-buttonProfile_Orders_WishList"
-                                onClick={() => navigate('/home')}
-                            >
-                                Ir a tienda
-                            </button>
-                        </div>
                     </div>
 
                     {/* Wishlist */}
                     <div className="background-containerProfile">
                         <div className="separation_div">
-                            <div className="headerProfileOrders">Lista de deseos:</div>
+                            <div className="headerProfileWishlist">Lista de deseos:</div>
                         </div>
                         {wishlistItems.length > 0 ? (
-                            <div className="wishlist-list">
-                                {wishlistItems.map(item => (
-                                    <div key={item.id} className="wishlist-item">
-                                        <div className="wishlist-image">
-                                            <img src={item.imageUrl} alt={item.name} />
-                                        </div>
-                                        <div className="wishlist-name">{item.name}</div>
-                                        <div className="wishlist-price">{item.price}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="no-wishlist">Aún no hay elementos en la lista de deseos</div>
-                        )}
-                        <div className="go-to-store">
-                            <button
-                                className="submit-buttonProfile_Orders_WishList"
-                                onClick={() => navigate('/home')}
-                            >
-                                Ir a tienda
-                            </button>
-                        </div>
+    <div className="wishlist-list">
+        {wishlistItems.map((item) => (
+            <div key={item._id} className="wishlist-item">
+                <img 
+                        src={`${VITE_IMAGES_BASE_URL}${firstVariantImage}`} 
+                        alt={wishlistItems[0].product_id.name} 
+                    />
+                <p>Artículo: {item.product_id.name}</p>
+                <p>Precio: ${item.product_id.base_price}</p>
+            </div>
+        ))}
+    </div>
+) : (
+    <p>No hay artículos en la lista de deseos.</p>
+)}
+
                     </div>
                 </div>
             </div>
         </section>
     );
 };
+
+export default Profile;

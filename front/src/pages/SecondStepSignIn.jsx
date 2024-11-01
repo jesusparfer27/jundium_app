@@ -38,38 +38,44 @@ export const SecondStepSignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { password, confirmPassword, genero, nombre, apellido, aceptar } = formData;
-  
+    
     // Validaciones básicas
     if (!password || !confirmPassword || !genero || !nombre || !apellido || !aceptar) {
       setError('Por favor, completa todos los campos y acepta la política de privacidad.');
       return;
     }
-  
+    
     // Verificar si la contraseña es suficientemente fuerte
     if (password.length < 8) {
       setError('La contraseña debe tener al menos 8 caracteres.');
       return;
     }
-  
+    
     // Verificar si las contraseñas coinciden
     if (password !== confirmPassword) {
       setError('Las contraseñas no coinciden.');
       return;
     }
-  
+    
+    // Asegúrate de que userEmail sea obtenido correctamente
+    const userEmail = localStorage.getItem('userEmail');
+    if (!userEmail) {
+      setError('No se encontró el email, por favor regresa a la primera etapa.');
+      return;
+    }
+    
     // Crear un objeto de datos del usuario
     const userData = { 
-      email: localStorage.getItem('userEmail'), // si se guarda en el primer paso
+      email: userEmail, // Ahora ya puedes usar userEmail aquí
       password,
       first_name: nombre,
       last_name: apellido,
-      gender: genero
-   };
-   
-  
+      gender: genero,
+    };
+    
     // Log de los datos que se enviarán a la colección accounts
     console.log("Datos a enviar a la colección accounts:", userData);
-  
+    
     try {
       // Realizar la solicitud POST al endpoint de usuarios
       const response = await fetch(`${VITE_API_BACKEND}/register`, {
