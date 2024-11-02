@@ -303,7 +303,6 @@ const cartSchema = new mongoose.Schema({
             },
             variant_id: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'Product',
                 required: true
             },
             quantity: {
@@ -328,10 +327,10 @@ const cartSchema = new mongoose.Schema({
 
 // Modelos
 const User = mongoose.model('User', userSchema, 'accounts');
-const Product = mongoose.model('Product', productSchema);
+const Product = mongoose.model('Product', productSchema, 'products');
 const Wishlist = mongoose.model('Wishlist', wishlistSchema);
 const Order = mongoose.model('Order', orderSchema);
-const Cart = mongoose.model('Cart', cartSchema);
+const Cart = mongoose.model('Cart', cartSchema, 'cart');
 
 // Exportar la conexión y los modelos
 export { connectDB, User, Product, Wishlist, Order, Cart };

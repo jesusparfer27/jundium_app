@@ -56,7 +56,7 @@ export const addToCart = async (req, res) => {
 };
 
 export const removeFromCart = async (req, res) => {
-    const { productId, variantId } = req.body;
+    const { productId, variantId } = req.params; // Cambié req.body a req.params
     const userId = req.user.id;
 
     try {
@@ -65,17 +65,31 @@ export const removeFromCart = async (req, res) => {
             return res.status(404).json({ message: 'Carrito no encontrado' });
         }
 
-        cart.items = cart.items.filter(item => 
-            item.product_id.toString() !== productId || item.variant_id.toString() !== variantId
+        // Encontrar el índice del producto en el carrito
+        const itemIndex = cart.items.findIndex(
+            item => item.product_id.toString() === productId && item.variant_id.toString() === variantId
         );
 
+        if (itemIndex === -1) {
+            return res.status(404).json({ message: 'Producto no encontrado en el carrito' });
+        }
+
+        // Reducir la cantidad del producto en uno
+        if (cart.items[itemIndex].quantity > 1) {
+            cart.items[itemIndex].quantity -= 1;
+        } else {
+            // Si la cantidad es 1, eliminar el producto del carrito
+            cart.items.splice(itemIndex, 1);
+        }
+
         await cart.save();
-        return res.status(200).json({ message: 'Producto eliminado del carrito', cart });
+        return res.status(200).json({ message: 'Producto actualizado en el carrito', cart });
     } catch (error) {
         console.error('Error eliminando del carrito:', error);
         return res.status(500).json({ message: 'Error eliminando del carrito', error });
     }
 };
+
 
 export const updateCartItem = async (req, res) => {
     const { productId, variantId, quantity } = req.body;
