@@ -35,7 +35,7 @@ export const Profile = () => {
     const handleSaveChanges = async () => {
         const token = localStorage.getItem('authToken');
         if (!token) return;
-    
+
         try {
             const response = await fetch(`${VITE_API_BACKEND}/user/update`, {
                 method: 'PUT',
@@ -46,7 +46,7 @@ export const Profile = () => {
                 body: JSON.stringify(user), // Suponiendo que `user` contenga los datos actualizados
             });
             if (!response.ok) throw new Error('Error al guardar los cambios');
-    
+
             const updatedUser = await response.json();
             console.log('Datos de usuario actualizados:', updatedUser);
             // Aquí podrías actualizar el estado del usuario con el nuevo objeto
@@ -59,34 +59,34 @@ export const Profile = () => {
         const fetchWishlistItems = async () => {
             const token = localStorage.getItem('authToken');
             if (!token) return;
-        
+
             try {
                 const response = await fetch(`${VITE_API_BACKEND}/wishlist`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-        
+
                 if (!response.ok) {
                     throw new Error('Error fetching wishlist items');
                 }
-        
+
                 const data = await response.json();
                 // Cambia esta línea para acceder a `wishlist.items`
                 setWishlistItems(data.wishlist.items); // Establece los elementos de la wishlist
-        
+
                 // Comprobar si no hay elementos en la wishlist
                 if (data.wishlist.items.length === 0) {
                     console.warn('No se encontraron artículos en la lista de deseos.'); // Registra una advertencia en la consola
                 }
-        
+
                 console.log("Datos de la wishlist del usuario logueado:", data.wishlist.items); // Log de los datos recibidos
             } catch (err) {
                 console.error('Error al cargar la wishlist:', err);
             }
         };
-        
-    
+
+
         fetchWishlistItems();
     }, [VITE_API_BACKEND]);
 
@@ -276,7 +276,7 @@ export const Profile = () => {
                     </div>
 
                     <div className="submit-buttonProfile">
-                    <button onClick={handleSaveChanges}>Guardar cambios</button>
+                        <button onClick={handleSaveChanges}>Guardar cambios</button>
                     </div>
 
                     <div className="logout-buttonProfile">
@@ -290,15 +290,15 @@ export const Profile = () => {
                         <div className="separation_div">
                             <div className="headerProfileOrders">Mis pedidos:</div>
                         </div>
-                            <div className="orders-list">
-                                {orderItems.map((order) => (
-                                    <div key={order.id} className="order-item">
-                                        <p>Pedido ID: {order.id}</p>
-                                        <p>Fecha: {new Date(order.date).toLocaleDateString()}</p>
-                                        <p>Total: ${order.total}</p>
-                                    </div>
-                                ))}
-                            </div>
+                        <div className="orders-list">
+                            {orderItems.map((item) => (
+                                <div key={item.id} className="order-item">
+                                    <p>Pedido ID: {item.id}</p>
+                                    <p>Fecha: {new Date(item.date).toLocaleDateString()}</p>
+                                    <p>Total: ${item.total}</p>
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
                     {/* Wishlist */}
@@ -307,21 +307,25 @@ export const Profile = () => {
                             <div className="headerProfileWishlist">Lista de deseos:</div>
                         </div>
                         {wishlistItems.length > 0 ? (
-    <div className="wishlist-list">
-        {wishlistItems.map((item) => (
-            <div key={item._id} className="wishlist-item">
-                <img 
-                        src={`${VITE_IMAGES_BASE_URL}${firstVariantImage}`} 
-                        alt={wishlistItems[0].product_id.name} 
-                    />
-                <p>Artículo: {item.product_id.name}</p>
-                <p>Precio: ${item.product_id.base_price}</p>
-            </div>
-        ))}
-    </div>
-) : (
-    <p>No hay artículos en la lista de deseos.</p>
-)}
+                            <div className="wishlist-list">
+                                {wishlistItems.map((item) => (
+                                    <div key={item._id} className="wishlist-item">
+                                        {item.product_id && item.product_id.variants && item.product_id.variants[0] && item.product_id.variants[0].image[0] ? (
+                                            <img
+                                                src={`${VITE_IMAGES_BASE_URL}${item.product_id.variants[0].image[0]}`}
+                                                alt={item.product_id.name}
+                                            />
+                                        ) : (
+                                            <p>Imagen no disponible</p>
+                                        )}
+                                        <p>Artículo: {item.product_id.name}</p>
+                                        <p>Precio: ${item.product_id.base_price}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p>No hay artículos en la lista de deseos.</p>
+                        )}
 
                     </div>
                 </div>

@@ -21,7 +21,7 @@ const router = Router();
 
 // Ruta para obtener todos los productos
 router.get("/products", getProducts); // Aquí defines tu ruta
-router.get("/products/:id", authenticateToken, getProductById); // Nueva ruta para obtener un producto por ID
+router.get("/products/:id", getProductById); // Nueva ruta para obtener un producto por ID
 router.get("/me", authenticateToken, getMe);
 router.get("/users", getUsers);
 router.get("/users/:id", getUserById);
@@ -32,7 +32,7 @@ router.post("/register", registerUser);
 // Rutas para el carrito
 router.post("/cart", authenticateToken, addToCart); // Añadir producto al carrito
 router.get("/cart", authenticateToken, getCart); // Obtener carrito del usuario
-router.delete("/cart", authenticateToken, removeFromCart); // Eliminar producto del carrito
+router.delete("/cart/:productId/:variantId", authenticateToken, removeFromCart); // Eliminar producto del carrito
 router.put("/cart", authenticateToken, updateCartItem); // Actualizar cantidad de producto en el carrito
 
 // Rutas para pedidos

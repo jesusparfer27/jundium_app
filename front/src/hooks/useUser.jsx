@@ -143,7 +143,7 @@ export function UserProvider({ children }) {
                 throw new Error("VITE_API_BACKEND no está definido.");
             }
     
-            const response = await fetch(`${VITE_API_BACKEND}/me`, {
+            const response = await fetch(`${ VITE_API_BACKEND}/me`, {
                 method: "GET",
                 headers: {
                     'Authorization': `Bearer ${token}`,

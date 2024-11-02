@@ -1,30 +1,89 @@
-// src/components/CartContainer.jsx
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { HeaderContext } from '../../context/HeaderContext';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../hooks/useUser';
 import '../../css/components/header/cart.css';
 
 const CartContainer = () => {
     const { activeMenu, closeMenu } = useContext(HeaderContext);
-    const cartContainerRef = useRef(null);
     const navigate = useNavigate();
+    const { VITE_API_BACKEND } = import.meta.env;
+    const { user } = useUser();
+    const [cartItems, setCartItems] = useState([]);
 
-    const cartItems = [
-        // { id: 1, name: 'Camiseta Básica', price: 19.99, image: 'https://via.placeholder.com/100' },
-        // { id: 2, name: 'Pantalón Deportivo', price: 39.99, image: 'https://via.placeholder.com/100' },
-        // { id: 3, name: 'Chaqueta de Invierno', price: 59.99, image: 'https://via.placeholder.com/100' },
-    ];
+    const fetchCartItems = useCallback(async () => {
+        if (!user) return;
 
-    const handleRemoveItem = (id) => {
+        try {
+            const token = localStorage.getItem('authToken');
+            const response = await fetch(`${VITE_API_BACKEND}/cart`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            if (!response.ok) throw new Error('Error al obtener los artículos del carrito');
+
+            const data = await response.json();
+
+            // Asegúrate de que 'items' existe y es un arreglo
+            if (Array.isArray(data.items)) {
+                setCartItems(data.items);
+            } else {
+                console.error('La respuesta del carrito no contiene un arreglo de artículos:', data);
+            }
+        } catch (error) {
+            console.error('Error al obtener el carrito:', error);
+        }
+    }, [VITE_API_BACKEND, user]);
+
+    useEffect(() => {
+        fetchCartItems();
+    }, [fetchCartItems]);
+
+    const handleRemoveItem = async (id) => {
+        if (!id) {
+            console.error('No se puede eliminar un producto sin ID');
+            return;
+        }
+
         console.log(`Eliminando producto con ID: ${id}`);
+
+        try {
+            const token = localStorage.getItem('authToken');
+            const response = await fetch(`${VITE_API_BACKEND}/cart/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al eliminar el producto del carrito');
+            }
+
+            setCartItems(prevItems => prevItems.filter(item => item._id !== id));
+
+            console.log(`Producto con ID: ${id} eliminado exitosamente`);
+        } catch (error) {
+            console.error('Error al eliminar el producto:', error);
+        }
     };
 
     const handleCheckout = () => {
+        if (!user) {
+            alert("Por favor inicia sesión para proceder con la compra.");
+            navigate('/login');
+            return;
+        }
         navigate('/check-out');
     };
 
+    console.log('Productos actualmente en el carrito:', cartItems);
+
     return (
-        <section ref={cartContainerRef} className={`cartContainer ${activeMenu === 'cart' ? 'active slideIn' : ''}`}>
+        <section className={`cartContainer ${activeMenu === 'cart' ? 'active slideIn' : ''}`}>
             {cartItems.length === 0 ? (
                 <div className="emptyCart">
                     <div className="emptyCartMessage">
@@ -44,22 +103,32 @@ const CartContainer = () => {
                     </div>
 
                     <div className="cartItems">
-                        {cartItems.map(item => (
-                            <div key={item.id} className="cartItem">
-                                <div className="cartItemImage">
-                                    <img src={item.image} alt={item.name} />
-                                </div>
-                                <div className="cartItemContent">
-                                    <p>{item.name}</p>
-                                    <p>${item.price.toFixed(2)}</p>
-                                </div>
-                            </div>
-                        ))}
+                    {cartItems.map(product => (
+    <div key={product._id} className="cartItem">
+        <div className="cartItemImage">
+            <img src={product.image} alt={product.name} />
+        </div>
+        <div className="cartItemContent">
+            <p>{product.name}</p>
+            <p>${(product.base_price || 0).toFixed(2)}</p>
+            <p>Cantidad: {product.quantity || 1}</p>
+            
+            {/* Registro del ID de la variante */}
+            {product.variants && product.variants.map(variant => {
+                console.log(`ID de variante: ${variant.variant_id}`);
+                return null; // Devuelve null ya que no deseas renderizar esto en el DOM
+            })}
+
+            <button onClick={() => handleRemoveItem(product._id)}>Eliminar</button>
+        </div>
+    </div>
+))}
+
                     </div>
 
                     <div className="cartSummary">
                         <p>Mi Selección</p>
-                        <p>Total: ${cartItems.reduce((acc, item) => acc + item.price, 0).toFixed(2)}</p>
+                        <p>Total: ${cartItems.reduce((acc, cartItem) => acc + ((cartItem.base_price || 0) * (cartItem.quantity || 1)), 0).toFixed(2)}</p>
                     </div>
 
                     <div className="checkoutButtonContainer">

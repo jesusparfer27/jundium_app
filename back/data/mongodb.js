@@ -77,7 +77,15 @@ const userSchema = new mongoose.Schema({
             default: false
         }
     },
-    wishlist: [{ product_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' } }],
+    wishlist: 
+        [
+            {
+                product_id: { 
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'Product' 
+                } 
+            }
+        ],
     orders: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'Order'
@@ -143,8 +151,8 @@ const productSchema = new mongoose.Schema({
     variants: [
         {
             variant_id: {
-                type: Number,
-                required: true
+                type: mongoose.Schema.Types.ObjectId,
+                required: true,
             },
             product_code: {
                 type: String,
@@ -200,17 +208,20 @@ const productSchema = new mongoose.Schema({
 });
 
 // Schema de Wishlist
-
 const wishlistSchema = new mongoose.Schema({
-    user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Account' },
+    user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // Asegúrate de que ref sea correcto
     items: [
         {
-            product_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+            product_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+            variant_id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Product', // Asegúrate de tener un modelo para Variant
+                required: true
+            },
             added_at: { type: Date, default: Date.now }
         }
     ]
 }, { timestamps: true });
-
 
 // Schema de Orders
 const orderSchema = new mongoose.Schema({
@@ -237,6 +248,11 @@ const orderSchema = new mongoose.Schema({
             product_id: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Product',
+                required: true
+            },
+            variant_id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Product', // O el modelo que corresponda
                 required: true
             },
             quantity: {
@@ -281,6 +297,11 @@ const cartSchema = new mongoose.Schema({
     items: [
         {
             product_id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Product',
+                required: true
+            },
+            variant_id: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Product',
                 required: true

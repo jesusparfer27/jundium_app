@@ -11,25 +11,22 @@ export const wishlistController = {
     // Agregar producto a la wishlist
     addToWishlist: async (req, res) => {
         try {
-            console.log("Request para agregar a wishlist:", req.body); // Log del cuerpo de la solicitud
             const userId = req.user.id; // ID del usuario tras la autenticación
-            const productId = req.params.productId;
+            const { productId, variantId } = req.body; // Obtenemos ambos IDs del cuerpo de la solicitud
 
             // Verificar si el producto existe
             const productExists = await Product.findById(productId);
             if (!productExists) {
-                console.log("Producto no encontrado:", productId); // Log si el producto no se encuentra
                 return res.status(404).json({ message: 'Producto no encontrado' });
             }
 
             // Agregar el producto a la wishlist o crear una nueva si no existe
             const wishlist = await Wishlist.findOneAndUpdate(
                 { user_id: userId },
-                { $addToSet: { items: { product_id: productId } } }, // Esto evita duplicados
+                { $addToSet: { items: { product_id: productId, variant_id: variantId } } }, // Esto evita duplicados
                 { new: true, upsert: true } // Crea un nuevo documento si no existe
             ).lean();
 
-            console.log("Producto agregado a la wishlist:", productId); // Log del producto agregado
             return res.status(201).json({ message: 'Producto agregado a la wishlist', wishlist });
         } catch (error) {
             console.error('Error al agregar a la wishlist: ', error);
@@ -42,7 +39,7 @@ export const wishlistController = {
         try {
             const userId = req.user.id;
 
-            const wishlist = await Wishlist.findOne({ user_id: userId }).populate('items.product_id').lean();
+            const wishlist = await Wishlist.findOne({ user_id: userId }).populate('items.product_id').populate('items.variant_id').lean();
             if (!wishlist) {
                 return res.status(404).json({ message: 'Wishlist no encontrada' });
             }
@@ -58,7 +55,7 @@ export const wishlistController = {
     removeFromWishlist: async (req, res) => {
         try {
             const userId = req.user.id;
-            const productId = req.params.productId;
+            const { productId, variantId } = req.body; // Obtener ambos IDs del cuerpo de la solicitud
 
             const wishlist = await Wishlist.findOne({ user_id: userId });
             if (!wishlist) {
@@ -67,7 +64,9 @@ export const wishlistController = {
 
             // Filtrar el producto que se desea eliminar
             const initialLength = wishlist.items.length;
-            wishlist.items = wishlist.items.filter(item => !item.product_id.equals(productId));
+            wishlist.items = wishlist.items.filter(item => {
+                return !(item.product_id.equals(productId) && item.variant_id.equals(variantId));
+            });
             await wishlist.save();
 
             if (initialLength === wishlist.items.length) {
