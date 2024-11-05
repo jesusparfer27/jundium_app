@@ -69,6 +69,7 @@ export const removeFromCart = async (req, res) => {
         const itemIndex = cart.items.findIndex(
             item => item.product_id.toString() === productId && item.variant_id.toString() === variantId
         );
+        
 
         if (itemIndex === -1) {
             return res.status(404).json({ message: 'Producto no encontrado en el carrito' });

@@ -17,9 +17,10 @@ const CartContainer = () => {
 
         try {
             const token = localStorage.getItem('authToken');
+
             const response = await fetch(`${VITE_API_BACKEND}/cart`, {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    Authorization: `Bearer ${token}`,
                 },
             });
 
@@ -44,7 +45,7 @@ const CartContainer = () => {
 
     const handleCheckout = () => {
         // Redirige a la página de detalles de compra
-        navigate('/checkout');
+        navigate('/check-out');
     };
     
 
@@ -63,22 +64,25 @@ const CartContainer = () => {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
+                body: JSON.stringify({ action: 'decrease' }),
             });
     
             if (!response.ok) {
-                throw new Error('Error al eliminar el producto del carrito');
+                const errorResponse = await response.json(); // Obtener la respuesta de error
+                throw new Error(`Error al actualizar el producto en el carrito: ${errorResponse.message || response.statusText}`);
             }
     
-            // Elimina el producto del estado local si la eliminación en el backend fue exitosa
-            setCartItems(prevItems =>
-                prevItems.filter(item => item.product_id._id !== productId || item.variant_id !== variantId)
+            // Actualiza el estado eliminando el item localmente
+            setCartItems((prevItems) => 
+                prevItems.filter(item => !(item.product_id._id === productId && item.variant_id === variantId))
             );
     
-            console.log(`Producto con ID: ${productId} y variante: ${variantId} eliminado del carrito`);
         } catch (error) {
-            console.error('Error al eliminar el producto del carrito:', error);
+            console.error('Error al actualizar el producto en el carrito:', error);
         }
     };
+    
+    
 
     console.log('Productos actualmente en el carrito:', cartItems);
 
@@ -102,14 +106,18 @@ const CartContainer = () => {
                         </div>
                     </div>
 
-                    <div className="cartItems">
+                    <div className={`cartItems ${cartItems.length >= 3 ? 'scrollableCartItems' : ''}`}>
                         <div className="cartItems">
                         {cartItems.map(item => {
     const { product_id, variant_id, quantity } = item;
-    const { name, base_price, variants } = product_id;
 
-    const selectedVariant = variants ? variants.find(variant => variant.variant_id === variant_id) : null;
-    const imageUrl = selectedVariant?.image[0];
+    // Asegúrate de que `product_id` existe antes de intentar acceder a sus propiedades
+    const name = product_id?.name || "Producto sin nombre";
+    const basePrice = product_id?.base_price || 0;
+    const variants = product_id?.variants || [];
+
+    const selectedVariant = variants.find(variant => variant.variant_id === variant_id);
+    const imageUrl = selectedVariant?.image ? selectedVariant.image[0] : null;
     const fullImageUrl = imageUrl ? `${VITE_IMAGES_BASE_URL}${imageUrl}` : null;
 
     return (
@@ -123,18 +131,26 @@ const CartContainer = () => {
             </div>
             <div className="cartItemContent">
                 <p>{name}</p>
-                <p>${(base_price || 0).toFixed(2)}</p>
+                <p>${basePrice.toFixed(2)}</p>
                 <p>Cantidad: {quantity || 1}</p>
 
                 {selectedVariant && (
                     <p>Color: {selectedVariant.color.colorName}</p>
                 )}
 
-                <button onClick={() => handleRemoveItem(product_id._id, variant_id)}>Eliminar</button>
+                {/* Asegúrate de que `product_id` y `variant_id` existen antes de llamar a `handleRemoveItem` */}
+                <button onClick={() => {
+                    if (product_id?._id && variant_id) {
+                        handleRemoveItem(product_id._id, variant_id);
+                    } else {
+                        console.error('Faltan el ID del producto o de la variante:', item);
+                    }
+                }}>Eliminar</button>
             </div>
         </div>
     );
 })}
+
                         </div>
 
 

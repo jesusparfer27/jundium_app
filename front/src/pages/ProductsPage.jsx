@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import '../css/pages/product_page.css';
+import { useParams } from 'react-router-dom';
 
 import AutumnImage from '../assets/home-sections/autumn-session-home.jpg';
 import SpringImage from '../assets/season-images-product_page/example-spring-season.jpg';
@@ -8,6 +9,7 @@ import SummerImage from '../assets/season-images-product_page/example-summer-sea
 import WinterImage from '../assets/home-sections/winter-session-home.jpg';
 
 export const ProductsPage = () => {
+    const { id } = useParams();
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -43,28 +45,77 @@ export const ProductsPage = () => {
         }
     };
 
-    const handleAddToWishlist = async (productId) => {
+
+
+
+    const handleAddToWishlist = async (product_id, variant_id) => {
+        if (!product_id || !variant_id) {
+            console.error("productId y variantId son requeridos.");
+            return;
+        }
+
+        const authToken = localStorage.getItem('authToken');
+        if (!authToken) {
+            console.error("Usuario no autenticado. No se puede agregar a la wishlist.");
+            return;
+        }
+
+        const decodedToken = JSON.parse(atob(authToken.split('.')[1]));
+        const user_id = decodedToken.id;
+
+        if (!user_id) {
+            console.error("No se pudo obtener el user_id del token.");
+            return;
+        }
+
+        // Buscar el producto
+        const response = await fetch(`${VITE_API_BACKEND}${VITE_PRODUCTS_ENDPOINT}/${product_id}`);
+        if (!response.ok) {
+            console.error('Error al buscar el producto');
+            return;
+        }
+        const product = await response.json();
+
+        console.log('Producto:', product);
+        console.log('ID de variante:', variant_id);
+
+        // Buscar la variante con un manejo más claro de tipos
+        const variant = product.variants.find(
+            (v) => v._id.toString() === variant_id.toString()
+        );
+
+        console.log('Variantes del producto:', product.variants);
+        console.log("la variante seleccionada:", variant_id);
+
+        if (!variant) {
+            console.error('Variante no encontrada');
+            return;
+        }
+
+        const wishlistData = { user_id, product_id, variant_id };
+
         try {
-            const response = await fetch(`${VITE_API_BACKEND}/wishlist/${productId}`, {
+            const responseWishlist = await fetch(`${VITE_API_BACKEND}/wishlist`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('authToken')}` // Asegúrate de que el token de autenticación esté en localStorage
-                }
+                    Authorization: `Bearer ${authToken}`,
+                },
+                body: JSON.stringify(wishlistData),
             });
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.error(errorData.message); // Manejo del error
-                return;
+            if (!responseWishlist.ok) {
+                const errorData = await responseWishlist.text();
+                throw new Error(errorData || 'Error al agregar a la wishlist');
             }
 
-            const result = await response.json();
-            console.log(`Producto ${productId} agregado a la wishlist:`, result); // Log del producto agregado
+            const responseData = await responseWishlist.json();
+            console.log('Producto agregado a la wishlist', responseData);
         } catch (error) {
-            console.error('Error al agregar a la wishlist:', error);
+            console.error('Error:', error);
         }
     };
+
 
     useEffect(() => {
         if (!VITE_API_BACKEND || !VITE_PRODUCTS_ENDPOINT || !VITE_IMAGES_BASE_URL) {
@@ -88,43 +139,48 @@ export const ProductsPage = () => {
             </div>
             <section className="productsPage">
                 <div className="heroSection">
-                    <div className="heroImage">
-                    </div>
+                    <div className="heroImage"></div>
                 </div>
                 <div className="productsContainer">
                     <div className="productGrid">
                         {products.length > 0 ? (
                             products.map((product) => (
-                                <NavLink
-                                    to={`/products/${product._id}`}
-                                    key={product._id}
-                                    className="productItem_ProductPage"
-                                >
+                                <div key={product._id} className="productItemWrapper">
                                     <div className="productImageWrapper">
-                                        <img
-                                            src={
-                                                product.variants &&
-                                                product.variants[0] &&
-                                                product.variants[0].image
-                                                    ? `${VITE_IMAGES_BASE_URL}${product.variants[0].image.find(img => img.endsWith('.jpg') || img.endsWith('.png')) || product.variants[0].image[0]}`
-                                                    : "ruta/a/imagen/por/defecto.jpg"
-                                            }
-                                            alt={product.name || 'Producto sin nombre'}
-                                            className="productImage"
-                                        />
-                                        <div className="likeIcon" onClick={() => handleAddToWishlist(product._id)}>
+                                        <NavLink
+                                            to={`/products/${product._id}`}
+                                            className="productItem_ProductPage"
+                                        >
+                                            <img
+                                                src={
+                                                    product.variants &&
+                                                        product.variants[0] &&
+                                                        product.variants[0].image
+                                                        ? `${VITE_IMAGES_BASE_URL}${product.variants[0].image.find(img => img.endsWith('.jpg') || img.endsWith('.png')) || product.variants[0].image[0]}`
+                                                        : "ruta/a/imagen/por/defecto.jpg"
+                                                }
+                                                alt={product.name || 'Producto sin nombre'}
+                                                className="productImage"
+                                            />
+                                        </NavLink>
+                                        <button
+                                            className="likeIcon"
+                                            onClick={() => handleAddToWishlist(product._id, product.variants[0]._id)} // Cambia aquí si la variante seleccionada es distinta
+                                        >
                                             <span className="material-symbols-outlined">favorite</span>
-                                        </div>
+                                        </button>
+
                                     </div>
                                     <div>
                                         <h4>{product.name || 'Nombre no disponible'}</h4>
                                         <p>${(product.base_price - product.discount).toFixed(2) || 'Precio no disponible'}</p>
                                     </div>
-                                </NavLink>
+                                </div>
                             ))
                         ) : (
                             <p>No se encontraron productos.</p>
                         )}
+
                     </div>
                 </div>
             </section>

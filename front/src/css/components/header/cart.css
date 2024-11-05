@@ -50,6 +50,39 @@
     padding: 0;
 }
 
+.cartItems {
+    width: 70%;
+    list-style: none;
+    padding: 0;
+}
+
+/* Añadido para permitir desplazamiento cuando hay 3 o más productos */
+.scrollableCartItems {
+    max-height: 800px; /* Ajusta la altura máxima según sea necesario */
+    overflow-y: auto; /* Agrega el scrollbar vertical */
+    overflow-x: hidden; /* Evita el scrollbar horizontal */
+    padding: 1rem; /* Espaciado interno opcional */
+    border-radius: 8px; /* Esquinas redondeadas opcionales */
+}
+
+.scrollableCartItems::-webkit-scrollbar {
+    width: 10px; /* Ancho de la scrollbar */
+}
+
+.scrollableCartItems::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Color del fondo de la scrollbar */
+    border-radius: 8px; /* Esquinas redondeadas del track */
+}
+
+.scrollableCartItems::-webkit-scrollbar-thumb {
+    background: #888; /* Color del thumb (parte que se desplaza) */
+    border-radius: 8px; /* Esquinas redondeadas del thumb */
+}
+
+.scrollableCartItems::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Color del thumb al pasar el mouse */
+}
+
 .redirectToHome {
     width: 100%;
     display: flex;

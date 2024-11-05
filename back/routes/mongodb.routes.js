@@ -2,7 +2,7 @@ import { Router } from 'express';
 import getProducts, { getProductById } from "../controllers/product.controller.js";
 import { getUsers, loginUser, getUserById, getMe } from '../controllers/users.controller.js';
 import { authenticateToken } from '../middlewares/auth.js';
-import { wishlistController } from '../controllers/wishlist.controller.js'; // Asegúrate de que la ruta sea correcta
+import { addToWishlist, getWishlist, removeFromWishlist } from '../controllers/wishlist.controller.js';
 import { registerUser } from '../controllers/register.controller.js';
 import {
     addToCart,
@@ -40,10 +40,10 @@ router.post("/orders", authenticateToken, createOrder); // Crear nuevo pedido
 router.get("/orders", authenticateToken, getOrders); // Obtener pedidos del usuario
 router.put("/orders/status", authenticateToken, updateOrderStatus); // Actualizar estado del pedido
 
-router.post("/wishlist/:productId", authenticateToken, wishlistController.addToWishlist); // Agregar producto a la wishlist
-router.get("/wishlist", authenticateToken, wishlistController.getWishlist); // Obtener wishlist del usuario
-router.delete("/wishlist/:productId", authenticateToken, wishlistController.removeFromWishlist); // Eliminar producto de la wishlist
-
+// Rutas para la wishlist
+router.post("/wishlist", authenticateToken, addToWishlist); // Agregar producto a la wishlist
+router.get("/wishlist", authenticateToken, getWishlist); // Obtener wishlist del usuario
+router.delete("/wishlist", authenticateToken, removeFromWishlist); // Eliminar producto de la wishlist con IDs en el cuerpo
 
 // Si decides implementar filtros más adelante, podrías hacerlo así:
 router.get("/products/filter", getProducts); // Ruta para filtros específicos
