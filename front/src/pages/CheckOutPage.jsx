@@ -1,27 +1,36 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
-import '../css/pages/checkoutpage.css'; // Importar estilos CSS
-import InfoAccordion from '../components/checkout/ComponentCheckOut'; // Asegúrate de que esta importación sea correcta
+import '../css/pages/checkoutpage.css';
+import InfoAccordion from '../components/checkout/ComponentCheckOut';
 import Modal from '../components/checkout/ComponentCheckOut';
 import { HeaderContext } from '../context/HeaderContext';
-import { useUser } from '../hooks/useUser'; // Importa el hook para obtener el usuario
+import { useUser } from '../hooks/useUser';
 
 export const CheckOutPage = () => {
     const [cartItems, setCartItems] = useState([]);
     const [total, setTotal] = useState({ price: 0, verySpenses: 0, endingPrice: 0 });
     const [expandedSections, setExpandedSections] = useState({});
     const { openMenu } = useContext(HeaderContext);
-    const { user } = useUser(); // Obtiene el usuario para la autenticación
+    const { user } = useUser();
     const { VITE_API_BACKEND, VITE_IMAGES_BASE_URL } = import.meta.env;
 
     const removeItem = (product_id) => {
-        setCartItems(cartItems.filter(item => item.product_id !== product_id)); // Cambia 'id' por 'product_id'
+        setCartItems(cartItems.filter(item => item.product_id !== product_id));
+    };
+
+    const handleQuantityChange = (product_id, newQuantity) => {
+        setCartItems(prevCartItems => 
+            prevCartItems.map(item => 
+                item.product_id === product_id 
+                    ? { ...item, quantity: newQuantity }
+                    : item
+            )
+        );
     };
 
     const fetchCartItems = useCallback(async () => {
-        if (!user) return; // Si no hay usuario, no hacemos la solicitud
-
+        if (!user) return;
         const token = localStorage.getItem('authToken');
-        
+
         if (!token) {
             console.error('No se encontró el token de autenticación.');
             return;
@@ -35,7 +44,7 @@ export const CheckOutPage = () => {
             });
 
             if (!response.ok) {
-                const errorText = await response.text(); // Intenta obtener más detalles sobre el error
+                const errorText = await response.text();
                 console.error('Error en la respuesta del servidor:', errorText);
                 throw new Error('Error al obtener los artículos del carrito');
             }
@@ -52,17 +61,27 @@ export const CheckOutPage = () => {
     }, [user, VITE_API_BACKEND]);
 
     useEffect(() => {
-        fetchCartItems(); // Llama a la función para obtener los productos en el carrito
+        fetchCartItems();
     }, [fetchCartItems]);
 
-    useEffect(() => {
-        const totalPrice = cartItems.reduce((sum, item) => sum + item.base_price * (item.quantity || 1), 0); // Cambiado para usar base_price
-        setTotal({
+    const calculateTotalPrice = useCallback(() => {
+        const totalPrice = cartItems.reduce((sum, item) => {
+            const basePrice = item.product_id?.base_price || 0; // Accede a base_price en product_id
+            const quantity = item.quantity || 1; // Obtiene la cantidad en item
+            return sum + (basePrice * quantity); // Multiplica el precio base por la cantidad y suma
+        }, 0);
+    
+        setTotal(prevTotal => ({
+            ...prevTotal,
             price: totalPrice,
-            verySpenses: total.verySpenses || 0,
-            endingPrice: totalPrice + (total.verySpenses || 0),
-        });
+            endingPrice: totalPrice + prevTotal.verySpenses, // Suma los gastos adicionales al precio total
+        }));
     }, [cartItems]);
+    
+    useEffect(() => {
+        calculateTotalPrice();
+    }, [cartItems, calculateTotalPrice]);
+    
 
     const toggleSection = (section) => {
         setExpandedSections(prevSections => ({
@@ -72,8 +91,9 @@ export const CheckOutPage = () => {
     };
 
     const handleOpenModal = () => {
-        openMenu('modal'); // Abre el modal
+        openMenu('modal');
     };
+    
 
     return (
         <section className="checkoutSection">
@@ -98,7 +118,6 @@ export const CheckOutPage = () => {
                         const basePrice = product_id?.base_price || 0;
                         const variants = product_id?.variants || [];
 
-                        // Encuentra la variante seleccionada
                         const selectedVariant = variants.find(variant => variant.variant_id === variant_id);
                         const imageUrl = selectedVariant?.image ? selectedVariant.image[0] : null;
                         const fullImageUrl = imageUrl ? `${VITE_IMAGES_BASE_URL}${imageUrl}` : null;
@@ -137,15 +156,19 @@ export const CheckOutPage = () => {
                                         </div>
                                     </div>
                                     <div className="quantity-price">
-                                        <div className='divCosts'>
-                                            <select value={quantity} onChange={(e) => console.log(`Actualizar cantidad de ${name} a ${e.target.value}`)}>
-                                                {[...Array(50)].map((_, i) => (
-                                                    <option key={i} value={i + 1}>{i + 1}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                        <div className='divCosts'>{basePrice} €</div>
-                                    </div>
+    <div className='divCosts'>
+        <select 
+            value={quantity} 
+            onChange={(e) => handleQuantityChange(product_id, parseInt(e.target.value))}
+        >
+            {[...Array(50)].map((_, i) => (
+                <option key={i} value={i + 1}>{i + 1}</option>
+            ))}
+        </select>
+    </div>
+    <div className='divCosts'>{(basePrice * quantity).toFixed(2)} €</div>
+</div>
+
                                     <div className="action-buttons">
                                         <button className="favorites-button" onClick={() => console.log(`Añadir ${name} a favoritos`)}>Añadir a favoritos</button>
                                         <button className="remove-button" onClick={() => removeItem(product_id)}>Eliminar del carrito</button>
@@ -166,7 +189,7 @@ export const CheckOutPage = () => {
                     <div className='header-finalBuying'>
                         <div className="totalPrice">
                             <div className='finalPrice-CheckOut'>Subtotal</div>
-                            <div className='finalPrice-CheckOutRight'>{total.price} €</div>
+                            <div className='finalPrice-CheckOutRight'>{total.price.toFixed(2)} €</div>
                         </div>
                         <div className="deliverySpendings">
                             <div className='finalPrice-CheckOut'>Envío</div>
@@ -174,7 +197,7 @@ export const CheckOutPage = () => {
                         </div>
                         <div className="finalPriceCheckOut">
                             <div className='finalPrice-CheckOut'>Total</div>
-                            <div className='finalPrice-CheckOutRight'>{total.endingPrice} €</div>
+                            <div className='finalPrice-CheckOutRight'>{total.endingPrice.toFixed(2)} €</div>
                         </div>
                         <div className="buyingButtonContainer">
                             <button>Continuar</button>
@@ -212,23 +235,22 @@ export const CheckOutPage = () => {
     );
 };
 
-// Funciones auxiliares para manejar títulos y contenido de la sección
 const getSectionTitle = (section) => {
     switch (section) {
-        case 'pedido': return 'Información de pedido';
-        case 'envio': return 'Información de envío';
-        case 'devolucion': return 'Política de devolución';
-        case 'atencion': return 'Atención al cliente';
-        default: return '';
+        case 'pedido': return 'Pedido';
+        case 'envio': return 'Envío';
+        case 'devolucion': return 'Devolución';
+        case 'atencion': return 'Atención al Cliente';
+        default: return 'Sección';
     }
 };
 
 const getSectionContent = (section) => {
     switch (section) {
-        case 'pedido': return 'Detalles de su pedido...';
+        case 'pedido': return 'Información sobre el pedido...';
         case 'envio': return 'Detalles del envío...';
-        case 'devolucion': return 'Detalles de la devolución...';
-        case 'atencion': return 'Detalles de atención al cliente...';
+        case 'devolucion': return 'Información sobre la política de devoluciones...';
+        case 'atencion': return 'Contacta con Atención al Cliente...';
         default: return '';
     }
 };
