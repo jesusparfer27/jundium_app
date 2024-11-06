@@ -1,66 +1,152 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css/pages/multifunctional_product_page.css';
 import { useNavigate } from 'react-router-dom';
-// import imageFavourite from ''
 
 export const MultifunctionalProductPage = () => {
-    const [likedProducts, setLikedProducts] = useState([
-        { id: 1, name: 'Producto 1', imageUrl: '/images/product1.jpg', price: 100 },
-        { id: 2, name: 'Producto 2', imageUrl: '/images/product2.jpg', price: 150 },
-        { id: 3, name: 'Producto 3', imageUrl: '/images/product3.jpg', price: 200 },
-        { id: 4, name: 'Producto 4', imageUrl: '/images/product4.jpg', price: 250 },
-        { id: 5, name: 'Producto 5', imageUrl: '/images/product5.jpg', price: 300 },
-    ]);
-
+    const [likedProducts, setLikedProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const { VITE_API_BACKEND, VITE_IMAGES_BASE_URL } = import.meta.env;
 
-    const removeProduct = (productId) => {
-        setLikedProducts(likedProducts.filter(product => product.id !== productId));
+    useEffect(() => {
+        const fetchLikedProducts = async () => {
+            try {
+                const token = localStorage.getItem('authToken');
+                const headers = {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                };
+
+                const response = await fetch(`${VITE_API_BACKEND}/wishlist`, { headers });
+                if (!response.ok) {
+                    throw new Error('Error al obtener los productos de la wishlist');
+                }
+
+                const data = await response.json();
+                console.log('Data received from wishlist API:', data); // Log de la respuesta
+                if (data && data.items && Array.isArray(data.items)) {
+                    setLikedProducts(data.items);
+                } else {
+                    throw new Error('No se encontraron productos en la wishlist');
+                }
+            } catch (error) {
+                setError(error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchLikedProducts();
+    }, []);
+
+    const handleRemoveFromWishlist = async (productId, variantId) => {
+        const token = localStorage.getItem('authToken');
+    
+        if (!token) {
+            setError('Por favor, inicia sesión para eliminar productos de la wishlist.');
+            return;
+        }
+    
+        if (!productId || !variantId) {
+            console.error('Falta productId o variantId:', { productId, variantId });
+            setError('No se pudo eliminar de la wishlist debido a un problema con los datos del producto.');
+            return;
+        }
+    
+        try {
+            const response = await fetch(`${VITE_API_BACKEND}/wishlist/${productId}/${variantId}`, {
+                method: 'DELETE',  // Usamos DELETE para eliminar
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    product_id: productId,
+                    variant_id: variantId,
+                }),
+            });
+    
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Error al eliminar de la wishlist');
+            }
+    
+            const data = await response.json();
+            console.log('Producto eliminado de la wishlist:', data);
+    
+            // Actualizamos el estado local para eliminar el producto de la wishlist
+            setLikedProducts((prevProducts) => prevProducts.filter(item => item.variant_id !== variantId));
+        } catch (error) {
+            console.error('Error al eliminar de la wishlist:', error);
+            setError('Ocurrió un error al eliminar el producto de la wishlist.');
+        }
     };
 
     const addToCart = (productId) => {
         navigate(`/cart/${productId}`);
     };
 
+    if (loading) {
+        return <div>Cargando productos...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
+
     return (
         <section className="wishlistSection">
             <h2 className="wishlistTitle">Wish List</h2>
             <div className="wishlistContainer">
-                {likedProducts.map(product => (
-                    <div key={product.id} className="wishlistItem">
-                        <div className="imageContainer">
-                            <img src={imageFavourite} alt={product.name} className="productImage" />
-                        </div>
+            {likedProducts.length > 0 ? (
+    likedProducts.map(item => {
+        const { product_id, variant_id } = item;
+        const { name, base_price, variants } = product_id;
 
-                        <div className="detailsContainer">
-                            <div className="detailsContainerFather">
-                                <div className="removeButtonContainer">
-                                    <button
-                                        className="removeButton"
-                                        onClick={() => removeProduct(product.id)}
-                                    >
-                                        X
-                                    </button>
-                                </div>
-                                <div className="productInfoRow">
-                                    <div className="productInfoColumn">
-                                        <div className="productName">{product.name}</div>
-                                        <div className="productPrice">${product.price}</div>
-                                    </div>
-                                    <div className="addToCartButtonContainer">
-                                        <button
-                                            className="addToCartButton"
-                                            onClick={() => addToCart(product.id)}
-                                        >
-                                            Añadir al carrito
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+        // Buscar la variante correspondiente al variant_id
+        const variant = variants?.find(v => v.variant_id === variant_id); // Buscar variante por variant_id
+        const imageUrl = variant?.image?.[0]; // Acceder a la primera imagen de la variante
+
+        // Debug: Verificar qué imagen estamos obteniendo
+        console.log('Image URL:', imageUrl);
+        const fullImageUrl = imageUrl ? `${VITE_IMAGES_BASE_URL}${imageUrl}` : null;
+        console.log('Full Image URL:', fullImageUrl); // Log de la URL completa de la imagen
+
+        return (
+            <div key={variant_id} className="wishlistItem">
+                <div className="imageContainer">
+                    {fullImageUrl ? (
+                        <img src={fullImageUrl} alt={name} />
+                    ) : (
+                        <p>Imagen no disponible</p>
+                    )}
+                </div>
+
+                <div className="detailsContainer">
+                    <div className="productInfoRow">
+                        <div className="productInfoColumn">
+                            <button onClick={() => handleRemoveFromWishlist(product_id._id, variant_id)}>X</button>
+                            <div className="productName">{name}</div>
+                            <div className="productPrice">${base_price}</div>
+                        </div>
+                        <div className="addToCartButtonContainer">
+                            <button className="addToCartButton" onClick={() => addToCart(product_id._id)}>
+                                Añadir al carrito
+                            </button>
                         </div>
                     </div>
-                ))}
+                </div>
+            </div>
+        );
+    })
+) : (
+    <div>No tienes productos en tu wishlist.</div>
+)}
+
             </div>
         </section>
     );
 };
+
+export default MultifunctionalProductPage;

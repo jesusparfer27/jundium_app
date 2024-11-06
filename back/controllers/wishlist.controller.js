@@ -84,31 +84,34 @@ export const getWishlist = async (req, res) => {
 };
 
 export const removeFromWishlist = async (req, res) => {
-    const { product_id, variant_id } = req.body; // Cambié variantId a variant_id
+    const { product_id, variant_id } = req.body; // Asegúrate de obtener ambos parámetros
     const user_id = req.user.id;
 
     try {
+        if (!product_id || !variant_id) {
+            return res.status(400).json({ message: 'Producto o variante no proporcionados' });
+        }
+
         const wishlist = await Wishlist.findOne({ user_id });
         if (!wishlist) {
             return res.status(404).json({ message: 'Wishlist no encontrada' });
         }
 
-        // Encontrar el índice del producto en la wishlist
         const itemIndex = wishlist.items.findIndex(
-            item => item.product_id.toString() === product_id && item.variant_id.toString() === variant_id // Cambié variantId a variant_id
+            (item) => item.product_id.toString() === product_id && item.variant_id.toString() === variant_id
         );
 
         if (itemIndex === -1) {
             return res.status(404).json({ message: 'Producto no encontrado en la wishlist' });
         }
 
-        // Eliminar el producto de la wishlist
         wishlist.items.splice(itemIndex, 1);
-
         await wishlist.save();
+
         return res.status(200).json({ message: 'Producto eliminado de la wishlist', wishlist });
     } catch (error) {
         console.error('Error eliminando de la wishlist:', error);
-        return res.status(500).json({ message: 'Error eliminando de la wishlist', error });
+        return res.status(500).json({ message: 'Error eliminando de la wishlist', error: error.message });
     }
 };
+

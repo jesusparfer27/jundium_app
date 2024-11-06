@@ -43,7 +43,7 @@ router.put("/orders/status", authenticateToken, updateOrderStatus); // Actualiza
 // Rutas para la wishlist
 router.post("/wishlist", authenticateToken, addToWishlist); // Agregar producto a la wishlist
 router.get("/wishlist", authenticateToken, getWishlist); // Obtener wishlist del usuario
-router.delete("/wishlist", authenticateToken, removeFromWishlist); // Eliminar producto de la wishlist con IDs en el cuerpo
+router.delete("/wishlist/:productId/:variantId", authenticateToken, removeFromWishlist); // Eliminar producto de la wishlist con IDs en el cuerpo
 
 // Si decides implementar filtros más adelante, podrías hacerlo así:
 router.get("/products/filter", getProducts); // Ruta para filtros específicos

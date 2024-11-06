@@ -88,9 +88,11 @@
         useEffect(() => {
             fetchWishlistItems();
         }, [fetchWishlistItems]);
+
+        const handleNavigateToWishlist = () => {
+            navigate('/wish-list');
+        };
         
-
-
         useEffect(() => {
             const fetchOrderItems = async () => {
                 const token = localStorage.getItem('authToken');
@@ -144,8 +146,9 @@
         console.log("Nombre del usuario logeado:", user?.first_name); // Agrega este console.log
 
         const firstVariantImage = wishlistItems.length > 0
-            ? wishlistItems[0]?.product_id?.variants?.[0]?.image?.[0] || null
-            : null;
+    ? wishlistItems[0]?.product_id?.variants?.[0]?.image?.[0] || null
+    : null;
+
 
 
         return (
@@ -311,34 +314,46 @@
                                 <div className="headerProfileWishlist">Lista de deseos:</div>
                             </div>
                             {wishlistItems.length > 0 ? (
-                                <div className="wishlist-list">
-                                    {wishlistItems.map((item) => {
-                                        // Deconstrucción de propiedades
-                                        const { product_id } = item;
-                                        const { name, base_price, variants } = product_id || {};
-                                        const firstVariantImage = variants?.[0]?.image?.[0] || null; // Asegúrate de manejar el caso donde no hay variantes
+    <div className="wishlist-list">
+        {wishlistItems.map((item) => {
+            // Deconstrucción de propiedades
+            const { product_id, variant_id } = item;
+            const { name, base_price } = product_id || {};
 
-                                        return (
-                                            <div key={item._id} className="wishlist-item">
-                                                {firstVariantImage ? (
-                                                    <img
-                                                        src={`${VITE_IMAGES_BASE_URL}${firstVariantImage}`}
-                                                        alt={name}
-                                                    />
-                                                ) : (
-                                                    <p>Imagen no disponible</p>
-                                                )}
-                                                <p>Artículo: {name}</p>
-                                                <p>Precio: ${base_price}</p>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            ) : (
-                                <p>No hay artículos en la lista de deseos.</p>
-                            )}
+            const variants = product_id?.variants || [];
 
 
+            const selectedVariant = variants.find(variant => variant.variant_id === variant_id);
+            const imageUrl = selectedVariant?.image ? selectedVariant.image[0] : null;
+            const fullImageUrl = imageUrl ? `${VITE_IMAGES_BASE_URL}${imageUrl}` : null; // Asegúrate de manejar el caso donde no hay variantes
+
+            return (
+                <div key={item._id} className="wishlist-item">
+                    {fullImageUrl ? (
+                        <img
+                            src={`${fullImageUrl}`}
+                            alt={name}
+                        />
+                    ) : (
+                        <p>Imagen no disponible</p>
+                    )}
+                    <p>Artículo: {name}</p>
+                    <p>Precio: ${base_price}</p>
+                </div>
+            );
+        })}
+    </div>
+) : (
+    <p>No hay artículos en la lista de deseos.</p>
+)}
+
+
+                            {/* Botón "Ver más..." */}
+                        {wishlistItems.length > 0 && (
+                            <div className="view-more-button">
+                                <button onClick={handleNavigateToWishlist}>Ver más...</button>
+                            </div>
+                        )}
 
                         </div>
                     </div>
