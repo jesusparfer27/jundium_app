@@ -195,3 +195,61 @@ export const getMe = async (req, res) => {
         });
     }
 };
+
+// Controlador para actualizar la información del usuario logueado
+export const updateUserById = async (req, res) => {
+    const token = req.headers['authorization']?.split(' ')[1];
+    if (!token) {
+        return res.status(401).json({ message: 'Token no proporcionado', success: false });
+    }
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        const userId = decoded.id;
+
+        const { first_name, last_name, email, password, location } = req.body;
+
+        // Validación de datos
+        if (!first_name && !last_name && !email && !password && !location) {
+            return res.status(400).json({ message: 'No se proporcionaron campos para actualizar', success: false });
+        }
+
+        // Crear objeto con los campos a actualizar
+        const updateFields = {};
+        if (first_name) updateFields.first_name = first_name;
+        if (last_name) updateFields.last_name = last_name;
+        if (email) updateFields.email = email;
+        if (password) {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            updateFields.password = hashedPassword;
+        }
+        if (location) {
+            updateFields.location = Array.isArray(location) ? location : [location]; // Asegurar que sea un array
+        }
+
+        // Actualizar el usuario en la base de datos
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { $set: updateFields },
+            { new: true, select: { password: 0 } } // Excluir el campo password en la respuesta
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'Usuario no encontrado', success: false });
+        }
+
+        return res.status(200).json({
+            data: updatedUser,
+            message: 'Usuario actualizado exitosamente',
+            success: true
+        });
+    } catch (error) {
+        console.error("Error al actualizar el usuario:", error);
+        return res.status(500).json({
+            message: 'Error en el servidor',
+            success: false,
+            error: error.message
+        });
+    }
+};
+

@@ -207,6 +207,12 @@ input {
     margin-top: 0.5rem;
 }
 
+.accordion-content.active {
+    display: block; /* Muestra el contenido cuando está activo */
+    transition: max-height 0.3s ease-in-out; /* Animación para mostrar */
+    max-height: 300px;
+}
+
 .contact-preferences {
     display: flex;
     flex-direction: column;

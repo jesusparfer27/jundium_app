@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import getProducts, { getProductById } from "../controllers/product.controller.js";
-import { getUsers, loginUser, getUserById, getMe } from '../controllers/users.controller.js';
+import { getUsers, loginUser, getUserById, getMe, updateUserById } from '../controllers/users.controller.js';
 import { authenticateToken } from '../middlewares/auth.js';
 import { addToWishlist, getWishlist, removeFromWishlist } from '../controllers/wishlist.controller.js';
 import { registerUser } from '../controllers/register.controller.js';
@@ -25,6 +25,8 @@ router.get("/products/:id", getProductById); // Nueva ruta para obtener un produ
 router.get("/me", authenticateToken, getMe);
 router.get("/users", getUsers);
 router.get("/users/:id", getUserById);
+
+router.patch("/me/update", authenticateToken, updateUserById)
 
 router.post("/login", loginUser, authenticateToken);
 router.post("/register", registerUser);

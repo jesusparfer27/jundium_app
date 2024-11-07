@@ -47,7 +47,7 @@ const CartContainer = () => {
         // Redirige a la página de detalles de compra
         navigate('/check-out');
     };
-    
+
 
 
     const handleRemoveItem = async (productId, variantId) => {
@@ -55,7 +55,7 @@ const CartContainer = () => {
             console.error('Faltan el ID del producto o de la variante');
             return;
         }
-    
+
         try {
             const token = localStorage.getItem('authToken');
             const response = await fetch(`${VITE_API_BACKEND}/cart/${productId}/${variantId}`, {
@@ -66,23 +66,23 @@ const CartContainer = () => {
                 },
                 body: JSON.stringify({ action: 'decrease' }),
             });
-    
+
             if (!response.ok) {
                 const errorResponse = await response.json(); // Obtener la respuesta de error
                 throw new Error(`Error al actualizar el producto en el carrito: ${errorResponse.message || response.statusText}`);
             }
-    
+
             // Actualiza el estado eliminando el item localmente
-            setCartItems((prevItems) => 
+            setCartItems((prevItems) =>
                 prevItems.filter(item => !(item.product_id._id === productId && item.variant_id === variantId))
             );
-    
+
         } catch (error) {
             console.error('Error al actualizar el producto en el carrito:', error);
         }
     };
-    
-    
+
+
 
     console.log('Productos actualmente en el carrito:', cartItems);
 
@@ -108,48 +108,48 @@ const CartContainer = () => {
 
                     <div className={`cartItems ${cartItems.length >= 3 ? 'scrollableCartItems' : ''}`}>
                         <div className="cartItems">
-                        {cartItems.map(item => {
-    const { product_id, variant_id, quantity } = item;
+                            {cartItems.map(item => {
+                                const { product_id, variant_id, quantity } = item;
 
-    // Asegúrate de que `product_id` existe antes de intentar acceder a sus propiedades
-    const name = product_id?.name || "Producto sin nombre";
-    const basePrice = product_id?.base_price || 0;
-    const variants = product_id?.variants || [];
+                                // Asegúrate de que `product_id` existe antes de intentar acceder a sus propiedades
+                                const name = product_id?.name || "Producto sin nombre";
+                                const basePrice = product_id?.base_price || 0;
+                                const variants = product_id?.variants || [];
 
-    const selectedVariant = variants.find(variant => variant.variant_id === variant_id);
-    const imageUrl = selectedVariant?.image ? selectedVariant.image[0] : null;
-    const fullImageUrl = imageUrl ? `${VITE_IMAGES_BASE_URL}${imageUrl}` : null;
+                                const selectedVariant = variants.find(variant => variant.variant_id === variant_id);
+                                const imageUrl = selectedVariant?.image ? selectedVariant.image[0] : null;
+                                const fullImageUrl = imageUrl ? `${VITE_IMAGES_BASE_URL}${imageUrl}` : null;
 
-    return (
-        <div key={item._id} className="cartItem">
-            <div className="cartItemImage">
-                {fullImageUrl ? (
-                    <img src={fullImageUrl} alt={name} />
-                ) : (
-                    <p>Imagen no disponible</p>
-                )}
-            </div>
-            <div className="cartItemContent">
-                <p>{name}</p>
-                <p>${basePrice.toFixed(2)}</p>
-                <p>Cantidad: {quantity || 1}</p>
+                                return (
+                                    <div key={item._id} className="cartItem">
+                                        <div className="cartItemImage">
+                                            {fullImageUrl ? (
+                                                <img src={fullImageUrl} alt={name} />
+                                            ) : (
+                                                <p>Imagen no disponible</p>
+                                            )}
+                                        </div>
+                                        <div className="cartItemContent">
+                                            <p>{name}</p>
+                                            <p>${basePrice.toFixed(2)}</p>
+                                            <p>Cantidad: {quantity || 1}</p>
 
-                {selectedVariant && (
-                    <p>Color: {selectedVariant.color.colorName}</p>
-                )}
+                                            {selectedVariant && (
+                                                <p>Color: {selectedVariant.color.colorName}</p>
+                                            )}
 
-                {/* Asegúrate de que `product_id` y `variant_id` existen antes de llamar a `handleRemoveItem` */}
-                <button onClick={() => {
-                    if (product_id?._id && variant_id) {
-                        handleRemoveItem(product_id._id, variant_id);
-                    } else {
-                        console.error('Faltan el ID del producto o de la variante:', item);
-                    }
-                }}>Eliminar</button>
-            </div>
-        </div>
-    );
-})}
+                                            {/* Asegúrate de que `product_id` y `variant_id` existen antes de llamar a `handleRemoveItem` */}
+                                            <button onClick={() => {
+                                                if (product_id?._id && variant_id) {
+                                                    handleRemoveItem(product_id._id, variant_id);
+                                                } else {
+                                                    console.error('Faltan el ID del producto o de la variante:', item);
+                                                }
+                                            }}>Eliminar</button>
+                                        </div>
+                                    </div>
+                                );
+                            })}
 
                         </div>
 
