@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useMemo } from "react";
+import { createContext, useContext, useState, useEffect, useMemo, useRef } from "react";
 
 const UserContext = createContext();
 
@@ -7,6 +7,8 @@ export function UserProvider({ children }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const VITE_API_BACKEND = import.meta.env.VITE_API_BACKEND;
+    const isFetched = useRef(false);
+
 
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
@@ -132,34 +134,30 @@ export function UserProvider({ children }) {
 
     const fetchUserDetails = async () => {
         const token = localStorage.getItem('authToken');
-        if (!token) {
-            console.warn("No se encontró el token en localStorage.");
-            setLoading(false);
-            return;
-        }
-    
+        if (!token || isFetched.current) return; // Si no hay token o ya se ha llamado, detener
+
         try {
             if (!VITE_API_BACKEND) {
                 throw new Error("VITE_API_BACKEND no está definido.");
             }
-    
-            const response = await fetch(`${ VITE_API_BACKEND}/me`, {
+
+            const response = await fetch(`${VITE_API_BACKEND}/me`, {
                 method: "GET",
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
-    
+
             if (!response.ok) {
                 throw new Error(`Error al obtener detalles del usuario: ${response.status}`);
             }
-    
+
             const responseData = await response.json();
             console.log("Detalles del usuario traídos:", responseData);
-            // Asigna la data completa al usuario
-            setUser(responseData.data); // Asegúrate de acceder correctamente a los datos
-            localStorage.setItem("user", JSON.stringify(responseData.data)); // Almacena el objeto correcto
+            setUser(responseData.data);
+            localStorage.setItem("user", JSON.stringify(responseData.data));
+            isFetched.current = true; // Marcar como ejecutado
         } catch (error) {
             console.error("Error al obtener los detalles del usuario:", error.message);
         } finally {
@@ -180,6 +178,7 @@ export function UserProvider({ children }) {
         error,
         login,
         logout,
+        setUser,
         register,
         fetchUserDetails,
         updateUserDetails,

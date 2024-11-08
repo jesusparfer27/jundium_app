@@ -11,18 +11,34 @@ export const Profile = () => {
     const [isAccordionOpen, setIsAccordionOpen] = useState(false);
     const { openMenu } = useContext(HeaderContext);
     const navigate = useNavigate();
-    const { user, loading, error} = useUser();
+    const { user, setUser, loading, error, fetchUserDetails } = useUser();
+    const [isUserLoaded, setIsUserLoaded] = useState(false);
     const { VITE_API_BACKEND, VITE_IMAGES_BASE_URL } = import.meta.env;
-    const [isFetching, setIsFetching] = useState(false);
 
+    useEffect(() => {
+        const loadUser = async () => {
+            const token = localStorage.getItem('authToken');
+            if (!token || user) return; // Si ya hay un usuario, no cargues de nuevo
+
+            try {
+                await fetchUserDetails(); // Esto debería establecer el usuario en el contexto
+                setIsUserLoaded(true);
+            } catch (err) {
+                console.error('Error fetching user data:', err);
+                openMenu('login');
+            }
+        };
+
+        loadUser();
+    }, [user, fetchUserDetails, openMenu]);
 
     const handleSaveChanges = async () => {
         const token = localStorage.getItem('authToken');
         if (!token) return;
 
         try {
-            const response = await fetch(`${VITE_API_BACKEND}/user/update`, {
-                method: 'PUT',
+            const response = await fetch(`${VITE_API_BACKEND}/me/update`, {
+                method: 'PATCH',
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
@@ -38,32 +54,37 @@ export const Profile = () => {
             console.error('Error al guardar cambios:', err);
         }
     };
- const fetchWishlistItems = useCallback(async () => {
-    if (!user || isFetching) return; // Si ya estamos en proceso de obtener datos, no hacer otra petición
- 
-    setIsFetching(true);
- 
-    try {
-        const token = localStorage.getItem('authToken');
-        const response = await fetch(`${VITE_API_BACKEND}/wishlist`, {
-            headers: { Authorization: `Bearer ${token}` },
-        });
+    const fetchWishlistItems = useCallback(async () => {
+        if (!user) return;
 
-        if (!response.ok) throw new Error('Error fetching wishlist items');
+        try {
+            const token = localStorage.getItem('authToken');
+            console.log("Token del usuario logueado:", token);
 
-        const data = await response.json();
-        if (Array.isArray(data.items)) {
-            setWishlistItems(data.items);
-        } else {
-            console.error('La respuesta de wishlist no contiene un arreglo de artículos:', data);
+            const response = await fetch(`${VITE_API_BACKEND}/wishlist`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Error fetching wishlist items');
+            }
+
+            const data = await response.json();
+            console.log("esto es data:", data); // Verifica la estructura de la respuesta
+
+            // Asegúrate de que 'wishlist' y 'items' existen y 'items' es un arreglo
+            if (Array.isArray(data.items)) {
+                setWishlistItems(data.items);
+            } else {
+                console.error('La respuesta de wishlist no contiene un arreglo de artículos:', data);
+            }
+        } catch (error) {
+            console.error('Error al obtener la wishlist:', error);
         }
-    } catch (error) {
-        console.error('Error al obtener la wishlist:', error);
-    } finally {
-        setIsFetching(false); // Esto se ejecuta siempre, independientemente de si hubo error o no
-    }
-}, [VITE_API_BACKEND, user, isFetching]);
-    
+    }, [VITE_API_BACKEND, user]);
+
     useEffect(() => {
         fetchWishlistItems();
     }, [fetchWishlistItems]);
@@ -100,23 +121,45 @@ export const Profile = () => {
             openMenu('login');
         }
     }, [error, openMenu]);
-    
 
     const handleUserInfoChange = (e) => {
         const { name, value, checked } = e.target;
-
-        if (name.startsWith('birthDate.') || name.startsWith('contactPreferences.')) {
-            const [section, key] = name.split('.');
-            user[section] = {
-                ...user[section],
-                [key]: section === 'birthDate' ? value : checked,
-            };
-        } else {
-            user[name] = value;
-        }
+        const [field, type] = name.split('.');
+    
+        setUser((prevUser) => {
+            if (name.startsWith('contactPreferences.')) {
+                // Si estamos modificando contactPreferences
+                const updatedPreferences = [...prevUser.contactPreferences];
+                const index = parseInt(field); // Asumiendo que el índice está en el campo
+                updatedPreferences[index] = {
+                    ...updatedPreferences[index],
+                    [type]: type === 'email' || type === 'phone' || type === 'whatsapp' ? checked : value,
+                };
+                return {
+                    ...prevUser,
+                    contactPreferences: updatedPreferences,
+                };
+            } else if (name.startsWith('birthDate.')) {
+                // Manejo para birthDate
+                const updatedBirthDate = { ...prevUser.birthDate, [type]: value };
+                const { day, month, year } = updatedBirthDate;
+                if (day && month && year) {
+                    const birthDate = new Date(year, month - 1, day);
+                    updatedBirthDate.completeDate = birthDate;
+                }
+                return {
+                    ...prevUser,
+                    birthDate: updatedBirthDate,
+                };
+            } else {
+                // Para otros campos generales
+                return { ...prevUser, [name]: value };
+            }
+        });
     };
 
     const handleLogout = () => {
+        localStorage.removeItem("user");
         localStorage.removeItem('authToken');
         console.log("Sesión eliminada correctamente de localStorage.");
         navigate('/');
@@ -124,6 +167,7 @@ export const Profile = () => {
 
     console.log("Usuario logeado:", user); // Para revisar en la consola
     console.log("Nombre del usuario logeado:", user?.first_name); // Agrega este console.log
+
 
     return (
         <section className="profile-section">
@@ -181,6 +225,7 @@ export const Profile = () => {
                         </div>
                     </div>
 
+
                     <div className="accordionProfile">
                         <button
                             className="accordion-buttonLocation"
@@ -189,33 +234,32 @@ export const Profile = () => {
                             {isAccordionOpen ? 'Ocultar ubicación' : 'Agregar ubicación'}
                         </button>
                         {isAccordionOpen && (
-    <>
-        <div className="accordion-content active">
-            <label htmlFor="location">Guarda tu ubicación</label>
-            <input
-                type="text"
-                id="location"
-                name="location"
-                placeholder="Ingresa tu dirección"
-                value={user?.location || ''}
-                onChange={handleUserInfoChange}
-            />
-        </div>
+                            <>
+                                <div className="accordion-content active">
+                                    <label htmlFor="location">Guarda tu ubicación</label>
+                                    <input
+                                        type="text"
+                                        id="location"
+                                        name="location"
+                                        placeholder="Ingresa tu dirección"
+                                        value={user?.location || ''}
+                                        onChange={handleUserInfoChange}
+                                    />
+                                </div>
 
-        <div className="accordion-content active">
-            <input
-                type="text"
-                id="postalCode"
-                name="postalCode"
-                placeholder="Ingresa tu código postal"
-                value={user?.postalCode || ''}
-                onChange={handleUserInfoChange}
-            />
-        </div>
-    </>
-)}
+                                <div className="accordion-content active">
+                                    <input
+                                        type="text"
+                                        id="postalCode"
+                                        name="postalCode"
+                                        placeholder="Ingresa tu código postal"
+                                        value={user?.postalCode || ''}
+                                        onChange={handleUserInfoChange}
+                                    />
+                                </div>
+                            </>
+                        )}
                     </div>
-
 
                     <div className="contact-preferences">
                         <div className="contact-item">

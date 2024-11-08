@@ -54,6 +54,10 @@
             postal_code: String,
             country: String
         },
+        birth_date: {
+            type: Date,
+            required: true,
+        },
         roles: {
             type: [String],
             default: ["user"],
@@ -92,7 +96,23 @@
         newsletter_subscription: {
             type: Boolean,
             default: false
-        }
+        },
+        contact_preferences: [
+            {
+                email: {
+                    type: Boolean,
+                    default: false
+                },
+                phone: {
+                    type: Boolean,
+                    default: false
+                },
+                whatsapp: {
+                    type: Boolean,
+                    default: false
+                }
+            }
+        ]
     }, {
         timestamps: true,
         versionKey: false,

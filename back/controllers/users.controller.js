@@ -207,7 +207,7 @@ export const updateUserById = async (req, res) => {
         const decoded = jwt.verify(token, JWT_SECRET);
         const userId = decoded.id;
 
-        const { first_name, last_name, email, password, location } = req.body;
+        const { first_name, last_name, email, password, location, contact_preferences, birth_date } = req.body;
 
         // Validación de datos
         if (!first_name && !last_name && !email && !password && !location) {
@@ -226,7 +226,12 @@ export const updateUserById = async (req, res) => {
         if (location) {
             updateFields.location = Array.isArray(location) ? location : [location]; // Asegurar que sea un array
         }
-
+        if (contact_preferences) {
+            updateFields.contact_preferences = Array.isArray(contact_preferences) ? contact_preferences : [contact_preferences]
+        }
+        if (birth_date && birth_date.completeDate) {
+            updateFields.birth_date = new Date(birth_date.completeDate);
+        }
         // Actualizar el usuario en la base de datos
         const updatedUser = await User.findByIdAndUpdate(
             userId,
