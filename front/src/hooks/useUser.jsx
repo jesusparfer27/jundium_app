@@ -14,9 +14,14 @@ export function UserProvider({ children }) {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
             setUser(JSON.parse(storedUser));
-            fetchUserDetails();
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                fetchUserDetails(); // Solo si el token está presente
+            } else {
+                setLoading(false); // Si no hay token, se desactiva la carga
+            }
         } else {
-            setLoading(false); // Si no hay usuario, no necesitas seguir cargando
+            setLoading(false); // Si no hay usuario, no se necesita cargar
         }
     }, []);
 
@@ -59,8 +64,8 @@ export function UserProvider({ children }) {
         if (!token) return;
 
         try {
-            const response = await fetch(`${VITE_API_BACKEND}/user/update`, {
-                method: 'PUT',
+            const response = await fetch(`${VITE_API_BACKEND}/me/update`, {
+                method: 'PATCH',
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
@@ -70,13 +75,24 @@ export function UserProvider({ children }) {
             if (!response.ok) throw new Error('Error al actualizar los datos');
 
             const updatedUser = await response.json();
+            if (updatedUser.token) {
+                localStorage.setItem('authToken', updatedUser.token);
+            }
             setUser(updatedUser);
             localStorage.setItem("user", JSON.stringify(updatedUser));
+
         } catch (err) {
             setError(err.message);
             console.error('Error updating user details:', err);
         }
     };
+
+    useEffect(() => {
+        if (user) {
+            localStorage.setItem("user", JSON.stringify(user));
+        }
+    }, [user]);
+
 
     const login = async (userData) => {
         setError(null); // Resetear error al intentar login

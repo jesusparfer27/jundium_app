@@ -207,10 +207,10 @@ export const updateUserById = async (req, res) => {
         const decoded = jwt.verify(token, JWT_SECRET);
         const userId = decoded.id;
 
-        const { first_name, last_name, email, password, location, contact_preferences, birth_date } = req.body;
+        const { first_name, last_name, email, password, contact_preferences, birth_date, postal_code, street, city, country } = req.body;
 
         // Validación de datos
-        if (!first_name && !last_name && !email && !password && !location) {
+        if (!first_name && !last_name && !email && !password) {
             return res.status(400).json({ message: 'No se proporcionaron campos para actualizar', success: false });
         }
 
@@ -223,12 +223,17 @@ export const updateUserById = async (req, res) => {
             const hashedPassword = await bcrypt.hash(password, 10);
             updateFields.password = hashedPassword;
         }
-        if (location) {
-            updateFields.location = Array.isArray(location) ? location : [location]; // Asegurar que sea un array
-        }
+        if (postal_code) updateFields.postal_code = postal_code
         if (contact_preferences) {
-            updateFields.contact_preferences = Array.isArray(contact_preferences) ? contact_preferences : [contact_preferences]
+            // Asegúrate de que contact_preferences tenga una estructura de objeto
+            const { email, phone, whatsapp } = contact_preferences;
+            updateFields.contact_preferences = {
+                email: Boolean(email),
+                phone: Boolean(phone),
+                whatsapp: Boolean(whatsapp)
+            };
         }
+        
         if (birth_date && birth_date.completeDate) {
             updateFields.birth_date = new Date(birth_date.completeDate);
         }
@@ -257,4 +262,3 @@ export const updateUserById = async (req, res) => {
         });
     }
 };
-

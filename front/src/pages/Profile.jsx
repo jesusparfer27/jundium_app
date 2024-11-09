@@ -14,6 +14,8 @@ export const Profile = () => {
     const { user, setUser, loading, error, fetchUserDetails } = useUser();
     const [isUserLoaded, setIsUserLoaded] = useState(false);
     const { VITE_API_BACKEND, VITE_IMAGES_BASE_URL } = import.meta.env;
+    const [isDirty, setIsDirty] = useState(false); // Nueva variable para controlar cambios
+    const [saveStatus, setSaveStatus] = useState(null);
 
     useEffect(() => {
         const loadUser = async () => {
@@ -32,28 +34,6 @@ export const Profile = () => {
         loadUser();
     }, [user, fetchUserDetails, openMenu]);
 
-    const handleSaveChanges = async () => {
-        const token = localStorage.getItem('authToken');
-        if (!token) return;
-
-        try {
-            const response = await fetch(`${VITE_API_BACKEND}/me/update`, {
-                method: 'PATCH',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(user), // Suponiendo que `user` contenga los datos actualizados
-            });
-            if (!response.ok) throw new Error('Error al guardar los cambios');
-
-            const updatedUser = await response.json();
-            console.log('Datos de usuario actualizados:', updatedUser);
-            // Aquí podrías actualizar el estado del usuario con el nuevo objeto
-        } catch (err) {
-            console.error('Error al guardar cambios:', err);
-        }
-    };
     const fetchWishlistItems = useCallback(async () => {
         if (!user) return;
 
@@ -123,40 +103,69 @@ export const Profile = () => {
     }, [error, openMenu]);
 
     const handleUserInfoChange = (e) => {
-        const { name, value, checked } = e.target;
-        const [field, type] = name.split('.');
+        const { name, value, checked, type } = e.target;
+        setIsDirty(true); // Marca como "sucio" al modificar
+        
+        // Log del cambio en el input
+        console.log(`Cambio en el campo: ${name} -> Valor: ${type === 'checkbox' ? checked : value}`);
     
         setUser((prevUser) => {
-            if (name.startsWith('contactPreferences.')) {
-                // Si estamos modificando contactPreferences
-                const updatedPreferences = [...prevUser.contactPreferences];
-                const index = parseInt(field); // Asumiendo que el índice está en el campo
-                updatedPreferences[index] = {
-                    ...updatedPreferences[index],
-                    [type]: type === 'email' || type === 'phone' || type === 'whatsapp' ? checked : value,
-                };
+            if (type === 'checkbox') {
+                const [parent, child] = name.split('.');  // Para manejar propiedades anidadas como contactPreferences
                 return {
                     ...prevUser,
-                    contactPreferences: updatedPreferences,
+                    [parent]: {
+                        ...prevUser[parent],
+                        [child]: checked
+                    }
                 };
-            } else if (name.startsWith('birthDate.')) {
-                // Manejo para birthDate
-                const updatedBirthDate = { ...prevUser.birthDate, [type]: value };
-                const { day, month, year } = updatedBirthDate;
-                if (day && month && year) {
-                    const birthDate = new Date(year, month - 1, day);
-                    updatedBirthDate.completeDate = birthDate;
-                }
-                return {
-                    ...prevUser,
-                    birthDate: updatedBirthDate,
-                };
-            } else {
-                // Para otros campos generales
-                return { ...prevUser, [name]: value };
             }
+    
+            // Para campos de texto
+            return {
+                ...prevUser,
+                [name]: value
+            };
         });
     };
+    
+    const handleSaveChanges = async () => {
+        const token = localStorage.getItem('authToken');
+        if (!token || loading || !isDirty) return; // Permitir guardado solo si hubo cambios
+
+        // Log antes de guardar los cambios
+        console.log("Guardando cambios con los siguientes datos del usuario:", user);
+
+        try {
+            const response = await fetch(`${VITE_API_BACKEND}/me/update`, {
+                method: 'PATCH',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(user),
+            });
+            if (!response.ok) throw new Error('Error al guardar los cambios');
+
+            const updatedUser = await response.json();
+            console.log('Datos de usuario actualizados:', updatedUser);
+
+            // Guarda el usuario actualizado en el localStorage
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+
+            setUser(updatedUser);
+            setIsDirty(false); // Reiniciar estado de cambios
+            setSaveStatus({ success: true, message: 'Cambios guardados exitosamente' }); // Mensaje de éxito
+
+            // Recarga los detalles del usuario después de guardar los cambios
+            await fetchUserDetails();
+        } catch (err) {
+            console.error('Error al guardar cambios:', err);
+            setSaveStatus({ success: false, message: 'Hubo un error al guardar los cambios' }); // Mensaje de error
+        }
+    };
+    
+
 
     const handleLogout = () => {
         localStorage.removeItem("user");
@@ -196,7 +205,7 @@ export const Profile = () => {
                             <label>Nombre</label>
                             <input
                                 type="text"
-                                name="firstName"
+                                name="first_name"
                                 value={user?.first_name || ''}
                                 onChange={handleUserInfoChange}
                             />
@@ -205,7 +214,7 @@ export const Profile = () => {
                             <label>Apellido</label>
                             <input
                                 type="text"
-                                name="lastName"
+                                name="last_name"
                                 value={user?.last_name || ''}
                                 onChange={handleUserInfoChange}
                             />
@@ -220,7 +229,7 @@ export const Profile = () => {
                                 <option value="">Seleccionar</option>
                                 <option value="México">México</option>
                                 <option value="España">España</option>
-                                <option value="Argentina">Argentina</option>
+                                <option value="Otro">Otro</option>
                             </select>
                         </div>
                     </div>
@@ -236,31 +245,41 @@ export const Profile = () => {
                         {isAccordionOpen && (
                             <>
                                 <div className="accordion-content active">
-                                    <label htmlFor="location">Guarda tu ubicación</label>
+                                    <label htmlFor="city">Ciudad</label>
                                     <input
                                         type="text"
-                                        id="location"
-                                        name="location"
-                                        placeholder="Ingresa tu dirección"
-                                        value={user?.location || ''}
+                                        id="city"
+                                        name="city"
+                                        placeholder="Ingresa tu ciudad"
+                                        value={user?.city || ''}
                                         onChange={handleUserInfoChange}
                                     />
                                 </div>
-
                                 <div className="accordion-content active">
+                                    <label htmlFor="street">Calle</label>
                                     <input
                                         type="text"
-                                        id="postalCode"
+                                        id="street"
+                                        name="street"
+                                        placeholder="Ingresa tu dirección"
+                                        value={user?.street || ''}
+                                        onChange={handleUserInfoChange}
+                                    />
+                                </div>
+                                <div className="accordion-content active">
+                                    <label htmlFor="postal_code">Codigo Postal</label>
+                                    <input
+                                        type="text"
+                                        id="location"
                                         name="postalCode"
-                                        placeholder="Ingresa tu código postal"
-                                        value={user?.postalCode || ''}
+                                        placeholder="Ingresa tu codigo postal"
+                                        value={user?.postal_code || ''}
                                         onChange={handleUserInfoChange}
                                     />
                                 </div>
                             </>
                         )}
                     </div>
-
                     <div className="contact-preferences">
                         <div className="contact-item">
                             <label htmlFor="email" className="contact-label">
@@ -269,6 +288,7 @@ export const Profile = () => {
                             <input
                                 type="checkbox"
                                 name="contactPreferences.email"
+                                checked={user?.contact_preferences?.email || false}
                                 onChange={handleUserInfoChange}
                             />
                         </div>
@@ -279,16 +299,18 @@ export const Profile = () => {
                             <input
                                 type="checkbox"
                                 name="contactPreferences.phone"
+                                checked={user?.contact_preferences?.phone || false}
                                 onChange={handleUserInfoChange}
                             />
                         </div>
                         <div className="contact-item">
                             <label htmlFor="whatsapp" className="contact-label">
-                                Contactable vía WhatsApp
+                                Contactable por WhatsApp
                             </label>
                             <input
                                 type="checkbox"
                                 name="contactPreferences.whatsapp"
+                                checked={user?.contact_preferences?.whatsapp || false}
                                 onChange={handleUserInfoChange}
                             />
                         </div>
