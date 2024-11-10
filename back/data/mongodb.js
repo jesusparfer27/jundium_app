@@ -50,29 +50,11 @@ const userSchema = new mongoose.Schema({
         enum: ['masculino', 'femenino', 'otro'],
         required: true
     },
-    country: {
+    phone_number: {
         type: String,
-        enum: ['Spain', 'Mexico', 'otro'],
-        required: true
-    },
-    street: {
-        type: String,
-        required: true
-
-    },
-    city: {
-        type: String,
-        required: true
-
-    },
-    postal_code: {
-        type: String,
-        required: true
-
     },
     birth_date: {
         type: Date,
-        required: true,
     },
     roles: {
         type: [String],
@@ -126,6 +108,25 @@ const userSchema = new mongoose.Schema({
         whatsapp: {
             type: Boolean,
             default: false
+        }
+    }, 
+    country: {
+        type: String,
+        enum: ['masculino', 'femenino', 'otro'],
+    },
+    location: 
+    {
+        city: {
+            type: String,
+            default: "",
+        },
+        street: {
+            type: String,
+            default: "",
+        },
+        postal_code: {
+            type: String,
+            default: ""
         }
     }
 }, {

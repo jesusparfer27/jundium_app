@@ -25,23 +25,6 @@ export function UserProvider({ children }) {
         }
     }, []);
 
-    const fetchOrderItems = async () => {
-        const token = localStorage.getItem('authToken');
-        if (!token) return;
-
-        try {
-            const response = await fetch(`${VITE_API_BACKEND}/orders`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            const data = await response.json();
-            return data; // Devuelve los pedidos
-        } catch (err) {
-            console.error('Error loading orders:', err);
-        }
-    };
-
     const fetchWishlistItems = async () => {
         const token = localStorage.getItem('authToken');
         if (!token) return;
@@ -199,7 +182,6 @@ export function UserProvider({ children }) {
         fetchUserDetails,
         updateUserDetails,
         fetchWishlistItems,
-        fetchOrderItems,
     }), [user, loading, error]);
 
     return (

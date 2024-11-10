@@ -24,7 +24,6 @@ router.get("/products", getProducts); // Aquí defines tu ruta
 router.get("/products/:id", getProductById); // Nueva ruta para obtener un producto por ID
 router.get("/me", authenticateToken, getMe);
 router.get("/users", getUsers);
-router.get("/users/:id", getUserById);
 
 router.patch("/me/update", authenticateToken, updateUserById)
 

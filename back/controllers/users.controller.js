@@ -207,10 +207,10 @@ export const updateUserById = async (req, res) => {
         const decoded = jwt.verify(token, JWT_SECRET);
         const userId = decoded.id;
 
-        const { first_name, last_name, email, password, contact_preferences, birth_date, postal_code, street, city, country } = req.body;
+        const { first_name, gender, country, phone_number, last_name, email, password, contact_preferences, birth_date, postal_code, location} = req.body;
 
         // Validación de datos
-        if (!first_name && !last_name && !email && !password) {
+        if (!first_name && !last_name && !email && !password && location) {
             return res.status(400).json({ message: 'No se proporcionaron campos para actualizar', success: false });
         }
 
@@ -224,6 +224,9 @@ export const updateUserById = async (req, res) => {
             updateFields.password = hashedPassword;
         }
         if (postal_code) updateFields.postal_code = postal_code
+        if (gender) updateFields.gender = gender;
+        if (phone_number) updateFields.phone_number = phone_number;
+        if (country) updateFields.country = country;
         if (contact_preferences) {
             // Asegúrate de que contact_preferences tenga una estructura de objeto
             const { email, phone, whatsapp } = contact_preferences;
@@ -233,9 +236,16 @@ export const updateUserById = async (req, res) => {
                 whatsapp: Boolean(whatsapp)
             };
         }
-        
-        if (birth_date && birth_date.completeDate) {
-            updateFields.birth_date = new Date(birth_date.completeDate);
+        if (birth_date && birth_date.day && birth_date.month !== undefined && birth_date.year) {
+            const completeDate = new Date(birth_date.year, birth_date.month, birth_date.day);
+            updateFields.birth_date = completeDate;
+        }
+
+        if (location) {
+            updateFields.location = {};
+            if (location.city) updateFields.location.city = location.city;
+            if (location.street) updateFields.location.street = location.street;
+            if (location.postal_code) updateFields.location.postal_code = location.postal_code;
         }
         // Actualizar el usuario en la base de datos
         const updatedUser = await User.findByIdAndUpdate(
@@ -253,6 +263,7 @@ export const updateUserById = async (req, res) => {
             message: 'Usuario actualizado exitosamente',
             success: true
         });
+
     } catch (error) {
         console.error("Error al actualizar el usuario:", error);
         return res.status(500).json({
