@@ -49,6 +49,37 @@
     animation: slideInVertical 0.3s ease forwards;
 }
 
+.searchBarRecentSearches_Container {
+    border-bottom: 1px solid black;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.searchRecomendation_Container.hidden {
+    display: none;
+}
+
+.searchRecomendation_Container.visible {
+    display: block;
+    background-color: white;
+    width: 45%;
+    position: absolute;
+    top: 80px;
+    padding-top: 2rem;
+    padding-bottom: .7rem;
+    padding-left: 4rem;
+}
+
+.recomendSearches {
+    list-style: none;
+}
+
+.groupList_searchesRecomendations {
+    padding: 0;
+}
+
+
 
 
 /* Primer div para la barra de búsqueda */
@@ -56,26 +87,43 @@
     display: flex;
     flex-direction: row ; /* Organizar en columnas */
     width: 100%;
-    border-bottom: 1px solid black; /* Línea inferior */
-    padding-bottom: 1rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.recentSearches_Block {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
 }
 
 .searchContent {
     width: 80%;
     display: flex;
-    gap: 3rem;
+    gap: 14rem;
     justify-content: center;
-    
+}
+
+.searchContent.flexRow {
+    width: 55%;
+    border: 1px solid black;
+    display: flex;
+    border-radius: 36px;
+    align-items: center;
+}
+
+.searchBar.activeSearch {
+    border: none; /* Sin borde cuando está activo */
+    outline: none; /* También eliminamos el outline para que no aparezca el borde de foco */
 }
 
 /* Estilos para el input de búsqueda */
 .searchBar {
-    padding: 1rem;
-    border-radius: 25px; /* Bordes redondeados */
-    border: 1px solid black; /* Borde gris claro */
-    width: 60%; /* Ancho completo */
-    
+    border: none; /* Borde gris claro */
+    width: 62%; /* Ancho completo */
+    height: 20px;
 }
 
 /* Botón de eliminar */
@@ -102,26 +150,17 @@
 
 /* Estilos para el botón de búsqueda */
 .searchButton {
-    background-color: #4caf50; /* Color verde */
-    color: white; /* Texto blanco */
+    color: black;
     border: none;
     padding: 0.5rem 1rem;
-    border-radius: 0.25rem; /* Bordes redondeados */
     cursor: pointer;
-    transition: background-color 0.3s ease; /* Animación suave en hover */
-}
-
-/* Efecto hover en el botón de búsqueda */
-.searchButton:hover {
-    background-color: #45a049; /* Color más oscuro */
+    background-color: transparent;
 }
 
 /* Estilo de botones de filtro */
 .filterButton {
     color: white;
     border: none;
-    padding: 0.5rem 1rem;
-    margin: 0.5rem 0;
     cursor: pointer;
     width: 100%;
     text-align: left;
@@ -249,4 +288,10 @@
     padding-right: 2rem;
     cursor: pointer;
     background: transparent;
+}
+
+.recentSearches_flexRow {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
 }

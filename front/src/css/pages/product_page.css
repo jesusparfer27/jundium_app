@@ -138,6 +138,13 @@
     right: 0; /* Opcional: sitúa el ícono en la esquina superior derecha */
     z-index: 10; /* Asegúrate de que esté encima de la imagen */
     padding: 10px; /* Opcional: agrega un poco de espacio alrededor del ícono */
+    border: 0;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.containerInfo_productPage {
+    padding-left: 1rem;
 }
 
 .productImageWrapper {

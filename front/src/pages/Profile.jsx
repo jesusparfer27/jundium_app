@@ -466,7 +466,7 @@ export const Profile = () => {
 
                         {/* Botón "Ver más..." */}
                         {wishlistItems.length > 0 && (
-                            <div className="view-more-button">
+                            <div className="submit-buttonProfile">
                                 <button onClick={handleNavigateToWishlist}>Ver más...</button>
                             </div>
                         )}

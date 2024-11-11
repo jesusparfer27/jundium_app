@@ -1,3 +1,5 @@
+
+
 /* Estilos para el CartContainer */
 .cartContainer {
     position: fixed;
@@ -15,6 +17,16 @@
     box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
 }
 
+
+
+.submit-buttonProfile.Cart button{
+    padding-top: .4rem;
+    padding-bottom: .4rem;
+}
+
+.textCard_Header {
+    margin: .3rem;
+}
 
 
 .cartContainer.active {
@@ -50,11 +62,6 @@
     padding: 0;
 }
 
-.cartItems {
-    width: 70%;
-    list-style: none;
-    padding: 0;
-}
 
 /* Añadido para permitir desplazamiento cuando hay 3 o más productos */
 .scrollableCartItems {
@@ -113,8 +120,15 @@
     flex-direction: column;
     justify-content: center;
     flex-grow: 1;
-    
+    margin-top: 1rem;
 }
+
+.cartItemContent :nth-child(4),
+.cartItemContent :nth-child(3){
+    align-self: flex-end;
+}
+
+
 
 
 

@@ -130,14 +130,18 @@ const CartContainer = () => {
                                             )}
                                         </div>
                                         <div className="cartItemContent">
-                                            <p>{name}</p>
-                                            <p>${basePrice.toFixed(2)}</p>
-                                            <p>Cantidad: {quantity || 1}</p>
+                                            <p className='textCard_Header'>{name}</p>
+                                            <p className='textCard_Header'>${basePrice.toFixed(2)}</p>
+                                            <p className='textCard_Header'>Cantidad: {quantity || 1}</p>
 
                                             {selectedVariant && (
-                                                <p>Color: {selectedVariant.color.colorName}</p>
+                                                <p className='textCard_Header'>Color: {selectedVariant.color.colorName}</p>
                                             )}
 
+
+                        
+                           
+                            <div className="submit-buttonProfile Cart">
                                             {/* Asegúrate de que `product_id` y `variant_id` existen antes de llamar a `handleRemoveItem` */}
                                             <button onClick={() => {
                                                 if (product_id?._id && variant_id) {
@@ -146,6 +150,7 @@ const CartContainer = () => {
                                                     console.error('Faltan el ID del producto o de la variante:', item);
                                                 }
                                             }}>Eliminar</button>
+                                             </div>
                                         </div>
                                     </div>
                                 );
