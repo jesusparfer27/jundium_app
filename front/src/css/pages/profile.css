@@ -27,6 +27,21 @@
     margin-top: -8rem;
 }
 
+.headerProfileWishlist {
+    width: 80%;
+    padding-bottom: 0.5rem;
+    text-align: start;
+    padding-top: 2rem;
+    padding-left: 3rem;
+    font-size: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.alternative_noWishlist {
+    text-align: center;
+    font-size: 20px;
+}
+
 .profile-image img {
     width: 100%;
     height: auto;
@@ -35,46 +50,13 @@
     margin-bottom: -5rem;
 }
 
-.backgroundPadding_Image {
-    position: relative;
-    padding: 2rem; /* Ajustar padding para crear el espacio entre la imagen y el contenido */
-    text-align: center; /* Centramos el texto */
-    margin-bottom: 4rem;
-    
-}
-
-.profile-initials {
-    position: absolute;
-    top: 0; /* Top negativo para superponer sobre la imagen */
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #fff;
-    border-radius: 50%;
-    width: 10rem;
-    height: 10rem;
-    display: flex;
-    margin-bottom: 4rem;
-    justify-content: center;
-    align-items: center;
-    font-size: 2rem;
-    z-index: 2; /* Para que se superponga sobre la imagen */
-}
-
-.user_name {
-    font-size: 1.5rem; /* Ajustar tamaño de fuente si es necesario */
-    padding-top: 1rem; /* Espacio superior */
-    padding-bottom: 1rem; /* Espacio inferior */
-    text-align: center; /* Centrar el texto */
-    color: #333; /* Cambiar color si es necesario */
-}
-
-
-
 .userProfile {
     display: flex;
     justify-content: center;
     gap: 1rem;
-    margin-top: 10.1rem;
+    z-index: 10;
+    margin-top: -10rem;
+    padding-top: -10rem;
     width: 90%;
     margin-bottom: 8rem;
     background-color: #D9D9D9;
@@ -144,6 +126,18 @@
     margin-bottom: 1rem;
 }
 
+.inputProfile_Container {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+}
+
+.inputProfileContainer_Container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .input-group {
     display: flex;
     flex-direction: column;
@@ -153,35 +147,37 @@
 .input-field {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    width: 90%;
     padding-top: .5rem;
     padding-bottom: .5rem;
     gap: .8rem;
+}
+
+.input-field input {
+    width: 100%;
+}
+
+.selectOption {
+    width: 104.5%;
+    padding-left: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 
 input,
 select {
     padding-top: 0.8rem;
     padding-bottom: 0.8rem;
-    
-    padding-right: 2.3rem;
     border: 1px solid #ccc;
     border-radius: 5px;
     width: 100%;
 }
-
-select {
-    padding-right: .8rem;
-}
-
-input {
-    width: 95%;
-}
-
 .accordionProfile {
     margin-bottom: 1rem;
-    padding-left: 3.3rem;
+    width: 80%;
+    display: flex;
+    justify-content: flex-start;
+    padding-bottom: 2rem;
+    flex-direction: column;
 }
 
 .accordion-buttonLocation {
@@ -211,19 +207,31 @@ input {
     display: block; /* Muestra el contenido cuando está activo */
     transition: max-height 0.3s ease-in-out; /* Animación para mostrar */
     max-height: 300px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 1rem;
+    
 }
 
 .contact-preferences {
     display: flex;
     flex-direction: column;
     gap: .8rem;
-    width: 40%;
+    width: 100%;
+    align-items: start;
+    padding-bottom: 2rem;
+}
+
+.contact-preferences input {
+    left: 0;
 }
 
 .contact-item {
     display: flex;
-    justify-content: flex-start;
+    align-items: start;
     flex-direction: row-reverse;
+    justify-content: flex-start;
+    width: 45%;
 
 }
 
@@ -235,19 +243,27 @@ input {
     padding-bottom: .8rem;
 }
 
+.birth-date_Container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
 .birth-date {
     margin-top: 1rem;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 60%;
-    padding-left: 3.4rem;
+    flex-direction: row;
+    width: 80%;
+    gap: 1.5rem;
 }
 
 .date-selectors {
     display: flex;
     gap: 0.5rem;
+    width: 20%;
 }
+
+
 
 .submit-buttonProfile {
     margin-top: 1rem;

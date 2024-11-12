@@ -26,6 +26,9 @@ import WinterSeason from '../assets/new-season/winter-season-square-home.jpg';
 export const HomePage = () => {
     const [offset, setOffset] = useState(0);
     const [scale, setScale] = useState(1); // Estado para el zoom
+    const [imagesLoaded, setImagesLoaded] = useState(false);
+    const [imagesToLoad, setImagesToLoad] = useState(0);
+    const [imagesLoadedCount, setImagesLoadedCount] = useState(0);
 
     const categoriesData = [
         { id: 1, name: "Bolsos de Mujer", image: WomanBags, type: "bolso", gender: "mujer" },
@@ -43,6 +46,21 @@ export const HomePage = () => {
         { id: 2, name: "Primavera", image: SpringSeason, endpoint: "/seasons/spring" },
         { id: 3, name: "Invierno", image: WinterSeason, endpoint: "/seasons/winter" },
     ];
+
+    useEffect(() => {
+        // Set the number of images to load initially
+        setImagesToLoad(categoriesData.length + seasonsData.length);
+    }, []);
+
+    const handleImageLoad = () => {
+        setImagesLoadedCount((prevCount) => {
+            const newCount = prevCount + 1;
+            if (newCount === imagesToLoad) {
+                setImagesLoaded(true);
+            }
+            return newCount;
+        });
+    };
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -69,7 +87,7 @@ export const HomePage = () => {
     const renderCategories = (data) => (
         data.map((category) => (
             <NavLink
-                to={`/products?type=${encodeURIComponent(category.type)}&gender=${encodeURIComponent(category.gender)}`} // Usar query params para el tipo y género
+                to={`/products?type=${encodeURIComponent(category.type)}&gender=${encodeURIComponent(category.gender)}`}
                 key={category.id}
                 className={({ isActive }) => (isActive ? 'myCustomActiveClass' : 'myCustomClass')}
             >
@@ -77,8 +95,9 @@ export const HomePage = () => {
                     <img
                         src={category.image}
                         alt={category.name}
+                        onLoad={handleImageLoad}
                         className="itemImage"
-                        loading="lazy" // Mejora el rendimiento de carga
+                        loading="lazy"
                     />
                 </div>
                 <div className="itemDescription">
@@ -99,8 +118,9 @@ export const HomePage = () => {
                     <img
                         src={season.image}
                         alt={season.name}
+                        onLoad={handleImageLoad}
                         className="itemImageDrops"
-                        loading="lazy" // Mejora el rendimiento de carga
+                        loading="lazy"
                     />
                 </div>
                 <div className="itemDescription">
@@ -111,7 +131,7 @@ export const HomePage = () => {
     );
 
     return (
-        <main>
+        <main className={imagesLoaded ? "images-loaded" : "images-loading"}>
             <section className="videoScrollContainer">
                 <div className="videoWrapper">
                     <img
@@ -119,15 +139,17 @@ export const HomePage = () => {
                         style={{ transform: `scale(${scale})`, transition: 'transform 0.1s ease' }}
                         src={winterImage}
                         alt="Imagen de fondo"
-                        loading="lazy" // Mejora el rendimiento de carga
+                        loading="lazy"
                     />
                 </div>
             </section>
 
             <section className="newCollections">
                 <h1 className='h1Style'>Echa un vistazo a los nuevos drops</h1>
-                <div className="newDropsHome">
-                    {renderCategories(categoriesData)}
+                <div className="newDropsHome_Container">
+                    <div className="newDropsHome">
+                        {renderCategories(categoriesData)}
+                    </div>
                 </div>
             </section>
 
@@ -141,7 +163,7 @@ export const HomePage = () => {
                                 muted
                                 loop
                                 playsInline
-                                onError={() => console.error('Error al cargar el video')} // Manejo de error
+                                onError={() => console.error('Error al cargar el video')}
                             >
                                 <source src={SeasonVideo} type="video/mp4" />
                                 Tu navegador no soporta la reproducción de videos.
@@ -163,7 +185,7 @@ export const HomePage = () => {
                     <div className="carousel" style={{ transform: `translateX(-${offset}%)` }}>
                         {categoriesData.map((category) => (
                             <NavLink
-                                to={`/products?type=${encodeURIComponent(category.type)}&gender=${encodeURIComponent(category.gender)}`} // Usar query params para el tipo y género
+                                to={`/products?type=${encodeURIComponent(category.type)}&gender=${encodeURIComponent(category.gender)}`}
                                 key={category.id}
                                 className="carouselItem"
                             >
@@ -171,7 +193,7 @@ export const HomePage = () => {
                                     src={category.image}
                                     alt={category.name}
                                     className="carouselImage"
-                                    loading="lazy" // Mejora el rendimiento de carga
+                                    loading="lazy"
                                 />
                                 <p>{category.name}</p>
                             </NavLink>
@@ -186,19 +208,23 @@ export const HomePage = () => {
                         <img className='imageAutumn'
                             style={{ transform: `scale(${scale})`, transition: 'transform 0.1s ease' }}
                             src={AutumnImage}
-                            alt="Imagen de otoño" 
-                            loading="lazy" // Mejora el rendimiento de carga
+                            alt="Imagen de otoño"
+                            loading="lazy"
                         />
                     </NavLink>
                 </div>
             </section>
 
-            <section className="newCollections lastSection">
-                <h1 className='h1Style'>Echa un vistazo a las nuevas temporadas</h1>
-                <div className="newDropsHome2">
-                    {renderSeasons(seasonsData)}
+            <div className="newCollections lastSection">
+                <div className="newCollections_Container">
+                    <h1 className='h1Style'>Echa un vistazo a la nueva temporada</h1>
+                    <div className="newCollections_Block">
+                        <div className="newDropsHome2">
+                            {renderSeasons(seasonsData)}
+                        </div>
+                    </div>
                 </div>
-            </section>
+            </div>
         </main>
     );
 };

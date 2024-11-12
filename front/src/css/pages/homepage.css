@@ -31,14 +31,30 @@ body,
     height: 145vh;
     width: 100%;
     object-fit: cover;
+    position: sticky;
+    z-index: -99;
 }
 
 /* Estilos generales para la sección de nuevos drops */
 .newCollections {
-    padding: 2rem 9.4rem;
     text-align: center;
     z-index: 1;
+    position: relative;
 }
+
+/* .imageAutumn {
+    object-fit: cover;
+    width: 62%;
+    padding-left: 17rem;
+    padding-top: -2rem;
+    height: 100vh;
+    margin-top: 24.5rem;
+} */
+
+/* .newCollections.lastSection {
+    position: relative;
+    z-index: 2; 
+} */
 
 .h1Style {
     font-size: 2rem;
@@ -54,19 +70,31 @@ body,
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(2, auto);
-    justify-items: center;
-    margin: 0 auto;
-    width: 100%;
+    width: 80%;
     min-height: 800px;
     gap: 2rem;
-    padding: 2rem;
+    padding-top: 2rem;
+    justify-content: center;
+    padding-bottom: 2rem;
     border-radius: 10px;
 }
+
+.newCollections_Container{
+    display: flex;
+    flex-direction: column;
+}
+
+.newDropsHome_Container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
 
 /* Estilos para el enlace de video */
 .videoLink {
     display: block;
-    margin: 2rem 0;
+  
     text-align: center;
 }
 
@@ -90,7 +118,8 @@ body,
 .carruselHome,
 .container_image_autumn,
 .newCollections,
-.newDropsHome2 {
+.newDropsHome2,
+.newDropsHome {
     z-index: 2; /* Valor más alto para superponer por encima de container_videoSession-2 */
     position: relative; /* Asegura que el z-index sea aplicado correctamente */
     background-color: white;
@@ -134,10 +163,31 @@ body,
     padding: 2rem;
 }
 
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff; /* Cambia el color de fondo si deseas */
+    z-index: 9999;
+}
+
+.images-loading {
+    display: none;
+}
+
+.images-loaded {
+    display: block;
+}
+
 .imageAutumn {
     object-fit: cover;
-    width: 60%;
-    padding-left: 20rem;
+    width: 62%;
+    padding-left: 17rem;
     padding-top: -2rem;
     height: 100vh;
     margin-top: 24.5rem;
@@ -149,8 +199,11 @@ body,
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    font-size: 24px;
     text-align: right;
+}
+
+.leftTextContainer p{
+    font-size: 24px;
 }
 
 /* Estilo para el contenedor del carrusel a la derecha */
@@ -177,8 +230,8 @@ body,
 /* Elemento individual del carrusel */
 .carouselItem {
     flex: 0 0 auto;
-    width: 600px;
-    height: 700px;
+    width: 550px;
+    height: 650px;
     text-align: center;
     color: black;
     text-decoration: none;
@@ -240,8 +293,9 @@ body,
 /* Contenedor para el scroll de video */
 .videoScrollContainer {
     height: 2000px;
-    position: relative;
+    position: sticky;
     z-index: -1;
+    top: 0;
 }
 
 /* Contenedor para los productos recientes */
@@ -283,7 +337,15 @@ body,
     display: flex;
     gap: 3rem;
     justify-content: center;
+    align-items: center;
+    width: 90%;
     padding-bottom: 3.6rem;
+}
+
+.newCollections_Block {
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 /* Estilo para la imagen de los drops */
@@ -291,3 +353,4 @@ body,
     width: 100%;
     height: 700px;
 }
+

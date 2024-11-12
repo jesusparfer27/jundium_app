@@ -232,183 +232,188 @@ export const Profile = () => {
                     <div className="headerProfile">Mi perfil:</div>
                     <div className="required-fields">Campos obligatorios</div>
                     <div className="input-group">
-                        <div className="input-field">
-                            <label>Género</label>
-                            <select
-                                name="gender"
-                                value={user?.gender || ''}
-                                onChange={handleUserInfoChange}
-                            >
-                                <option value="">Seleccionar</option>
-                                <option value="Masculino">Masculino</option>
-                                <option value="Femenino">Femenino</option>
-                                <option value="Otro">Otro</option>
-                            </select>
-                        </div>
-                        <div className="input-field">
-                            <label>Nombre</label>
-                            <input
-                                type="text"
-                                name="first_name"
-                                value={user?.first_name || ''}
-                                onChange={handleUserInfoChange}
-                            />
-                        </div>
-                        <div className="input-field">
-                            <label>Apellido</label>
-                            <input
-                                type="text"
-                                name="last_name"
-                                value={user?.last_name || ''}
-                                onChange={handleUserInfoChange}
-                            />
-                        </div>
-                        <div className="input-field">
-                            <label>País</label>
-                            <select
-                                name="country"
-                                value={user?.country || ''}
-                                onChange={handleUserInfoChange}
-                            >
-                                <option value="">Seleccionar</option>
-                                <option value="México">México</option>
-                                <option value="España">España</option>
-                                <option value="Otro">Otro</option>
-                            </select>
-                        </div>
-                        <div className="input-field">
-                            <label>Numero de teléfono</label>
-                            <input
-                                type="text"
-                                name="phone_number"
-                                value={user?.phone_number || ''}
-                                onChange={handleUserInfoChange}
-                            />
-                        </div>
-                    </div>
-
-
-                    <div className="accordionProfile">
-                        <button
-                            className="accordion-buttonLocation"
-                            onClick={() => setIsAccordionOpen(!isAccordionOpen)}
-                        >
-                            {isAccordionOpen ? 'Ocultar ubicación' : 'Agregar ubicación'}
-                        </button>
-                        {isAccordionOpen && (
-                            <>
-                                <div className="accordion-content active">
-                                    <label htmlFor="city">Ciudad Ciudad</label>
+                        <div className="inputProfile_Container">
+                            <div className="inputProfileContainer_Container">
+                                <div className="input-field">
+                                    <label>Género</label>
+                                    <select
+                                        name="gender"
+                                        className='selectOption'
+                                        value={user?.gender || ''}
+                                        onChange={handleUserInfoChange}
+                                    >
+                                        <option value="">Seleccionar</option>
+                                        <option value="Masculino">Masculino</option>
+                                        <option value="Femenino">Femenino</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                </div>
+                                <div className="input-field">
+                                    <label>Nombre</label>
                                     <input
                                         type="text"
-                                        id="city"
-                                        name="city"
-                                        placeholder="Ingresa tu ciudad"
-                                        value={user?.location?.city || ''}
+                                        name="first_name"
+                                        value={user?.first_name || ''}
                                         onChange={handleUserInfoChange}
                                     />
                                 </div>
-                                <div className="accordion-content active">
-                                    <label htmlFor="street">Calle Calle</label>
+                                <div className="input-field">
+                                    <label>Apellido</label>
                                     <input
                                         type="text"
-                                        id="street"
-                                        name="street"
-                                        placeholder="Ingresa tu dirección"
-                                        value={user?.location?.street || ''}
+                                        name="last_name"
+                                        value={user?.last_name || ''}
                                         onChange={handleUserInfoChange}
                                     />
                                 </div>
-                                <div className="accordion-content active">
-                                    <label htmlFor="postal_code">Código Postal</label>
+                                <div className="input-field">
+                                    <label>País</label>
+                                    <select
+                                        name="country"
+                                        className='selectOption'
+                                        value={user?.country || ''}
+                                        onChange={handleUserInfoChange}
+                                    >
+                                        <option value="">Seleccionar</option>
+                                        <option value="México">México</option>
+                                        <option value="España">España</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                </div>
+                                <div className="input-field">
+                                    <label>Numero de teléfono</label>
                                     <input
                                         type="text"
-                                        id="postal_code"
-                                        name="postal_code"
-                                        placeholder="Ingresa tu código postal"
-                                        value={user?.location?.postal_code || ''}
+                                        name="phone_number"
+                                        value={user?.phone_number || ''}
                                         onChange={handleUserInfoChange}
                                     />
                                 </div>
-                            </>
-                        )}
-                    </div>
-                    <div className="contact-preferences">
-                        <div className="contact-item">
-                            <label htmlFor="email" className="contact-label">
-                                Contactable por email
-                            </label>
-                            <input
-                                type="checkbox"
-                                name="contact_preferences.email"
-                                checked={user?.contact_preferences?.email || false}
-                                onChange={handleUserInfoChange}
-                            />
-                        </div>
-                        <div className="contact-item">
-                            <label htmlFor="phone" className="contact-label">
-                                Contactable por teléfono
-                            </label>
-                            <input
-                                type="checkbox"
-                                name="contact_preferences.phone"
-                                checked={user?.contact_preferences?.phone || false}
-                                onChange={handleUserInfoChange}
-                            />
-                        </div>
-                        <div className="contact-item">
-                            <label htmlFor="whatsapp" className="contact-label">
-                                Contactable por WhatsApp
-                            </label>
-                            <input
-                                type="checkbox"
-                                name="contact_preferences.whatsapp"
-                                checked={user?.contact_preferences?.whatsapp || false}
-                                onChange={handleUserInfoChange}
-                            />
-                        </div>
-                    </div>
-                    <div className="birth-date">
-                        <div className="date-selectors">
-                            <label>Año de nacimiento</label>
-                            <select
-                                name="birth_date.year"
-                                value={user?.birth_date?.year || ''}
-                                onChange={handleUserInfoChange}
-                            >
-                                <option value="">Seleccionar año</option>
-                                {Array.from({ length: 100 }, (_, i) => 2024 - i).map(year => (
-                                    <option key={year} value={year}>{year}</option>
-                                ))}
-                            </select>
+                            </div>
                         </div>
 
-                        <div className="date-selectors">
-                            <label>Mes de nacimiento</label>
-                            <select
-                                name="birth_date.month"
-                                value={user?.birth_date?.month || ''}
-                                onChange={handleUserInfoChange}
-                            >
-                                <option value="">Seleccionar mes</option>
-                                {['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'].map((month, idx) => (
-                                    <option key={idx} value={idx + 1}>{month}</option> // El mes se almacena como número
-                                ))}
-                            </select>
-                        </div>
 
-                        <div className="date-selectors">
-                            <label>Día de nacimiento</label>
-                            <select
-                                name="birth_date.day"
-                                value={user?.birth_date?.day || ''}
-                                onChange={handleUserInfoChange}
+                        <div className="accordionProfile">
+                            <button
+                                className="accordion-buttonLocation"
+                                onClick={() => setIsAccordionOpen(!isAccordionOpen)}
                             >
-                                <option value="">Seleccionar día</option>
-                                {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
-                                    <option key={day} value={day}>{day}</option>
-                                ))}
-                            </select>
+                                {isAccordionOpen ? 'Ocultar ubicación' : 'Agregar ubicación'}
+                            </button>
+                            {isAccordionOpen && (
+                                <>
+                                    <div className="accordion-content active">
+                                        <label htmlFor="city">Ciudad Ciudad</label>
+                                        <input
+                                            type="text"
+                                            id="city"
+                                            name="city"
+                                            placeholder="Ingresa tu ciudad"
+                                            value={user?.location?.city || ''}
+                                            onChange={handleUserInfoChange}
+                                        />
+                                    </div>
+                                    <div className="accordion-content active">
+                                        <label htmlFor="street">Calle Calle</label>
+                                        <input
+                                            type="text"
+                                            id="street"
+                                            name="street"
+                                            placeholder="Ingresa tu dirección"
+                                            value={user?.location?.street || ''}
+                                            onChange={handleUserInfoChange}
+                                        />
+                                    </div>
+                                    <div className="accordion-content active">
+                                        <label htmlFor="postal_code">Código Postal</label>
+                                        <input
+                                            type="text"
+                                            id="postal_code"
+                                            name="postal_code"
+                                            placeholder="Ingresa tu código postal"
+                                            value={user?.location?.postal_code || ''}
+                                            onChange={handleUserInfoChange}
+                                        />
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                        <div className="contact-preferences">
+                            <div className="contact-item">
+                                <label htmlFor="email" className="contact-label">
+                                    Contactable por email
+                                </label>
+                                <input
+                                    type="checkbox"
+                                    name="contact_preferences.email"
+                                    checked={user?.contact_preferences?.email || false}
+                                    onChange={handleUserInfoChange}
+                                />
+                            </div>
+                            <div className="contact-item">
+                                <label htmlFor="phone" className="contact-label">
+                                    Contactable por teléfono
+                                </label>
+                                <input
+                                    type="checkbox"
+                                    name="contact_preferences.phone"
+                                    checked={user?.contact_preferences?.phone || false}
+                                    onChange={handleUserInfoChange}
+                                />
+                            </div>
+                            <div className="contact-item">
+                                <label htmlFor="whatsapp" className="contact-label">
+                                    Contactable por WhatsApp
+                                </label>
+                                <input
+                                    type="checkbox"
+                                    name="contact_preferences.whatsapp"
+                                    checked={user?.contact_preferences?.whatsapp || false}
+                                    onChange={handleUserInfoChange}
+                                />
+                            </div>
+                        </div>
+                        <div className="birth-date_Container">
+                            <div className="birth-date">
+                                <div className="date-selectors">
+                                    <select
+                                        name="birth_date.year"
+                                        value={user?.birth_date?.year || ''}
+                                        onChange={handleUserInfoChange}
+                                    >
+                                        <option value="">Seleccionar año</option>
+                                        {Array.from({ length: 100 }, (_, i) => 2024 - i).map(year => (
+                                            <option key={year} value={year}>{year}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className="date-selectors">
+                                    <select
+                                        name="birth_date.month"
+                                        value={user?.birth_date?.month || ''}
+                                        onChange={handleUserInfoChange}
+                                    >
+                                        <option value="">Seleccionar mes</option>
+                                        {['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'].map((month, idx) => (
+                                            <option key={idx} value={idx + 1}>{month}</option> // El mes se almacena como número
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className="date-selectors">
+                                    <select
+                                        name="birth_date.day"
+                                        value={user?.birth_date?.day || ''}
+                                        onChange={handleUserInfoChange}
+                                    >
+                                        <option value="">Seleccionar día</option>
+                                        {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
+                                            <option key={day} value={day}>{day}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -416,10 +421,7 @@ export const Profile = () => {
                     <div className="submit-buttonProfile">
                         <button onClick={handleSaveChanges}>Guardar cambios</button>
                     </div>
-
-                    <div className="logout-buttonProfile">
-                        <button onClick={handleLogout} className="logout-button">Cerrar sesión</button>
-                    </div>
+                    
                 </div>
 
                 <div className="order-wishlist">
@@ -460,7 +462,12 @@ export const Profile = () => {
                                 })}
                             </div>
                         ) : (
-                            <p>No hay artículos en la lista de deseos.</p>
+                            <>
+                                <p className='alternative_noWishlist'>No hay artículos en la lista de deseos.</p>
+                                <div className="submit-buttonProfile">
+                                    <button onClick={handleNavigateToWishlist}>Ir a tienda</button>
+                                </div>
+                            </>
                         )}
 
 
@@ -471,6 +478,17 @@ export const Profile = () => {
                             </div>
                         )}
 
+                    </div>
+
+                    <div className="logOut_Container">
+                        <div className="logOut_blockSeparation">
+                            <div className="logOut_blockContent">
+                                <span>Log out</span>
+                            </div>
+                        </div>
+                        <div className="buttonBlock">
+                        <button onClick={handleLogout} className="logout-button">Cerrar sesión</button>
+                        </div>
                     </div>
                 </div>
             </div>

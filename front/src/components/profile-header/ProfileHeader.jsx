@@ -7,7 +7,8 @@ const ProfileImage = ({ initials, userName, isAdmin }) => {
 
     return (
         <div className="profile-image">
-            <img src={pictureProfile} alt="Perfil" />
+            <img className='imgHeader_Profile' src={pictureProfile} alt="Perfil" />
+            <div className="containerPadding_Image"></div>
             <div className="backgroundPadding_Image">
                 <div className="profile-initials">{displayInitials}</div>
                 <div className="user_name">{userName}</div>

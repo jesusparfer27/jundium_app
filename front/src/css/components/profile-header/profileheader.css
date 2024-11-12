@@ -1,0 +1,48 @@
+.profile-image {
+    height: 120vh;
+    padding-top: -20rem;
+}
+
+.imgHeader_Profile {
+    object-fit: cover;
+    padding-top: 30rem;
+}
+
+.profile-initials {
+    position: absolute;
+    top: 0; /* Top negativo para superponer sobre la imagen */
+    left: -20%;
+    transform: translateX(-50%);
+    transform: translateY(-175%);
+    background-color: #fff;
+    border-radius: 50%;
+    width: 16rem;
+    height: 16rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 2rem;
+    font-size: 2rem;
+    z-index: 2; /* Para que se superponga sobre la imagen */
+}
+
+.containerPadding_Image {
+    height: 10rem;
+    padding-top: 20rem;
+    width: 100%;
+    background-color: #D9D9D9;
+    margin-top: -10rem;
+}
+
+.backgroundPadding_Image {
+    position: relative;
+    padding: 2rem; /* Ajustar padding para crear el espacio entre la imagen y el contenido */
+    text-align: center; /* Centramos el texto */
+    margin-bottom: 9rem;
+}
+
+.user_name {
+    font-size: 1.5rem; /* Ajustar tamaño de fuente si es necesario */
+    text-align: center; /* Centrar el texto */
+    color: #333; /* Cambiar color si es necesario */
+}
