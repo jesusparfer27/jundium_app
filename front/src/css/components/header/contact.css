@@ -7,7 +7,6 @@
     height: 100%;
     background-color: white; /* Fondo blanco grisáceo */
     color: #333; /* Texto en tono gris oscuro */
-    
     z-index: 1001;
     display: flex;
     flex-direction: column;

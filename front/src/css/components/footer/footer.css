@@ -19,6 +19,31 @@ footer.footer-dark .footerSection strong {
     color: white; /* Color blanco en modo oscuro */
 }
 
+footer.footer-dark .input_subscribeNewsletter {
+    background-color: black;
+    border: 1px solid white;
+    margin: 0;
+}
+
+footer.footer-dark .input_subscribeNewsletter::placeholder {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-size: 18px;
+}
+
+footer.footer-dark .input_subscribeNewsletter.active {
+    background-color: black;
+    color: white;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-size: 18px;
+}
+
+footer.footer-dark .subscriptionInputContainer button {
+    border: 1px solid white;
+    color: white;
+}
+
 /* Cambia el color de los enlaces de redes sociales */
 .socialLinks a {
     text-decoration: none; /* Sin subrayado en los enlaces */
@@ -108,34 +133,38 @@ footer.footer-dark .socialLinks a {
     flex-direction: row;
     gap: 10px;
     width: 80%;
-}
-
-.subscriptionInputContainer input {
-    padding: 10px;
-    border-radius: 4px;
-    font-size: 0.9em;
-    color: black;
-    border: 1px solid black;
-}
-
-.subscriptionInputContainer input::placeholder {
-    color: #999;
+    margin-bottom: 1rem;
 }
 
 .subscriptionInputContainer button {
     background-color: transparent;
     color: black;
-    border: 1px solid black;
-    padding: 10px 15px;
+    border: 1px solid white;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
     font-size: 0.9em;
+    border: 1px solid black;
 }
 
-.subscriptionInputContainer button:hover {
-    background-color: white; /* Cambia el color del botón al pasar el mouse */
-    color: white; /* Cambia el color del texto del botón al pasar el mouse */
+.input_subscribeNewsletter {
+    background-color: transparent;
+    border: 1px solid black;
+    margin: 0;
+}
+
+.input_subscribeNewsletter::placeholder {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-size: 18px;
+}
+
+.input_subscribeNewsletter.active {
+    background-color: transparent;
+    color: black;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-size: 18px;
 }
 
 /* Estilos para la fila inferior del footer */

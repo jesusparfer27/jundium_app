@@ -40,21 +40,9 @@ body,
     text-align: center;
     z-index: 1;
     position: relative;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
 }
-
-/* .imageAutumn {
-    object-fit: cover;
-    width: 62%;
-    padding-left: 17rem;
-    padding-top: -2rem;
-    height: 100vh;
-    margin-top: 24.5rem;
-} */
-
-/* .newCollections.lastSection {
-    position: relative;
-    z-index: 2; 
-} */
 
 .h1Style {
     font-size: 2rem;
@@ -144,14 +132,14 @@ body,
 .videoWrapper {
     position: sticky;
     top: 0;
-    padding-top: 12rem;
+    padding-top: 13rem;
     overflow: hidden;
 }
 
 /* Estilo para la imagen de los productos */
 .itemImage {
     width: 20vw;
-    height: 485px;
+    height: 445px;
     
 }
 
@@ -160,7 +148,7 @@ body,
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 2rem;
+
 }
 
 .preloader {

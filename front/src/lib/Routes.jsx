@@ -11,12 +11,14 @@ import { Profile } from "../pages/Profile";
 import { SecondStepSignIn } from '../pages/SecondStepSignIn'
 import { Admin } from "../pages/Admin";
 import { MultifunctionalProductPage } from "../pages/MultifunctionalProductPage";
+import { ErrorPage } from "../pages/ErrorPage";
 
 // Crear las rutas
 const router = createBrowserRouter([
     {
         path: '/',
         element: <App />,
+        errorElement: <ErrorPage />, // Agregar aquí la página de error
         children: [
             {
                 index: true,

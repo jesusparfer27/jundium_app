@@ -7,6 +7,8 @@ import './css/app/app.css';
 import Footer from "./components/footer/Footer";
 import { useContext } from "react";
 import { HeaderContext } from "./context/HeaderContext";
+import { ScrollToTop } from "./lib/ScrollToTop";  // Importa el componente ScrollToTop
+
 
 function App() {
     return (
@@ -33,6 +35,7 @@ function MainContent() {
             )}
             
             <div className="mainContent">
+            <ScrollToTop /> {/* Asegúrate de que ScrollToTop esté dentro de MainContent */}
                 <Outlet />
             </div>
         </>

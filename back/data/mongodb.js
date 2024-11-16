@@ -48,10 +48,10 @@ const userSchema = new mongoose.Schema({
     gender: {
         type: String,
         enum: ['masculino', 'femenino', 'otro'],
-        required: true
-    },
-    phone_number: {
-        type: String,
+        required: true,
+        set: function(value) {
+            return value.toLowerCase(); // Convertir a minúsculas antes de guardarlo
+        }
     },
     birth_date: {
         type: Date,
@@ -95,8 +95,7 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    contact_preferences:
-    {
+    contact_preferences: {
         email: {
             type: Boolean,
             default: false
@@ -109,13 +108,21 @@ const userSchema = new mongoose.Schema({
             type: Boolean,
             default: false
         }
-    }, 
+    },
+    newsletter: {
+        subscribed: {
+            type: Boolean,
+            default: false,
+        },
+        subscription_date: {
+            type: Date,
+        }
+    },
     country: {
         type: String,
-        enum: ['masculino', 'femenino', 'otro'],
+        enum: ['México', 'Argentina', 'Colombia', 'Chile', 'Perú', 'España'], // Actualizar según países válidos
     },
-    location: 
-    {
+    location: {
         city: {
             type: String,
             default: "",
@@ -133,6 +140,39 @@ const userSchema = new mongoose.Schema({
     timestamps: true,
     versionKey: false,
     strict: false
+});
+
+const supportEmailSchema = new mongoose.Schema({
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User', // Referencia al esquema de usuarios
+        required: true
+    },
+    first_name: {
+        type: String,
+        required: true
+    },
+    user_email: {
+        type: String,
+        required: true,
+        validate: {
+            validator: function (v) {
+                return /^\S+@\S+\.\S+$/.test(v); // Validación simple de email
+            },
+            message: props => `${props.value} no es un correo válido!`
+        }
+    },
+    content: {
+        type: String,
+        required: true
+    },
+    sent_date: {
+        type: Date,
+        default: Date.now // Fecha actual por defecto
+    }
+}, {
+    timestamps: true,
+    versionKey: false
 });
 
 // Schema de Producto
@@ -377,6 +417,7 @@ const Product = mongoose.model('Product', productSchema, 'products');
 const Wishlist = mongoose.model('Wishlist', wishlistSchema, 'wishlists');
 const Order = mongoose.model('Order', orderSchema);
 const Cart = mongoose.model('Cart', cartSchema, 'cart');
+const SupportEmail = mongoose.model('SupportEmail', supportEmailSchema, 'support_emails');
 
 // Exportar la conexión y los modelos
-export { connectDB, User, Product, Wishlist, Order, Cart };
+export { connectDB, User, Product, Wishlist, Order, Cart, SupportEmail };

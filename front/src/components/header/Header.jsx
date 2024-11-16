@@ -21,7 +21,7 @@ const Header = () => {
     }, [location.pathname]);
 
     // Función para manejar el clic en el botón de login
-// Función para manejar el clic en el botón de login
+    // Función para manejar el clic en el botón de login
     useEffect(() => {
         setIsProductsPage(location.pathname === '/products');
     }, [location.pathname]); // Esto está correcto
@@ -88,10 +88,14 @@ const Header = () => {
                 {isProductsPage && (
                     <div className="headerFilter_Container">
                         <div className="headerFilter">
-                            <button className='button_filterButton' onClick={() => openMenu('button_filterButton')}>
-                                <span className="material-symbols-outlined">filter_list</span>
-                                <h3 className='h3Style'>Filtrar</h3>
-                            </button>
+                            <div className="flexButton_FilterColumn">
+                                <div className="flexButton_Filter">
+                                    <button className='button_filterButton' onClick={() => openMenu('button_filterButton')}>
+                                        <span className="material-symbols-outlined">filter_list</span>
+                                        <h3 className='h3Style_Filter'>Filtrar</h3>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 )}

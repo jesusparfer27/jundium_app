@@ -73,14 +73,24 @@
 
 .recomendSearches {
     list-style: none;
+    display: flex;
+}
+
+.searchRecommendation_Navlink {
+    display: flex;
+    gap: 1rem;
+    padding-top: .8rem;
+}
+
+.searchRecomendation_flexColumn span{
+    font-size: 20px;
 }
 
 .groupList_searchesRecomendations {
     padding: 0;
+    display: flex;
+    flex-direction: column;
 }
-
-
-
 
 /* Primer div para la barra de búsqueda */
 .searchInputContainer {

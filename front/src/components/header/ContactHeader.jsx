@@ -1,5 +1,6 @@
 // src/components/ContactContainer.jsx
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useRef, useState } from 'react';
+import  { useUser } from '../../hooks/useUser'
 import { HeaderContext } from '../../context/HeaderContext';
 import '../../css/components/header/header.css';
 import '../../css/components/header/closeButton.css'; // Importa los estilos del botón de cierre
@@ -8,6 +9,59 @@ import '../../css/components/header/contact.css'
 const ContactContainer = () => {
     const { activeMenu, closeMenu } = useContext(HeaderContext);
     const contactContainerRef = useRef(null);
+    const { VITE_API_BACKEND } = import.meta.env
+    
+    const { user } = useUser()
+    console.log(user)
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        content: ''
+    });
+    const [statusMessage, setStatusMessage] = useState('');
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!user) {
+            setStatusMessage('Usuario no autenticado.');
+            return;
+        }
+    
+        try {
+            const token = localStorage.getItem('authToken');
+    
+            const response = await fetch(`${VITE_API_BACKEND}/support/email`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    user_id: user,
+                    name: formData.name, // Ajustado a first_name
+                    email: formData.email,    // user_email en el schema
+                    content: formData.content
+                })
+            });
+            console.log(formData)
+    
+            if (response.ok) {
+                setStatusMessage('Tu mensaje se envió correctamente.');
+                setFormData({ name: '', email: '', content: '' });
+            } else {
+                const errorData = await response.json();
+                setStatusMessage(`Error al enviar mensaje: ${errorData.message}`);
+            }
+        } catch (error) {
+            console.error('Error al enviar la solicitud:', error);
+            setStatusMessage('Hubo un error al enviar tu mensaje. Inténtalo más tarde.');
+        }
+    };
 
     return (
         <div
@@ -35,12 +89,32 @@ const ContactContainer = () => {
                 </div>
                 <div className="formContainer">
                     <h1>Mandanos un Email</h1>
-                    <form className='formInfo'>
-                        <input type="text" placeholder="Tu nombre" />
-                        <input type="email" placeholder="Tu email" />
-                        <textarea placeholder="Tu mensaje"></textarea>
-                        <button type="submit">Enviar</button>
+                    <form className='formInfo' onSubmit={handleSubmit}>
+                    <input
+                            type="text"
+                            name="name"
+                            placeholder="Tu nombre"
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
+                        />
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="Tu email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                        />
+                        <textarea
+                        name="content" // Añade el atributo name
+                        placeholder="Tu mensaje"
+                        value={formData.content}
+                        onChange={handleChange}
+                        required></textarea>
+                        <button type="submit" onClick={handleSubmit}>Enviar</button>
                     </form>
+                    {statusMessage && <p className="statusMessage">{statusMessage}</p>}
                 </div>
             </div>
         </div>

@@ -210,7 +210,10 @@ select {
     display: flex;
     flex-direction: column;
     padding-top: 1rem;
-    
+}
+
+.labelFor_City {
+    padding-bottom: .8rem;
 }
 
 .contact-preferences {
@@ -357,6 +360,43 @@ select {
     display: flex;
     align-items: center;
     font-weight: bold;
+}
+
+.logOut_Container {
+    background-color: white;
+}
+
+.logOut_blockSeparation {
+    border-bottom: 1px solid black;
+    display: flex;
+    justify-content: center;
+}
+
+.logOut_blockContent {
+    width: 90%;
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+    font-size: 24px;
+}
+
+
+
+.buttonBlock {
+    padding-top: 2rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 2rem;
+}
+
+.logout-button {
+    background-color: transparent;
+    width: 90%;
+    padding-top: .8rem;
+    padding-bottom: .8rem;
+    cursor: pointer;
+    color: black;
+    border-radius: 17px;
 }
 
 .submit-buttonProfile_Orders_WishList {

@@ -39,7 +39,7 @@
 .genderSection.open {
     left: 25.8%;
     animation: slideInHorizontal 0.3s ease forwards;
-    border-right: 1px solid black;
+    border-right:1px solid black;
 }
 
 /* Estilos para el SideMenu */
@@ -277,7 +277,7 @@ h2 {
     margin-top: 3rem;
     padding-left: 3rem;
     border-top: 1px solid black;
-    width: 92%;
+    width: 91%;
 }
 
 /* Título del headerFooter */

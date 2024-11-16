@@ -273,3 +273,48 @@ export const updateUserById = async (req, res) => {
         });
     }
 };
+
+export const subscribeNewsletter = async (req, res) => {
+    const token = req.headers['authorization']?.split(' ')[1];
+    if (!token) {
+        return res.status(401).json({ message: 'Token no proporcionado', success: false });
+    }
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        const userId = decoded.id;
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'Usuario no encontrado', success: false });
+        }
+
+        // Verificar si el email coincide con el del usuario logueado
+        const { email } = req.body;
+        if (email.toLowerCase().trim() !== user.email.toLowerCase().trim()) {
+            return res.status(400).json({
+                message: 'El correo proporcionado no coincide con el correo del usuario logueado.',
+                success: false
+            });
+        }
+
+        // Actualizar la suscripción
+        user.newsletter.subscribed = true;
+        user.newsletter.subscription_date = new Date();
+        await user.save();
+
+        return res.status(200).json({
+            data: { email: user.email, subscribed: user.newsletter.subscribed },
+            message: "Usuario suscrito exitosamente a la newsletter",
+            success: true
+        });
+
+    } catch (error) {
+        console.error("Error al suscribir a la newsletter:", error);
+        return res.status(500).json({
+            message: 'Error en el servidor',
+            success: false,
+            error: error.message
+        });
+    }
+};

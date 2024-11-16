@@ -1,9 +1,10 @@
 import { Router } from 'express';
 import getProducts, { getProductById } from "../controllers/product.controller.js";
-import { getUsers, loginUser, getUserById, getMe, updateUserById } from '../controllers/users.controller.js';
+import { getUsers, loginUser, getUserById, getMe, updateUserById, subscribeNewsletter } from '../controllers/users.controller.js';
 import { authenticateToken } from '../middlewares/auth.js';
 import { addToWishlist, getWishlist, removeFromWishlist } from '../controllers/wishlist.controller.js';
 import { registerUser } from '../controllers/register.controller.js';
+import { sendSupportEmail } from '../controllers/email.support.controller.js';
 import {
     addToCart,
     getCart,
@@ -29,6 +30,8 @@ router.patch("/me/update", authenticateToken, updateUserById)
 
 router.post("/login", loginUser, authenticateToken);
 router.post("/register", registerUser);
+router.post("/newsletter", authenticateToken, subscribeNewsletter)
+router.post('/support/email', authenticateToken, sendSupportEmail);
 
 // Rutas para el carrito
 router.post("/cart", authenticateToken, addToCart); // Añadir producto al carrito

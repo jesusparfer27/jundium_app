@@ -24,7 +24,7 @@ const HeaderSearch = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [gender, setGender] = useState('');
     const [type, setType] = useState('');
-    const [showRecommendations, setShowRecommendations] = useState(false); 
+    const [showRecommendations, setShowRecommendations] = useState(false);
     const [recommendations, setRecommendations] = useState([]);
     const { VITE_API_BACKEND, VITE_PRODUCTS_ENDPOINT } = import.meta.env;
 
@@ -122,8 +122,10 @@ const HeaderSearch = () => {
                             <span>Para explorar...</span>
                             <ul className='groupList_searchesRecomendations'>
                                 {recommendations.map((rec, index) => (
-                                    <li className='recomendSearches'  key={index}>
-                                        <NavLink  to={`/products?search=${encodeURIComponent(rec)}`}>{rec}</NavLink>
+                                    <li className='recomendSearches' key={index}>
+                                        <NavLink className="searchRecommendation_Navlink" to={`/products?search=${encodeURIComponent(rec)}`}> <span className="material-symbols-outlined">
+                                            search
+                                        </span>{rec}</NavLink>
                                     </li>
                                 ))}
                             </ul>

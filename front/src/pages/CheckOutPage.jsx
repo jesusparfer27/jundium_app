@@ -18,9 +18,9 @@ export const CheckOutPage = () => {
     };
 
     const handleQuantityChange = (product_id, newQuantity) => {
-        setCartItems(prevCartItems => 
-            prevCartItems.map(item => 
-                item.product_id === product_id 
+        setCartItems(prevCartItems =>
+            prevCartItems.map(item =>
+                item.product_id === product_id
                     ? { ...item, quantity: newQuantity }
                     : item
             )
@@ -70,18 +70,18 @@ export const CheckOutPage = () => {
             const quantity = item.quantity || 1; // Obtiene la cantidad en item
             return sum + (basePrice * quantity); // Multiplica el precio base por la cantidad y suma
         }, 0);
-    
+
         setTotal(prevTotal => ({
             ...prevTotal,
             price: totalPrice,
             endingPrice: totalPrice + prevTotal.verySpenses, // Suma los gastos adicionales al precio total
         }));
     }, [cartItems]);
-    
+
     useEffect(() => {
         calculateTotalPrice();
     }, [cartItems, calculateTotalPrice]);
-    
+
 
     const toggleSection = (section) => {
         setExpandedSections(prevSections => ({
@@ -93,7 +93,7 @@ export const CheckOutPage = () => {
     const handleOpenModal = () => {
         openMenu('modal');
     };
-    
+
 
     return (
         <section className="checkoutSection">
@@ -132,21 +132,8 @@ export const CheckOutPage = () => {
                                 <div className="infoProductCheckOut">
                                     <div className="product-header">
                                         <div className='divCosts'>{product_id?.name || "Nombre no disponible"}</div>
-                                        <div className='divCosts'>{name || "Nombre no disponible"}</div>
                                     </div>
                                     <div className="upperInformation">
-                                        <div className="color-size">
-                                            <div className='divCosts'>Descripción:</div>
-                                            <div className='divCosts'>{product_id?.description || "Descripción no disponible"}</div>
-                                        </div>
-                                        <div className="color-size">
-                                            <div className='divCosts'>Colección:</div>
-                                            <div className='divCosts'>{product_id?.collection || "Colección no disponible"}</div>
-                                        </div>
-                                        <div className="color-size">
-                                            <div className='divCosts'>Marca:</div>
-                                            <div className='divCosts'>{product_id?.brand || "Marca no disponible"}</div>
-                                        </div>
                                         {selectedVariant && (
                                             <p>Color: {selectedVariant.color.colorName}</p>
                                         )}
@@ -156,18 +143,18 @@ export const CheckOutPage = () => {
                                         </div>
                                     </div>
                                     <div className="quantity-price">
-    <div className='divCosts'>
-        <select 
-            value={quantity} 
-            onChange={(e) => handleQuantityChange(product_id, parseInt(e.target.value))}
-        >
-            {[...Array(50)].map((_, i) => (
-                <option key={i} value={i + 1}>{i + 1}</option>
-            ))}
-        </select>
-    </div>
-    <div className='divCosts'>{(basePrice * quantity).toFixed(2)} €</div>
-</div>
+                                        <div className='divCosts'>
+                                            <select
+                                                value={quantity}
+                                                onChange={(e) => handleQuantityChange(product_id, parseInt(e.target.value))}
+                                            >
+                                                {[...Array(50)].map((_, i) => (
+                                                    <option key={i} value={i + 1}>{i + 1}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <div className='divCosts'>{(basePrice * quantity).toFixed(2)} €</div>
+                                    </div>
 
                                     <div className="action-buttons">
                                         <button className="favorites-button" onClick={() => console.log(`Añadir ${name} a favoritos`)}>Añadir a favoritos</button>

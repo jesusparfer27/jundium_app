@@ -303,7 +303,7 @@ export const Profile = () => {
                             {isAccordionOpen && (
                                 <>
                                     <div className="accordion-content active">
-                                        <label htmlFor="city">Ciudad Ciudad</label>
+                                        <label className='labelFor_City' htmlFor="city">Ciudad Ciudad</label>
                                         <input
                                             type="text"
                                             id="city"
@@ -314,7 +314,7 @@ export const Profile = () => {
                                         />
                                     </div>
                                     <div className="accordion-content active">
-                                        <label htmlFor="street">Calle Calle</label>
+                                        <label className='labelFor_City' htmlFor="street">Calle Calle</label>
                                         <input
                                             type="text"
                                             id="street"
@@ -325,7 +325,7 @@ export const Profile = () => {
                                         />
                                     </div>
                                     <div className="accordion-content active">
-                                        <label htmlFor="postal_code">Código Postal</label>
+                                        <label className='labelFor_City' htmlFor="postal_code">Código Postal</label>
                                         <input
                                             type="text"
                                             id="postal_code"

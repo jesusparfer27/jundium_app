@@ -98,8 +98,7 @@ html,
     top: 0;
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
     color: black; /* Texto siempre negro */
-    padding-top: .5rem;
-    padding-bottom: .5rem;
+    
     border-bottom: 1px solid #dcdcdc;
     z-index: 11;
     
@@ -177,13 +176,48 @@ header {
     flex-direction: column;
 }
 
+.button_filterButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    border: 1px solid black;
+    border-radius: 22px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    font-size: 16px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    color: black;
+    height: 4vh;
+    cursor: pointer;
+}
+
+
+
+
+.flexButton_FilterColumn {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+}
+
+.flexButton_Filter {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
 .headerFilter_Container {
     width: 100%;
     background-color: white;
     display: flex;
-    margin-top: 5.2rem;
-    padding: 0.5rem 0;
-    height: 40px;
+    padding-top:87px;
+    padding-bottom: 9px;
+    
 }
 
 /* Estilos para el botón de filtro */
@@ -191,40 +225,11 @@ header {
     display: flex;
     width: 97%;
     justify-content: flex-end;
-}
-
-.button_filterButton {
-    background: none;
-    border: none;
-    cursor: pointer;
-    border: 1px solid black;
-    border-radius: 22px;
-    width: 5%;
-    display: flex;
-    justify-content: center;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 16px;
-    color: black;
-    margin-top: 0.5rem;
-    cursor: pointer;
-}
-
-.button_filterButton:hover {
-    border: 2px solid black;
 }
 
 
 .headerFilter h3 {
     font-size: 16px;
 }
-
-.button_filterButton {
-   
-  
-}
-
-/* Línea separadora en el header */
-/* Línea separadora en el header */
-
 

@@ -131,7 +131,7 @@ export const HomePage = () => {
     );
 
     return (
-        <main className={imagesLoaded ? "images-loaded" : "images-loading"}>
+        <main className="images-loaded">
             <section className="videoScrollContainer">
                 <div className="videoWrapper">
                     <img
