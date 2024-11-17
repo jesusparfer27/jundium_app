@@ -4,6 +4,8 @@ import { getUsers, loginUser, getUserById, getMe, updateUserById, subscribeNewsl
 import { authenticateToken } from '../middlewares/auth.js';
 import { addToWishlist, getWishlist, removeFromWishlist } from '../controllers/wishlist.controller.js';
 import { verifyAdmin, adminUser } from '../controllers/admin.controller.js';
+import { upload } from '../middlewares/multer.js';  // Importar el middleware de multer
+import { createProduct } from '../controllers/create.products.controller.js';
 import { registerUser } from '../controllers/register.controller.js';
 import { sendSupportEmail } from '../controllers/email.support.controller.js';
 import {
@@ -35,6 +37,8 @@ router.post("/login", loginUser, authenticateToken);
 router.post("/register", registerUser);
 router.post("/newsletter", authenticateToken, subscribeNewsletter)
 router.post('/support/email', authenticateToken, sendSupportEmail);
+
+router.post('/create-product', upload.array('images', 10), createProduct);
 
 // Rutas para el carrito
 router.post("/cart", authenticateToken, addToCart); // Añadir producto al carrito

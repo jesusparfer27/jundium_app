@@ -5,8 +5,15 @@ import ProfileImage from '../components/profile-header/ProfileHeader';
 import { useUser } from '../hooks/useUser'
 
 export const Admin = () => {
+
+    const [variants, setVariants] = useState([]);
+    const [variantCount, setVariantCount] = useState(0);
+    const [activeAccordion, setActiveAccordion] = useState('general');
+    const [imageUrls, setImageUrls] = useState([]);
+    // Estado para guardar los archivos seleccionados
+    const [fileNames, setFileNames] = useState([]);
+
     const [generalProduct, setGeneralProduct] = useState({
-        name: '',
         collection: '',
         brand: '',
         type: '',
@@ -14,17 +21,11 @@ export const Admin = () => {
         new_arrival: true,
         featured: false,
     });
-
-    const [variants, setVariants] = useState([]);
-    const [activeAccordion, setActiveAccordion] = useState('general');
-    const [variantCount, setVariantCount] = useState(1);
-
-    const [productData, setProductData] = useState([])
-
     const [currentVariant, setCurrentVariant] = useState({
         color: { colorName: '', hexCode: '' },
         size: [],
         material: '',
+        name: '',
         price: '',
         discount: 0,
         image: [],
@@ -45,6 +46,8 @@ export const Admin = () => {
     const [isAdmin, setIsAdmin] = useState(false); // Estado para verificar si el usuario es admin
     const [adminData, setAdminData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);  // Estado para manejo de carga
+
+    // LOGICAS PARA LA AUTORIZACIÓN DEL ADMINISTRADOR
 
     useEffect(() => {
         // Espera hasta que el usuario esté cargado completamente
@@ -71,128 +74,6 @@ export const Admin = () => {
         console.log('Estado de usuario:', user);
     }, [user]);
 
-    // Cambiar estado para las propiedades generales del producto
-    const handleGeneralChange = (e) => {
-        const { id, value } = e.target;
-        setGeneralProduct({ ...generalProduct, [id]: value });
-    };
-
-    // Manejar el cambio en el input de talla
-    const handleSizeChange = (e) => {
-        setCurrentSize(e.target.value.toUpperCase()); // Convertir a mayúsculas para consistencia
-    };
-
-    // Agregar talla al listado
-    const handleAddSize = () => {
-        if (currentSize && !sizes.includes(currentSize)) {
-            setSizes((prevSizes) => [...prevSizes, currentSize]);
-        }
-        setCurrentSize(''); // Limpiar el input después de añadir
-    };
-
-    // Eliminar talla del listado
-    const handleDeleteSize = (sizeToRemove) => {
-        setSizes((prevSizes) => prevSizes.filter((size) => size !== sizeToRemove));
-    };
-
-    // Cambiar estado para las propiedades de la variante actual
-    const handleVariantChange = (e) => {
-        const { id, value } = e.target;
-
-        if (id === 'colorName' || id === 'hexCode') {
-            setCurrentVariant((prev) => ({
-                ...prev,
-                color: {
-                    ...prev.color,
-                    [id === 'colorName' ? 'colorName' : 'hexCode']: value,
-                },
-            }));
-        } else {
-            setCurrentVariant((prev) => ({
-                ...prev,
-                [id]: value,
-            }));
-        }
-    };
-
-
-    const addNewVariantAccordion = () => {
-        // Validar que la variante actual tenga datos válidos antes de guardarla
-        if (!currentVariant.color.colorName || !currentVariant.price) {
-            alert('Por favor, completa todos los campos obligatorios de la variante.');
-            return;
-        }
-
-        // Guardar la variante actual en la lista de variantes
-        setVariants((prevVariants) => [...prevVariants, currentVariant]);
-
-        // Reiniciar el estado de la variante actual
-        setCurrentVariant({
-            color: { colorName: '', hexCode: '' },
-            size: [],
-            material: '',
-            price: '',
-            discount: 0,
-            image: [],
-            is_main: false,
-            description: '',
-        });
-
-        // Incrementar el contador de variantes (si se usa para el diseño)
-        setVariantCount((prevCount) => prevCount + 1);
-    };
-
-    // Agregar talla al array de tamaños de la variante
-    const addSize = (size) => {
-        if (!size || currentVariant.size.includes(size)) return;
-        setCurrentVariant((prev) => ({
-            ...prev,
-            size: [...prev.size, size],
-        }));
-    };
-
-    // Agregar imagen al array de imágenes de la variante
-    const addImage = (url) => {
-        if (!url) return;
-        setCurrentVariant((prev) => ({
-            ...prev,
-            image: [...prev.image, url],
-        }));
-    };
-
-    // Guardar la variante actual en la lista de variantes
-    const saveVariant = () => {
-        setVariants((prev) => [...prev, currentVariant]);
-        setCurrentVariant({
-            color: { colorName: '', hexCode: '' },
-            size: [],
-            material: '',
-            price: '',
-            discount: 0,
-            image: [],
-            is_main: false,
-            description: '',
-        });
-    };
-
-    // Cambiar el estado de `new_arrival` después de una semana
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setGeneralProduct((prev) => ({ ...prev, new_arrival: false }));
-        }, 7 * 24 * 60 * 60 * 1000); // 1 semana
-
-        return () => clearTimeout(timer);
-    }, []);
-
-    // Manejar el envío del producto completo
-    const handleSubmit = () => {
-        const completeProduct = {
-            ...generalProduct,
-            variants,
-        };
-        console.log('Producto completo:', completeProduct);
-
-    };
 
     useEffect(() => {
         if (isAdmin) {
@@ -226,13 +107,302 @@ export const Admin = () => {
         }
     };
 
+
+
+
+
+    // LOGICAS PARA CREAR TALLAS
+
+    // Manejar el cambio en el input de talla
+    const handleSizeChange = (e) => {
+        setCurrentSize(e.target.value.toUpperCase()); // Convertir a mayúsculas
+    };
+
+    // Eliminar talla del listado
+    const handleDeleteSize = (sizeToRemove) => {
+        const updatedSizes = sizes.filter((size) => size !== sizeToRemove);
+        setSizes(updatedSizes);
+        setCurrentVariant((prevVariant) => ({
+            ...prevVariant,
+            size: updatedSizes,
+        }));
+    };
+
+    // Agregar talla al listado
+    const handleAddSize = () => {
+        if (currentSize && !sizes.includes(currentSize)) {
+            const updatedSizes = [...sizes, currentSize.toUpperCase()];
+            setSizes(updatedSizes);
+            setCurrentVariant((prevVariant) => ({
+                ...prevVariant,
+                size: updatedSizes,
+            }));
+        } else {
+            alert('La talla ya está en la lista o está vacía.');
+        }
+        setCurrentSize('');
+    };
+
+
+
+
+    // LOGICAS PARA AGREGAR IMAGENES
+
+    // Agregar imagen al array de imágenes de la variante
+    const addImage = (url) => {
+        if (!url) return;
+        setCurrentVariant((prev) => ({
+            ...prev,
+            image: [...prev.image, url],
+        }));
+    };
+
+
+    const generateImageFolderPath = (product, variant) => {
+        console.log('Product:', product);
+        console.log('Variant:', variant);
+        // Destructurar con validaciones
+        const type = product?.type || 'unknownType';
+        const gender = product?.gender || 'unknownGender';
+        const name = variant?.name || 'unknownProduct';
+        const colorName = variant?.color?.colorName || 'unknownColor';
+
+        // Crear estructura de carpetas
+        const folderPath = `${gender}/${type}/${name}/${colorName}`;
+        console.log('Folder Path:', folderPath);
+        return folderPath;
+    };
+
+    // Ejemplo de uso
+    const folderPath = generateImageFolderPath(generalProduct, currentVariant);
+    console.log(folderPath); // Esto mostrará la ruta generada en consola
+
+
+
+    // Manejar el cambio en un campo de input de imagen
+
+    const handleImageChange = (index, value) => {
+        const endpoint = value.trim();
+        if (imageUrls.includes(endpoint) && imageUrls[index] !== endpoint) {
+            alert("El endpoint ya existe.");
+            return;
+        }
+
+        const updatedUrls = [...imageUrls];
+        updatedUrls[index] = endpoint || '';
+        setImageUrls(updatedUrls);
+
+        setCurrentVariant((prevVariant) => ({
+            ...prevVariant,
+            image: updatedUrls.filter((url) => url !== ''), // Eliminar cualquier valor vacío
+        }));
+    };
+
+
+    const handleDeleteImageInput = (index) => {
+        const updatedUrls = imageUrls.filter((_, i) => i !== index); // Removemos el índice correspondiente
+        setImageUrls(updatedUrls);
+
+        // Sincronizamos con currentVariant.image
+        setCurrentVariant((prevVariant) => ({
+            ...prevVariant,
+            image: updatedUrls,
+        }));
+    };
+
+    const handleAddImageInput = () => {
+        if (imageUrls.includes('')) {
+            alert("Ya existe un campo vacío.");
+            return;
+        }
+        setImageUrls((prevUrls) => [...prevUrls, '']);  // Asegúrate de que sea una cadena vacía
+    };
+
+
+
+    // HANDLE CHANGES
+
+    // Cambiar estado para las propiedades de la variante actual
+    const handleVariantChange = (e) => {
+        const { id, value } = e.target;
+
+        if (id === 'colorName' || id === 'hexCode') {
+            setCurrentVariant((prev) => ({
+                ...prev,
+                color: {
+                    ...prev.color,
+                    [id === 'colorName' ? 'colorName' : 'hexCode']: value,
+                },
+            }));
+        } else {
+            setCurrentVariant((prev) => ({
+                ...prev,
+                [id]: value,
+            }));
+        }
+    };
+
+    // Cambiar estado para las propiedades generales del producto
+    const handleGeneralChange = (e) => {
+        const { id, value, type, checked } = e.target;
+        setGeneralProduct((prev) => ({
+            ...prev,
+            [id]: type === 'checkbox' ? checked : value,
+        }));
+    };
+    
+
+    // Manejar el envío del producto completo
+
     const handleChange = (e) => {
-        const { id, value, type, checked, files } = e.target;
-        setProductData({
-            ...productData,
-            [id]: type === 'checkbox' ? checked : (type === 'file' ? files[0] : value),
+        const { id, type, files } = e.target;
+
+        if (type === 'file') {
+            const selectedFiles = Array.from(files); // Convierte el FileList a un array
+
+            // Validar archivos: extensión y tamaño (máximo 2 MB)
+            const invalidFile = selectedFiles.find(file => file.size > 2 * 1024 * 1024 || !['image/jpeg', 'image/png'].includes(file.type));
+
+            if (invalidFile) {
+                alert('Solo se permiten archivos JPEG o PNG de hasta 2 MB.');
+                return;
+            }
+
+            // Actualizar el estado con el primer archivo seleccionado (o puedes manejar todos los archivos)
+            setGeneralProduct((prev) => ({
+                ...prev,
+                [id]: selectedFiles[0], // Si solo quieres el primer archivo
+            }));
+
+            // Guardar los nombres de los archivos seleccionados
+            setFileNames(selectedFiles.map(file => file.name)); // Guardar todos los nombres de los archivos
+        } else {
+            setGeneralProduct((prev) => ({
+                ...prev,
+                [id]: e.target[type === 'checkbox' ? 'checked' : 'value'],
+            }));
+        }
+    };
+
+
+
+
+    //  LOGICAS PARA EL SUBMIT DE PRODUCTOS Y VARIANTES
+
+    const validateProductData = () => {
+        if (!generalProduct.name || !generalProduct.type || variants.length === 0) {
+            alert('Por favor, completa los campos obligatorios antes de enviar.');
+            return false;
+        }
+        return true;
+    };
+
+    // Guardar la variante actual en la lista de variantes
+    const saveVariant = () => {
+        setVariants((prev) => [...prev, currentVariant]);
+        setCurrentVariant({
+            color: { colorName: '', hexCode: '' },
+            size: [],
+            material: '',
+            price: '',
+            discount: 0,
+            image: [],
+            is_main: false,
+            description: '',
         });
     };
+
+    const handleSubmit = async () => {
+        if (!validateProductData()) return;
+
+        const formData = new FormData();
+
+        // Agregar datos generales del producto
+        Object.keys(generalProduct).forEach((key) => {
+            formData.append(key, generalProduct[key]);
+        });
+
+        // Agregar imágenes
+        formData.append('imageUrls', JSON.stringify(imageUrls));
+        console.log(formData)
+
+        // Agregar variantes del producto
+        formData.append('variants', JSON.stringify(variants));
+
+        // Agregar imágenes de las variantes
+        variants.forEach((variant, index) => {
+            if (variant.image && variant.image.length > 0) {
+                variant.image.forEach((file, idx) => {
+                    formData.append(`image_${index}_${idx}`, file);
+                });
+            }
+        });
+
+        try {
+            const token = localStorage.getItem('authToken');
+            const response = await fetch(`${VITE_API_BACKEND}/create-product`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al crear el producto.');
+            }
+
+            const data = await response.json();
+            console.log('Producto creado con éxito:', data);
+            navigate('/admin'); // Redirigir a la vista de administración o donde desees
+        } catch (err) {
+            console.error('Error en la creación del producto:', err);
+        }
+    };
+
+
+
+
+
+    // LOGICAS PARA LOS ACORDEONES
+
+    // Lógica para agregar una nueva variante sin reiniciar la variante actual
+    const addNewVariantAccordion = (e) => {
+        e.preventDefault();
+
+        // Guardar la variante actual
+        setVariants((prevVariants) => [...prevVariants, currentVariant]);
+
+        // Incrementar el contador para la variante
+        setVariantCount((prevCount) => prevCount + 1);
+
+        // Agregar una nueva variante vacía para continuar trabajando en ella
+        setCurrentVariant({
+            color: { colorName: '', hexCode: '' },
+            size: [],
+            material: '',
+            price: '',
+            discount: 0,
+            image: [],
+            is_main: false,
+            description: '',
+        });
+    };
+
+
+
+    // LOGICAS PARA NEW ARRIVALS
+
+    // Cambiar el estado de `new_arrival` después de una semana
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setGeneralProduct((prev) => ({ ...prev, new_arrival: false }));
+        }, 7 * 24 * 60 * 60 * 1000); // 1 semana
+
+        return () => clearTimeout(timer);
+    }, []);
+
+
 
     return (
         <section className="admin-panel">
@@ -242,69 +412,87 @@ export const Admin = () => {
                 <>
                     <div className="createProductContainer">
                         <div className="createProduct">
-                            <div className="containerTittle_AdminContainer_Create">
-                                <div className="containerTittle_AdminCreate">
-                                    <h1>Create a product</h1>
-                                </div>
-                            </div>
-                            <div className="productForm">
-                                <div className="divForm_ColumnContainer">
-                                    <div className="divForm_Column">
-                                        <label htmlFor="typeOfProduct" className="labelTypeOfProduct">Gender</label>
-                                        <select
-                                            name=""
-                                            id="">
-                                            <option value="mujer">Mujer</option>
-                                            <option value="hombre">Hombre</option>
-                                            <option value="unisex">Unisex</option>
-                                        </select>
-                                    </div>
-                                    <div className="divForm_Column">
-                                        <label htmlFor="typeOfProduct" className="labelTypeOfProduct">Brand</label>
-                                        <input
-                                            type="text"
-                                            id="brand"
-                                            className="inputTypeOfProduct"
-                                            placeholder="EXAMPLE: Camiseta"
-                                            value={productData.brand}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
-                                    <div className="divForm_Column">
-                                        <label htmlFor="typeOfProduct" className="labelTypeOfProduct">Collection</label>
-                                        <input
-                                            type="text"
-                                            id="collection"
-                                            className="inputTypeOfProduct"
-                                            placeholder="EXAMPLE: Camiseta"
-                                            value={productData.collection}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
-                                    <div className="divForm_Column">
-                                        <label htmlFor="typeOfProduct" className="labelTypeOfProduct">Tipo de Producto</label>
-                                        <select
-                                            name=""
-                                            id="">
-                                            <option value="camiseta">Camiseta</option>
-                                            <option value="abrigo">Abrigo</option>
-                                            <option value="zapatillas">Zapatillas</option>
-                                            <option value="bolso">Bolso</option>
-                                        </select>
+                            <form onSubmit={handleSubmit}>
+                                <div className="containerTittle_AdminContainer_Create">
+                                    <div className="containerTittle_AdminCreate">
+                                        <h1>Create a product</h1>
                                     </div>
                                 </div>
-                            </div>
+                                <div className="productForm">
+                                    <div className="divForm_ColumnContainer">
+                                        <div className="divForm_Column">
+                                            <label htmlFor="typeOfProduct" className="labelTypeOfProduct">Gender</label>
+                                            <select
+                                                id="gender"
+                                                value={generalProduct.gender}
+                                                onChange={handleChange}
+                                            >
+                                                <option value="">Select Gender</option>
+                                                <option value="mujer">Mujer</option>
+                                                <option value="hombre">Hombre</option>
+                                                <option value="unisex">Unisex</option>
+                                            </select>
+                                        </div>
+
+                                        <div className="divForm_Column">
+                                            <label htmlFor="brand" className="labelTypeOfProduct">Brand</label>
+                                            <input
+                                                type="text"
+                                                id="brand"
+                                                className="inputTypeOfProduct"
+                                                placeholder="EXAMPLE: Nike"
+                                                value={generalProduct.brand}
+                                                onChange={handleChange}
+                                            />
+                                        </div>
+
+                                        <div className="divForm_Column">
+                                            <label htmlFor="collection" className="labelTypeOfProduct">Collection</label>
+                                            <input
+                                                type="text"
+                                                id="collection"
+                                                className="inputTypeOfProduct"
+                                                placeholder="EXAMPLE: Spring 2024"
+                                                value={generalProduct.collection}
+                                                onChange={handleChange}
+                                            />
+                                        </div>
+
+                                        <div className="divForm_Column">
+                                            <label htmlFor="type" className="labelTypeOfProduct">Tipo de Producto</label>
+                                            <select
+                                                id="type"
+                                                value={generalProduct.type}
+                                                onChange={handleChange}
+                                            >
+                                                <option value="">Select Type</option>
+                                                <option value="camiseta">Camiseta</option>
+                                                <option value="abrigo">Abrigo</option>
+                                                <option value="zapatillas">Zapatillas</option>
+                                                <option value="bolso">Bolso</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
+
 
                     <div className={`accordion ${activeAccordion === 'variant' ? 'open' : ''}`}>
                         <div className="createVariant_Container">
                             <div className="containerTittle_AdminContainer">
                                 <div className="containerTittle_Admin">
-                                    <h2 className='text_createVariant' onClick={() => setActiveAccordion('variant')}>Variante</h2>
+                                    <h2 className='text_createVariant' onClick={() => setActiveAccordion('variant')}>
+                                        Variante {variantCount + 1}
+                                    </h2> {/* Aquí mostramos el número de variante */}
                                 </div>
                             </div>
-                            {activeAccordion === 'variant' && (
+
+                            {/* Mostrar las variantes creadas */}
+
+
+                            <div className="variant">
                                 <div className="variantForm">
                                     {/* Campos de la variante */}
                                     <div className="divForm_Column">
@@ -364,7 +552,6 @@ export const Admin = () => {
                                             >
                                                 Enviar talla
                                             </button>
-
                                         </div>
                                         <div className="containerSize_Display">
                                             <div className="blockSize_Display">
@@ -394,25 +581,63 @@ export const Admin = () => {
                                             <input
                                                 name='image'
                                                 type="file"
+                                                multiple
                                                 id="image"
                                                 className="inputImage"
                                                 onChange={handleChange}
                                             />
                                         </div>
+                                        <div className="fileList">
+                                            {fileNames.length > 0 && (
+                                                <ul>
+                                                    {fileNames.map((name, index) => (
+                                                        <li key={index}>{name}</li>
+                                                    ))}
+                                                </ul>
+                                            )}
+                                            {fileNames.length === 0 && <p>No hay archivos seleccionados.</p>}
+                                        </div>
                                     </div>
                                     {/* Agregar imágenes */}
                                     <div className="divForm_Column">
-                                        <label htmlFor="image">Agregar Imagen:</label>
-                                        <input
-                                            name='image'
-                                            type="text"
-                                            id="image"
-                                            placeholder="URL de la imagen"
-                                            onKeyDown={(e) => e.key === 'Enter' && addImage(e.target.value)}
-                                        />
+                                        {/* Botón para agregar un nuevo input */}
+                                        <div className="buttonContainer_addNew_imageUrl">
+                                            <button
+                                                className="button_addNew_imageUrl"
+                                                type="button"
+                                                onClick={handleAddImageInput}
+                                            >
+                                                Nuevo input
+                                            </button>
+                                        </div>
+                                        <label htmlFor="image">Agregar Endpoint de Imagen:</label>
+
+                                        {/* Lista de inputs dinámicos */}
+                                        {imageUrls.map((imageUrl, index) => (
+                                            <div key={index} className="imageInputContainer">
+                                                <input
+                                                    name={`image_${index}`}
+                                                    type="text"
+                                                    id={`image_${index}`}
+                                                    placeholder="Endpoint de la imagen (e.g., /red-shoes)"
+                                                    value={imageUrl || ''}  // Asegúrate de que no sea undefined
+                                                    onChange={(e) => handleImageChange(index, e.target.value)}
+                                                />
+                                                <button
+                                                    type="button"
+                                                    className="button_remove_imageUrl"
+                                                    onClick={() => handleDeleteImageInput(index)}
+                                                >
+                                                    Eliminar
+                                                </button>
+                                            </div>
+                                        ))}
                                     </div>
+
+                                    {/* Mostrar los endpoints en la lista */}
                                     <div className="divForm_Column">
                                         <div className="imageList">
+                                            <strong>Endpoints Agregados:</strong>
                                             {currentVariant.image.map((img, index) => (
                                                 <div key={index}>{img}</div>
                                             ))}
@@ -457,7 +682,7 @@ export const Admin = () => {
                                         />
                                     </div>
                                 </div>
-                            )}
+                            </div>
                         </div>
                     </div>
 
@@ -472,7 +697,7 @@ export const Admin = () => {
                     </div>
 
 
-                    <div className="editProductContainer">
+                    {/* <div className="editProductContainer">
                         <div className="editProduct">
                             <div className="containerTittle_Admin">
                                 <h1>Edit a product</h1>
@@ -517,11 +742,12 @@ export const Admin = () => {
                         <button className="submitEditProductButton" onClick={handleSubmit}>
                             Editar Producto
                         </button>
-                    </div>
+                    </div> */}
                 </>
             ) : (
                 <p>No tienes permisos para acceder a esta sección.</p>
-            )}
-        </section>
+            )
+            }
+        </section >
     );
 };
