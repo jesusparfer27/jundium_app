@@ -3,6 +3,7 @@ import getProducts, { getProductById } from "../controllers/product.controller.j
 import { getUsers, loginUser, getUserById, getMe, updateUserById, subscribeNewsletter } from '../controllers/users.controller.js';
 import { authenticateToken } from '../middlewares/auth.js';
 import { addToWishlist, getWishlist, removeFromWishlist } from '../controllers/wishlist.controller.js';
+import { verifyAdmin, adminUser } from '../controllers/admin.controller.js';
 import { registerUser } from '../controllers/register.controller.js';
 import { sendSupportEmail } from '../controllers/email.support.controller.js';
 import {
@@ -27,6 +28,8 @@ router.get("/me", authenticateToken, getMe);
 router.get("/users", getUsers);
 
 router.patch("/me/update", authenticateToken, updateUserById)
+
+router.get("/admin", verifyAdmin, adminUser);
 
 router.post("/login", loginUser, authenticateToken);
 router.post("/register", registerUser);

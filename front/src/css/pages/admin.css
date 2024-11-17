@@ -7,9 +7,66 @@
     padding-bottom: 4rem;
 }
 
+.containerTittle_AdminContainer_Create {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.containerTittle_AdminCreate {
+    width: 88%;
+}
+
+.productForm {
+    width: 100%;
+    flex-direction: column;
+    display: flex;
+}
+
+.accordion.open {
+    width: 91%;
+    background-color: white;
+    border: none;
+}
+
+.variantForm {
+    width: 100%;
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.divForm_ColumnContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center ;
+    gap: 1rem;
+}
+
+.text_createVariant {
+    padding-bottom: 1rem;
+}
+
+
+
+.divForm_Column {
+    width: 88%;
+    gap: .6rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
 .createProductContainer {
     display: flex;
     justify-content: center;
+    margin-top: -20rem;
+    z-index: 10;
 }
 
 .editProductContainer {
@@ -30,36 +87,27 @@
     gap: 1rem;
     padding: 1rem;
     margin-top: 1rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
 
-.introduceTypeOfProduct, .introduceName, .introducePrice,
-.introduceImage, .introduceMultimedia, .introduceSetSizes,
-.introduceSetColors, .introduceAddMaterials, .introduceAddDescription,
-.editProductReference, .editDiscount, .editSetOutOfStock {
+.containerTittle_Admin {
+    width: 95%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.containerTittle_Admin h1 {
+    display: flex;
+    justify-content: center;
+}
+
+
+
+.containerTittle_AdminContainer {
     width: 100%;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.introduceTypeOfProduct label, .introduceName label, .introducePrice label, 
-.introduceImage label, .introduceMultimedia label, .introduceSetSizes label, 
-.introduceSetColors label, .introduceAddMaterials label, 
-.introduceAddDescription label, .editProductReference label, 
-.editDiscount label, .editSetOutOfStock label {
-    font-weight: bold;
-    width: 90%;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-    padding-bottom: .5rem;
-}
-
-input, textarea {
-    width: 90%;
-    padding: 01rem;
-    font-size: 16px;
-    margin-bottom: 0.5rem;
-    border: 1px solid #ccc;
+    justify-content: center;
 }
 
 textarea {
@@ -79,24 +127,6 @@ textarea {
     padding-top: 2rem;
 }
 
-.editSetOutOfStock {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    width: 90%;
-    padding-left: 5rem;
-}
-
-.editSetOutOfStock label {
-    width: 7%;
-    display: flex;
-    align-self: center;
-    padding-bottom: 0;
-}
-
-.editSetOutOfStock input {
-    width: 5%;
-}
 
 .submitCreateButton, .submitEditProductButton {
     background-color: black;

@@ -18,6 +18,13 @@ export const Profile = () => {
     const [saveStatus, setSaveStatus] = useState(null);
 
     useEffect(() => {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            navigate('/error'); // Redirige a la página de error si no hay token
+        }
+    }, [navigate]);
+
+    useEffect(() => {
         const loadUser = async () => {
             const token = localStorage.getItem('authToken');
             if (!token || user) return; // Si ya hay un usuario, no cargues de nuevo
