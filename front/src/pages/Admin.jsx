@@ -34,6 +34,9 @@ export const Admin = () => {
 
     const [typeOptions] = useState(['camiseta', 'bolso', 'abrigo', 'zapatillas']);
 
+    const [currentSize, setCurrentSize] = useState(''); // Talla actual a añadir
+    const [sizes, setSizes] = useState([]); // Lista de tallas
+
     const [error, setError] = useState('');
     const navigate = useNavigate(); // useNavigate para redirigir
     const { user } = useUser();
@@ -74,14 +77,44 @@ export const Admin = () => {
         setGeneralProduct({ ...generalProduct, [id]: value });
     };
 
+    // Manejar el cambio en el input de talla
+    const handleSizeChange = (e) => {
+        setCurrentSize(e.target.value.toUpperCase()); // Convertir a mayúsculas para consistencia
+    };
+
+    // Agregar talla al listado
+    const handleAddSize = () => {
+        if (currentSize && !sizes.includes(currentSize)) {
+            setSizes((prevSizes) => [...prevSizes, currentSize]);
+        }
+        setCurrentSize(''); // Limpiar el input después de añadir
+    };
+
+    // Eliminar talla del listado
+    const handleDeleteSize = (sizeToRemove) => {
+        setSizes((prevSizes) => prevSizes.filter((size) => size !== sizeToRemove));
+    };
+
     // Cambiar estado para las propiedades de la variante actual
     const handleVariantChange = (e) => {
-        const { id, value, type, checked } = e.target;
-        setCurrentVariant({
-            ...currentVariant,
-            [id]: type === 'checkbox' ? checked : value,
-        });
+        const { id, value } = e.target;
+
+        if (id === 'colorName' || id === 'hexCode') {
+            setCurrentVariant((prev) => ({
+                ...prev,
+                color: {
+                    ...prev.color,
+                    [id === 'colorName' ? 'colorName' : 'hexCode']: value,
+                },
+            }));
+        } else {
+            setCurrentVariant((prev) => ({
+                ...prev,
+                [id]: value,
+            }));
+        }
     };
+
 
     const addNewVariantAccordion = () => {
         // Validar que la variante actual tenga datos válidos antes de guardarla
@@ -218,23 +251,22 @@ export const Admin = () => {
                                 <div className="divForm_ColumnContainer">
                                     <div className="divForm_Column">
                                         <label htmlFor="typeOfProduct" className="labelTypeOfProduct">Gender</label>
-                                        <input
-                                            type="text"
-                                            id="typeOfProduct"
-                                            className="inputTypeOfProduct"
-                                            placeholder="EXAMPLE: Camiseta"
-                                            value={productData.typeOfProduct}
-                                            onChange={handleChange}
-                                        />
+                                        <select
+                                            name=""
+                                            id="">
+                                            <option value="mujer">Mujer</option>
+                                            <option value="hombre">Hombre</option>
+                                            <option value="unisex">Unisex</option>
+                                        </select>
                                     </div>
                                     <div className="divForm_Column">
                                         <label htmlFor="typeOfProduct" className="labelTypeOfProduct">Brand</label>
                                         <input
                                             type="text"
-                                            id="typeOfProduct"
+                                            id="brand"
                                             className="inputTypeOfProduct"
                                             placeholder="EXAMPLE: Camiseta"
-                                            value={productData.typeOfProduct}
+                                            value={productData.brand}
                                             onChange={handleChange}
                                         />
                                     </div>
@@ -242,23 +274,23 @@ export const Admin = () => {
                                         <label htmlFor="typeOfProduct" className="labelTypeOfProduct">Collection</label>
                                         <input
                                             type="text"
-                                            id="typeOfProduct"
+                                            id="collection"
                                             className="inputTypeOfProduct"
                                             placeholder="EXAMPLE: Camiseta"
-                                            value={productData.typeOfProduct}
+                                            value={productData.collection}
                                             onChange={handleChange}
                                         />
                                     </div>
                                     <div className="divForm_Column">
                                         <label htmlFor="typeOfProduct" className="labelTypeOfProduct">Tipo de Producto</label>
-                                        <input
-                                            type="text"
-                                            id="typeOfProduct"
-                                            className="inputTypeOfProduct"
-                                            placeholder="EXAMPLE: Camiseta"
-                                            value={productData.typeOfProduct}
-                                            onChange={handleChange}
-                                        />
+                                        <select
+                                            name=""
+                                            id="">
+                                            <option value="camiseta">Camiseta</option>
+                                            <option value="abrigo">Abrigo</option>
+                                            <option value="zapatillas">Zapatillas</option>
+                                            <option value="bolso">Bolso</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -276,26 +308,39 @@ export const Admin = () => {
                                 <div className="variantForm">
                                     {/* Campos de la variante */}
                                     <div className="divForm_Column">
+                                        <label htmlFor="colorName">Name:</label>
+                                        <input
+                                            name="name"
+                                            type="text"
+                                            id="name"
+                                            value={currentVariant.name}
+                                            onChange={handleVariantChange}
+                                        />
+                                    </div>
+                                    <div className="divForm_Column">
                                         <label htmlFor="colorName">Color Name:</label>
                                         <input
+                                            name="colorName"
                                             type="text"
                                             id="colorName"
                                             value={currentVariant.color.colorName}
-                                            onChange={(e) => handleVariantChange(e)}
+                                            onChange={handleVariantChange}
                                         />
                                     </div>
                                     <div className="divForm_Column">
                                         <label htmlFor="hexCode">Hex Code:</label>
                                         <input
+                                            name="hexCode"
                                             type="text"
                                             id="hexCode"
                                             value={currentVariant.color.hexCode}
-                                            onChange={(e) => handleVariantChange(e)}
+                                            onChange={handleVariantChange}
                                         />
                                     </div>
                                     <div className="divForm_Column">
                                         <label htmlFor="material">Material:</label>
                                         <input
+                                            name='material'
                                             type="text"
                                             id="material"
                                             value={currentVariant.material}
@@ -309,20 +354,45 @@ export const Admin = () => {
                                             type="text"
                                             id="size"
                                             placeholder="Ej: M"
-                                            onKeyDown={(e) => e.key === 'Enter' && addSize(e.target.value)}
+                                            value={currentSize}
+                                            onChange={handleSizeChange}
                                         />
-                                    </div>
-                                    <div className="divForm_Column">
-                                        <div className="sizeList">
-                                            {currentVariant.size.map((size, index) => (
-                                                <div key={index}>{size}</div>
-                                            ))}
+                                        <div className='sizeContainer_Button'>
+                                            <button
+                                                className="submitEditProductButton"
+                                                onClick={handleAddSize}
+                                            >
+                                                Enviar talla
+                                            </button>
+
+                                        </div>
+                                        <div className="containerSize_Display">
+                                            <div className="blockSize_Display">
+                                                <ul className="sizeDisplay">
+                                                    {sizes.map((size, index) => (
+                                                        <div className="sizeSelected_Group" key={index}>
+                                                            <div className="sizeBlock_displaySize">
+                                                                <li>{size}</li>
+                                                            </div>
+                                                            <div className="containerSize_displayButton">
+                                                                <button
+                                                                    className="deleteSize_Button"
+                                                                    onClick={() => handleDeleteSize(size)}
+                                                                >
+                                                                    X
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="divForm_Column">
                                         <div className="introduceImage">
                                             <label htmlFor="image" className="labelImage">Subir Imagen</label>
                                             <input
+                                                name='image'
                                                 type="file"
                                                 id="image"
                                                 className="inputImage"
@@ -334,6 +404,7 @@ export const Admin = () => {
                                     <div className="divForm_Column">
                                         <label htmlFor="image">Agregar Imagen:</label>
                                         <input
+                                            name='image'
                                             type="text"
                                             id="image"
                                             placeholder="URL de la imagen"
@@ -360,6 +431,7 @@ export const Admin = () => {
                                     <div className="divForm_Column">
                                         <label htmlFor="discount">Descuento:</label>
                                         <input
+                                            name='discount'
                                             type="number"
                                             id="discount"
                                             value={currentVariant.discount}

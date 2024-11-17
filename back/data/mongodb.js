@@ -177,29 +177,9 @@ const supportEmailSchema = new mongoose.Schema({
 
 // Schema de Producto
 const productSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    description: {
-        type: String,
-        required: true
-    },
-    base_price: {
-        type: Number,
-        required: true
-    },
     collection: {
         type: String,
         required: true
-    },
-    out_of_stock: {
-        type: Boolean,
-        default: false
-    },
-    discount: {
-        type: Number,
-        default: 0
     },
     brand: {
         type: String,
@@ -214,20 +194,31 @@ const productSchema = new mongoose.Schema({
         enum: ['hombre', 'mujer'],
         required: true
     },
-    product_code: {
-        type: String,
-        required: true,
-        unique: true
-    },
     variants: [
         {
             variant_id: {
                 type: mongoose.Schema.Types.ObjectId,
                 required: true,
             },
+            product_reference: {
+                type: String,
+                required: true
+            },
+            name: {
+                type: String,
+                required: true
+            },
+            discount: {
+                type: Number,
+                default: 0
+            },
             product_code: {
                 type: String,
                 required: true
+            },
+            out_of_stock: {
+                type: Boolean,
+                default: false
             },
             color: {
                 colorName: {
@@ -253,6 +244,14 @@ const productSchema = new mongoose.Schema({
             discount: {
                 type: Number,
                 default: 0
+            },
+            description: {
+                type: String,
+                required: true
+            },
+            base_price: {
+                type: Number,
+                required: true
             },
             image: {
                 type: [String],
