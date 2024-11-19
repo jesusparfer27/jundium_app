@@ -84,40 +84,23 @@ export const Variant = () => {
 
     const handleImageUploadChange = (e, index) => {
         const files = Array.from(e.target.files);
+        const newUrls = files.map((file) => URL.createObjectURL(file));
+        const newFileNames = files.map((file) => file.name);
     
-        if (!files.length) return;
-    
-        // Crear URLs únicas para los archivos
-        const newImageUrls = files.map((file) => URL.createObjectURL(file));
-        
         setVariants((prevVariants) => {
             const updatedVariants = [...prevVariants];
-    
-            if (!updatedVariants[index].image) {
-                updatedVariants[index].image = [];
+            const variant = updatedVariants[index];
+            // Evita duplicados con `Set`
+            if (!Array.isArray(variant.file)) {
+                variant.file = []; // Garantiza que siempre sea un array
             }
-    
-            // Crear un conjunto para evitar duplicados
-            const uniqueUrls = Array.from(
-                new Set([...updatedVariants[index].image, ...newImageUrls])
-            );
-    
-            updatedVariants[index].image = uniqueUrls;
-            return updatedVariants;
-        });
-    
-        // Actualizar nombres de archivos
-        const fileNames = files.map((file) => file.name);
-        setVariants((prevVariants) => {
-            const updatedVariants = [...prevVariants];
-            const uniqueFileNames = Array.from(
-                new Set([...updatedVariants[index].file, ...fileNames])
-            );
-            updatedVariants[index].file = uniqueFileNames;
+            variant.image = [...new Set([...variant.image, ...newUrls])];
+            variant.file = [...new Set([...variant.file, ...newFileNames])];
             return updatedVariants;
         });
     };
     
+
 
     const handleImageChange = (e, index) => {
         const files = Array.from(e.target.files);
@@ -160,20 +143,26 @@ export const Variant = () => {
     };
 
     const handleAddSize = (index) => {
+        if (!currentSize.trim()) {
+            alert('Por favor, ingrese una talla válida.');
+            return;
+        }
+
         setVariants((prevVariants) => {
             const updatedVariants = [...prevVariants];
             if (!updatedVariants[index].size) {
                 updatedVariants[index].size = [];
             }
-            if (updatedVariants[index].size.includes(currentSize.toUpperCase())) {
-                alert(`La talla ${currentSize.toUpperCase()} ya existe.`);
+            if (updatedVariants[index].size.includes(currentSize)) {
                 return updatedVariants;
             }
-            updatedVariants[index].size = [...updatedVariants[index].size, currentSize.toUpperCase()];
+            updatedVariants[index].size = [...updatedVariants[index].size, currentSize];
             return updatedVariants;
         });
-        setCurrentSize('');
+
+        setCurrentSize(''); // Limpia el input después de añadir la talla
     };
+
 
 
 
@@ -392,8 +381,8 @@ export const Variant = () => {
                                                 type="text"
                                                 id="size"
                                                 placeholder="Ej: M"
-                                                value={variants[index]?.size || ''}
-                                                onChange={(e) => setCurrentSize(e.target.value.toUpperCase())}
+                                                value={currentSize} // Vincula el valor al estado actual
+                                                onChange={(e) => setCurrentSize(e.target.value.toUpperCase())} // Actualiza el estado de la talla
                                             />
                                             <div className="sizeContainer_Button">
                                                 <button
@@ -419,6 +408,7 @@ export const Variant = () => {
                                                 </ul>
                                             </div>
                                         </div>
+
                                         <div className="divForm_Column">
                                             <div className="introduceImage">
                                                 <label htmlFor={`image-${index}`} className="labelImage">Subir Imagen</label>
@@ -431,21 +421,25 @@ export const Variant = () => {
                                                     onChange={(e) => handleImageUploadChange(e, index)}
                                                 />
                                             </div>
-
-                                            <div className="imagePreviews">
-                                                {variants[index]?.image?.map((image, i) => (
-                                                    <img
-                                                        key={i}
-                                                        src={image}
-                                                        alt={`Vista previa ${i + 1}`}
-                                                        className="imagePreview"
-                                                        style={{ width: '100px', height: '100px', objectFit: 'cover', margin: '5px' }}
-                                                    />
+                                            <div className="containerForPreviews">
+                                                {variants[index]?.image.map((imageUrl, imgIndex) => (
+                                                    <div key={imgIndex} className="imagePreview">
+                                                        <img
+                                                            src={imageUrl}
+                                                            alt={`Preview ${imgIndex}`}
+                                                            className="previewImage"
+                                                        />
+                                                        <p className="fileName">{variants[index]?.file[imgIndex]}</p>
+                                                        <button
+                                                            className="deleteImage_Button"
+                                                            onClick={() => handleDeleteImageInput(index, imgIndex)}
+                                                        >
+                                                            Eliminar
+                                                        </button>
+                                                    </div>
                                                 ))}
                                             </div>
                                         </div>
-
-                                        
 
                                         <div className="divForm_Column">
                                             <label htmlFor="price">Precio:</label>

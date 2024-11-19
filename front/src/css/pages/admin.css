@@ -21,7 +21,17 @@
     width: 90%;
 }
 
+.previewImage {
+    width: 200px;
+}
 
+.containerForPreviews {
+    display: grid;
+    grid-template-columns: repeat(4, 20%);
+    grid-template-rows: auto; /* Ajusta la altura según el contenido */
+    gap: 10px; /* Espaciado entre las columnas */
+    justify-content: center; /* Centra el grid horizontalmente */
+}
 
 .productForm {
     width: 100%;
