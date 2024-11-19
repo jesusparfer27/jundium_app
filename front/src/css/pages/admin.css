@@ -21,23 +21,41 @@
     width: 90%;
 }
 
+
+
 .productForm {
     width: 100%;
     flex-direction: column;
     display: flex;
 }
 
+.godSon {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .accordionContainer {
     display: flex;
     justify-content: center;
+    flex-direction: column;
     width: 100%;
     padding-top: 4rem;
+}
+
+.godDiv {
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .accordionContainer.open {
     background-color: white;
     border: none;
     display: flex;
+    width: 100%;
     justify-content: center;
 }
 
@@ -101,6 +119,10 @@
     justify-content: center;
     margin-top: -20rem;
     z-index: 10;
+}
+
+.adminPanel_Variants {
+    flex-direction: column;
 }
 
 .editProductContainer {
