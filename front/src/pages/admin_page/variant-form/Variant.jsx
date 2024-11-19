@@ -84,23 +84,40 @@ export const Variant = () => {
 
     const handleImageUploadChange = (e, index) => {
         const files = Array.from(e.target.files);
-
+    
         if (!files.length) return;
-
-        const fileNames = files.map((file) => file.name);
-
+    
+        // Crear URLs únicas para los archivos
+        const newImageUrls = files.map((file) => URL.createObjectURL(file));
+        
         setVariants((prevVariants) => {
             const updatedVariants = [...prevVariants];
-            if (!updatedVariants[index].image) updatedVariants[index].image = [];
-
-            updatedVariants[index].image = [
-                ...new Set([...updatedVariants[index].image, ...fileNames]),
-            ];
+    
+            if (!updatedVariants[index].image) {
+                updatedVariants[index].image = [];
+            }
+    
+            // Crear un conjunto para evitar duplicados
+            const uniqueUrls = Array.from(
+                new Set([...updatedVariants[index].image, ...newImageUrls])
+            );
+    
+            updatedVariants[index].image = uniqueUrls;
             return updatedVariants;
         });
-
-        setImageUrls((prevUrls) => [...new Set([...prevUrls, ...fileNames])]);
+    
+        // Actualizar nombres de archivos
+        const fileNames = files.map((file) => file.name);
+        setVariants((prevVariants) => {
+            const updatedVariants = [...prevVariants];
+            const uniqueFileNames = Array.from(
+                new Set([...updatedVariants[index].file, ...fileNames])
+            );
+            updatedVariants[index].file = uniqueFileNames;
+            return updatedVariants;
+        });
     };
+    
 
     const handleImageChange = (e, index) => {
         const files = Array.from(e.target.files);
@@ -415,10 +432,6 @@ export const Variant = () => {
                                                 />
                                             </div>
 
-                                            <div className="fileList">
-                                                <h4>URLs de imágenes subidas:</h4>
-                                            </div>
-
                                             <div className="imagePreviews">
                                                 {variants[index]?.image?.map((image, i) => (
                                                     <img
@@ -432,25 +445,7 @@ export const Variant = () => {
                                             </div>
                                         </div>
 
-                                        <div className="divForm_Column">
-                                            <div key={index} className="imageInputContainer">
-                                                <input
-                                                    name={`image_${index}`}
-                                                    type="text"
-                                                    id='image'
-                                                    placeholder="Nombre del archivo"
-                                                    value={variants[index]?.image.join(", ") || ''} // Mostramos los nombres de archivo, separados por coma si hay varios
-                                                    onChange={(e) => handleImageChange(index, e.target.value)}
-                                                />
-                                                <button
-                                                    type="button"
-                                                    className="button_remove_imageUrl"
-                                                    onClick={() => handleDeleteImageInput(index)}
-                                                >
-                                                    Eliminar
-                                                </button>
-                                            </div>
-                                        </div>
+                                        
 
                                         <div className="divForm_Column">
                                             <label htmlFor="price">Precio:</label>
