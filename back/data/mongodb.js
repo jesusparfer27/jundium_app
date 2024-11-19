@@ -56,11 +56,6 @@ const userSchema = new mongoose.Schema({
     birth_date: {
         type: Date,
     },
-    roles: {
-        type: [String],
-        default: ["user"],
-        enum: ["user", "admin"]
-    },
     permissions: {
         manage_users: {
             type: Boolean,

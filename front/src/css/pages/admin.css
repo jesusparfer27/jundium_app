@@ -1,3 +1,7 @@
+.container_adminContainer {
+    background-color: #D9D9D9;
+}
+
 .admin-panel {
     width: 100%;
     background-color: #D9D9D9;
@@ -14,7 +18,7 @@
 }
 
 .containerTittle_AdminCreate {
-    width: 88%;
+    width: 90%;
 }
 
 .productForm {
@@ -23,10 +27,40 @@
     display: flex;
 }
 
-.accordion.open {
-    width: 91%;
+.accordionContainer {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding-top: 4rem;
+}
+
+.accordionContainer.open {
     background-color: white;
     border: none;
+    display: flex;
+    justify-content: center;
+}
+
+.container_ButtonSubmit {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    padding-bottom: 3rem;
+}
+
+.container_ButtonSubmitContainer {
+    display: flex;
+    width: 92%;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.createVariant_Container {
+    width: 92%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .variantForm {
@@ -76,7 +110,7 @@
 
 .createProductContainer, .editProductContainer {
     width: 100%;
-    padding-top: 5rem;
+    padding-top: 10rem;
 }
 
 .createProduct, .editProduct {
@@ -122,7 +156,7 @@ textarea {
 
 .submitEdition,
 .submitEditProduct {
-    width: 91.5%;
+    width: 100%;
     justify-content: center;
     padding-top: 2rem;
 }

@@ -3,7 +3,7 @@ import getProducts, { getProductById } from "../controllers/product.controller.j
 import { getUsers, loginUser, getUserById, getMe, updateUserById, subscribeNewsletter } from '../controllers/users.controller.js';
 import { authenticateToken } from '../middlewares/auth.js';
 import { addToWishlist, getWishlist, removeFromWishlist } from '../controllers/wishlist.controller.js';
-import { verifyAdmin, adminUser } from '../controllers/admin.controller.js';
+import { adminUser, verifyAdmin } from '../controllers/admin.controller.js';
 import { upload } from '../middlewares/multer.js';  // Importar el middleware de multer
 import { createProduct } from '../controllers/create.products.controller.js';
 import { registerUser } from '../controllers/register.controller.js';

@@ -9,7 +9,7 @@ import { CheckOutPage } from "../pages/CheckOutPage";
 import { EmailSignIn } from "../pages/EmailSignIn";
 import { Profile } from "../pages/Profile";
 import { SecondStepSignIn } from '../pages/SecondStepSignIn'
-import { Admin } from "../pages/Admin";
+import { Admin } from "../pages/admin_page/Admin";
 import { MultifunctionalProductPage } from "../pages/MultifunctionalProductPage";
 import { ErrorPage } from "../pages/ErrorPage";
 

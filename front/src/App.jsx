@@ -9,13 +9,12 @@ import { useContext } from "react";
 import { HeaderContext } from "./context/HeaderContext";
 import { ScrollToTop } from "./lib/ScrollToTop";  // Importa el componente ScrollToTop
 
-
 function App() {
     return (
         <HeaderProvider>
-            <Header />
-            <MainContent />
-            <Footer />
+                <Header />
+                <MainContent />
+                <Footer />
         </HeaderProvider>
     );
 }
@@ -33,9 +32,9 @@ function MainContent() {
                     onClick={handleOverlayClick} // Llama a handleOverlayClick aquí
                 ></div>
             )}
-            
+
             <div className="mainContent">
-            <ScrollToTop /> {/* Asegúrate de que ScrollToTop esté dentro de MainContent */}
+                <ScrollToTop /> {/* Asegúrate de que ScrollToTop esté dentro de MainContent */}
                 <Outlet />
             </div>
         </>
