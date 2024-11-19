@@ -87,28 +87,24 @@ export const Variant = () => {
 
         if (!files.length) return;
 
-        // Extraemos los nombres de los archivos
         const fileNames = files.map((file) => file.name);
 
-        // Actualizamos el estado de las variantes
         setVariants((prevVariants) => {
             const updatedVariants = [...prevVariants];
             if (!updatedVariants[index].image) updatedVariants[index].image = [];
 
-            // Añadimos los nombres de archivo al estado, asegurándonos de no repetirlos
             updatedVariants[index].image = [
                 ...new Set([...updatedVariants[index].image, ...fileNames]),
             ];
             return updatedVariants;
         });
 
-        // También puedes guardar los nombres de los archivos en el estado de las URLs de imágenes si lo necesitas
         setImageUrls((prevUrls) => [...new Set([...prevUrls, ...fileNames])]);
     };
 
     const handleImageChange = (e, index) => {
         const files = Array.from(e.target.files);
-        const imageUrls = files.map((file) => URL.createObjectURL(file)); // Crear una URL para vista previa
+        const imageUrls = files.map((file) => URL.createObjectURL(file));
 
         setVariants((prevVariants) => {
             const updatedVariants = [...prevVariants];
@@ -116,11 +112,10 @@ export const Variant = () => {
             return updatedVariants;
         });
 
-        // Actualiza la lista de nombres de archivos para mostrarlos en el input de texto
         const fileNames = files.map((file) => file.name);
         setVariants((prevVariants) => {
             const updatedVariants = [...prevVariants];
-            updatedVariants[index].file = fileNames; // Guardar solo los nombres de archivo
+            updatedVariants[index].file = fileNames;
             return updatedVariants;
         });
     };
@@ -497,31 +492,32 @@ export const Variant = () => {
                                     </div>
                                 </div>
                             </div>
-                            <button
-                                className="deleteVariantButton"
-                                onClick={() => handleDeleteVariant(index)}
-                            >
-                                Eliminar Variante
-                            </button>
+                            <div className="container_ButtonSubmitContainer">
+                                <div className="submitEdition">
+                                    <button className="submitCreateButton" onClick={() => handleDeleteVariant(index)}>Eliminar variante</button>
+                                </div>
+                            </div>
                         </div>
+
+
                     ))}
 
                 </div>
             </div>
 
 
-                <div className="container_ButtonSubmit">
-                    <div className="container_ButtonSubmitContainer">
+            <div className="container_ButtonSubmit">
+                <div className="container_ButtonSubmitContainer">
 
-                        <div className="submitEdition">
-                            <button className="submitCreateButton" onClick={addNewVariantForm}>Agregar Nueva Variante</button>
-                        </div>
+                    <div className="submitEdition">
+                        <button className="submitCreateButton" onClick={addNewVariantForm}>Agregar Nueva Variante</button>
+                    </div>
 
-                        <div className="submitEdition">
-                            <button className="submitCreateButton" onClick={addNewVariantAccordion}>Enviar Producto</button>
-                        </div>
+                    <div className="submitEdition">
+                        <button className="submitCreateButton" onClick={addNewVariantAccordion}>Enviar Producto</button>
                     </div>
                 </div>
+            </div>
         </>
     );
 };
