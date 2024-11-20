@@ -78,9 +78,50 @@ export const CheckOutPage = () => {
         }));
     }, [cartItems]);
 
-    useEffect(() => {
-        calculateTotalPrice();
-    }, [cartItems, calculateTotalPrice]);
+    const addToWishlist = async (productId, variantId) => {
+        const token = localStorage.getItem('authToken');
+
+        // Ahora accedemos correctamente al userId del usuario autenticado
+        const userId = user?._id;  // Usamos user._id aquí
+
+        console.log("user", user)
+        console.log("userId", userId)
+
+        if (!userId || !productId || !variantId) {
+            console.error('user_id, product_id y variant_id son requeridos.');
+            return;
+        }
+
+        if (!token) {
+            console.error('No se encontró el token de autenticación.');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${VITE_API_BACKEND}/wishlist`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ user_id: userId, product_id: productId, variant_id: variantId }),
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Error al agregar a la wishlist:', errorText);
+                throw new Error('No se pudo agregar el producto a la wishlist');
+            }
+
+            const data = await response.json();
+            console.log('Producto agregado a la wishlist:', data);
+            alert('Producto añadido a tu lista de deseos');
+        } catch (error) {
+            console.error('Error al añadir el producto a la wishlist:', error);
+            alert('Hubo un error al añadir a tu lista de deseos');
+        }
+    };
+
 
 
     const toggleSection = (section) => {
@@ -157,7 +198,12 @@ export const CheckOutPage = () => {
                                     </div>
 
                                     <div className="action-buttons">
-                                        <button className="favorites-button" onClick={() => console.log(`Añadir ${name} a favoritos`)}>Añadir a favoritos</button>
+                                        <button
+                                            className="favorites-button"
+                                            onClick={() => addToWishlist(product_id, variant_id)}
+                                        >
+                                            Añadir a favoritos
+                                        </button>
                                         <button className="remove-button" onClick={() => removeItem(product_id)}>Eliminar del carrito</button>
                                     </div>
                                 </div>
@@ -187,7 +233,7 @@ export const CheckOutPage = () => {
                             <div className='finalPrice-CheckOutRight'>{total.endingPrice.toFixed(2)} €</div>
                         </div>
                         <div className="buyingButtonContainer">
-                            <button>Continuar</button>
+                            <button className='checkout-button'>Continuar</button>
                         </div>
                     </div>
                 </div>
@@ -217,7 +263,7 @@ export const CheckOutPage = () => {
                 </div>
             </div>
 
-            <Modal /> {/* Modal para visualizar el carrito */}
+            <Modal />
         </section>
     );
 };

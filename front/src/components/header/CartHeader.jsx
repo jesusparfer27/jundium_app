@@ -44,6 +44,7 @@ const CartContainer = () => {
     }, [fetchCartItems]);
 
     const handleCheckout = () => {
+        closeMenu()
         // Redirige a la página de detalles de compra
         navigate('/check-out');
     };

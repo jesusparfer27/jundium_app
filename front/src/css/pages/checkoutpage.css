@@ -1,11 +1,25 @@
 .checkoutSection {
     display: flex;
-    width: 100%;    
+    width: 100%;   
+    margin-top: -3rem; 
+}
+
+.buttonTo_Stripe {
+    border: 1px solid black;
+}
+
+.buttonTo_Stripe:hover {
+    border: 1px solid black;
 }
 
 .columnFlex {
     width: 33%;
     background-color: white;
+    height: 80vh;
+    position: sticky;
+    top: 0;
+    padding-top: 4rem;
+   
 }
 
 .left-column {
@@ -174,11 +188,13 @@
     border: none;
     border-radius: 24px;
     cursor: pointer;
+    border: 1px solid black;
 }
 
 .checkout-button:hover {
-    background-color: white;
+    background-color: transparent;
     color: black;
+    border: 1px solid black;
 }
 
 .right-column {
