@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../../css/pages/admin.css'
 
 export const Variant = () => {
@@ -9,6 +9,7 @@ export const Variant = () => {
     const [selectedVariantIndex, setSelectedVariantIndex] = useState(null);
     const [activeAccordion, setActiveAccordion] = useState(null);
     const [variants, setVariants] = useState([{
+        name: '',
         color: { colorName: '', hexCode: '' },
         size: [],
         file: [],
@@ -22,6 +23,7 @@ export const Variant = () => {
     const [currentSize, setCurrentSize] = useState('');
     const [imageUrls, setImageUrls] = useState([]);
     const [currentVariant, setCurrentVariant] = useState({
+        name: '',
         color: { colorName: '', hexCode: '' },
         size: [],
         file: [],
@@ -32,44 +34,59 @@ export const Variant = () => {
         is_main: false,
         description: '',
     });
+    const { VITE_API_BACKEND } = import.meta.env;
 
-    const handleVariantChange = (e, index) => {
-        const { id, value } = e.target;
 
-        setVariants((prevVariants) => {
-            const updatedVariants = [...prevVariants];
-            const currentVariant = { ...updatedVariants[index] };
+const handleVariantChange = (e, index) => {
+    const { id, checked } = e.target;
+    console.log(`handleVariantChange - Index: ${index}, ID: ${id}, Checked: ${checked}`);
+    if (index === undefined || index === null) {
+        console.error("Invalid index received:", index);
+        return;
+    }
 
-            if (id.includes('.')) {
-                const [parentKey, childKey] = id.split('.');
-                currentVariant[parentKey] = {
-                    ...currentVariant[parentKey],
-                    [childKey]: value,
-                };
-            } else {
-                currentVariant[id] = value;
-            }
+    setVariants((prevVariants) => {
+        const updatedVariants = [...prevVariants];
+        const currentVariant = { ...updatedVariants[index] };
 
-            updatedVariants[index] = currentVariant;
-            return updatedVariants;
-        });
-    };
+        if (id === 'is_main') {
+            currentVariant.is_main = checked;
+        } else if (id.includes('.')) {
+            const [parentKey, childKey] = id.split('.');
+            currentVariant[parentKey] = {
+                ...currentVariant[parentKey],
+                [childKey]: e.target.value,
+            };
+        } else {
+            currentVariant[id] = e.target.value;
+        }
 
+        updatedVariants[index] = currentVariant;
+        return updatedVariants;
+    });
+};
 
     const validateVariant = (variant) => {
-        if (!variant.name || !variant.color.colorName || !variant.color.hexCode || !variant.price) {
+        console.log('Validating Variant:', variant);
+
+        if (!variant || !variant.name || !variant.color.colorName || !variant.color.hexCode || !variant.price) {
             setError('Por favor, complete todos los campos requeridos.');
+            console.log('Validation Error: Missing required fields', variant);
+            console.log('Validation Error: Falta completar campos requeridos.');
             return false;
         }
         if (isNaN(variant.price)) {
             setError('El precio debe ser un número válido.');
+            console.log('Validation Error: El precio no es válido.');
             return false;
         }
         if (isNaN(variant.discount)) {
             setError('El descuento debe ser un número válido.');
+            console.log('Validation Error: El descuento no es válido.');
             return false;
         }
         setError('');
+        console.log('Validation Passed.');
         return true;
     };
 
@@ -84,22 +101,24 @@ export const Variant = () => {
 
     const handleImageUploadChange = (e, index) => {
         const files = Array.from(e.target.files);
+        console.log(`handleImageUploadChange - Index: ${index}, Files:`, files);
         const newUrls = files.map((file) => URL.createObjectURL(file));
         const newFileNames = files.map((file) => file.name);
-    
+
         setVariants((prevVariants) => {
             const updatedVariants = [...prevVariants];
             const variant = updatedVariants[index];
-            // Evita duplicados con `Set`
+
             if (!Array.isArray(variant.file)) {
-                variant.file = []; // Garantiza que siempre sea un array
+                variant.file = [];
             }
             variant.image = [...new Set([...variant.image, ...newUrls])];
             variant.file = [...new Set([...variant.file, ...newFileNames])];
+
+            console.log(`handleImageUploadChange - Index: ${index}, Updated Variants:`, updatedVariants); // Debug log
             return updatedVariants;
         });
     };
-    
 
 
     const handleImageChange = (e, index) => {
@@ -120,6 +139,83 @@ export const Variant = () => {
         });
     };
 
+    useEffect(() => {
+        if (variants.length === 0) {
+            setVariants([
+                {
+                    name: '',
+                    color: { colorName: '', hexCode: '' },
+                    size: [],
+                    file: [],
+                    material: '',
+                    price: '',
+                    discount: 0,
+                    image: [],
+                    is_main: false,
+                    description: '',
+                },
+            ]);
+        }
+    }, []);
+    
+
+    const handleSubmit = async (event, index) => {
+        event.preventDefault();
+
+        if (index === undefined || index === null || index < 0 || index >= variants.length) {
+            setError('Índice de variante no válido.');
+            console.error('handleSubmit Error: Índice de variante no válido.');
+            return;
+        }
+    
+        const variantToSubmit = variants[index];
+        console.log('handleSubmit - Variant to Submit:', variantToSubmit);
+    
+        if (!validateVariant(variantToSubmit)) {
+            console.log('handleSubmit: La variante no pasó la validación.');
+            return;
+        }
+
+        try {
+            console.log('Submitting Variant to Backend:', variantToSubmit)
+            const response = await fetch(`${VITE_API_BACKEND}/create-product`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(variantToSubmit),
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al enviar la variante');
+            }
+
+            const data = await response.json();
+            console.log('Variante guardada exitosamente:', data);
+
+            setVariants((prevVariants) => {
+                const updatedVariants = [...prevVariants];
+                updatedVariants[index] = {
+                    color: { colorName: '', hexCode: '' },
+                    name: '',
+                    size: [],
+                    material: '',
+                    price: '',
+                    discount: 0,
+                    image: [],
+                    is_main: false,
+                    description: '',
+                };
+                console.log(`handleSubmit - Reset Variants:`, updatedVariants);
+                return updatedVariants;
+            });
+
+            setError('');
+        } catch (error) {
+            console.error('Error al guardar la variante:', error);
+            setError('Hubo un problema al guardar la variante. Intente nuevamente.');
+        }
+    };
 
     const handleSizeChange = (e, index) => {
         const size = e.target.value.toUpperCase();
@@ -160,11 +256,8 @@ export const Variant = () => {
             return updatedVariants;
         });
 
-        setCurrentSize(''); // Limpia el input después de añadir la talla
+        setCurrentSize('');
     };
-
-
-
 
     const handleDeleteSize = (sizeToRemove, index) => {
         setVariants((prevVariants) => {
@@ -224,6 +317,7 @@ export const Variant = () => {
             });
 
             setCurrentVariant({
+                name: '',
                 color: { colorName: '', hexCode: '' },
                 size: [],
                 material: '',
@@ -238,6 +332,7 @@ export const Variant = () => {
 
     const resetCurrentVariant = () => {
         setCurrentVariant({
+            name: '',
             color: { colorName: '', hexCode: '' },
             size: [],
             material: '',
@@ -274,6 +369,7 @@ export const Variant = () => {
         setVariants((prevVariants) => [
             ...prevVariants,
             {
+                name: '',
                 color: { colorName: '', hexCode: '' },
                 size: [],
                 material: '',
@@ -286,11 +382,10 @@ export const Variant = () => {
         ]);
     };
 
-
     const addNewVariantAccordion = (e) => {
         e.preventDefault();
 
-        if (validateVariant()) {
+        if (validateVariant(currentVariant)) {
             setVariants((prevVariants) => [
                 ...prevVariants,
                 { ...currentVariant },
@@ -298,6 +393,7 @@ export const Variant = () => {
         }
 
         setCurrentVariant({
+            name: '',
             color: { colorName: '', hexCode: '' },
             size: [],
             material: '',
@@ -307,9 +403,14 @@ export const Variant = () => {
             is_main: false,
             description: '',
         });
-
         setVariantCount((prevCount) => prevCount + 1);
     };
+
+    const handleVariantSelection = (index) => {
+        console.log('Selected variant index:', index);
+        setSelectedVariantIndex(index);
+    };
+
 
     const handleVariantClick = (index) => {
         if (index >= 0 && index < variants.length) {
@@ -341,8 +442,8 @@ export const Variant = () => {
                                                 name="name"
                                                 type="text"
                                                 id="name"
-                                                value={currentVariant.name}
-                                                onChange={handleVariantChange}
+                                                value={variants[index]?.name || ''}
+                                                onChange={(e) => handleVariantChange(e, index)}
                                             />
                                         </div>
                                         <div className="divForm_Column">
@@ -374,15 +475,14 @@ export const Variant = () => {
                                                 onChange={(e) => handleVariantChange(e, index)}
                                             />
                                         </div>
-
                                         <div className="divForm_Column">
                                             <label htmlFor="size">Talla:</label>
                                             <input
                                                 type="text"
                                                 id="size"
                                                 placeholder="Ej: M"
-                                                value={currentSize} // Vincula el valor al estado actual
-                                                onChange={(e) => setCurrentSize(e.target.value.toUpperCase())} // Actualiza el estado de la talla
+                                                value={currentSize}
+                                                onChange={(e) => setCurrentSize(e.target.value.toUpperCase())}
                                             />
                                             <div className="sizeContainer_Button">
                                                 <button
@@ -408,7 +508,6 @@ export const Variant = () => {
                                                 </ul>
                                             </div>
                                         </div>
-
                                         <div className="divForm_Column">
                                             <div className="introduceImage">
                                                 <label htmlFor={`image-${index}`} className="labelImage">Subir Imagen</label>
@@ -440,7 +539,6 @@ export const Variant = () => {
                                                 ))}
                                             </div>
                                         </div>
-
                                         <div className="divForm_Column">
                                             <label htmlFor="price">Precio:</label>
                                             <input
@@ -468,13 +566,12 @@ export const Variant = () => {
                                                 onChange={(e) => handleVariantChange(e, index)}
                                             />
                                         </div>
-
                                         <div className="divForm_Column">
                                             <label htmlFor="is_main">¿Es Principal?</label>
                                             <input
                                                 type="checkbox"
                                                 id="is_main"
-                                                value={variants[index]?.is_main || ''}
+                                                checked={variant.is_main}
                                                 onChange={(e) => handleVariantChange(e, index)}
                                             />
                                         </div>
@@ -487,23 +584,24 @@ export const Variant = () => {
                                 </div>
                             </div>
                         </div>
-
-
                     ))}
-
                 </div>
             </div>
-
-
             <div className="container_ButtonSubmit">
                 <div className="container_ButtonSubmitContainer">
-
                     <div className="submitEdition">
                         <button className="submitCreateButton" onClick={addNewVariantForm}>Agregar Nueva Variante</button>
                     </div>
-
                     <div className="submitEdition">
-                        <button className="submitCreateButton" onClick={addNewVariantAccordion}>Enviar Producto</button>
+                        <button
+                            className="submitCreateButton"
+                            onClick={(event) => {
+                                console.log('Selected Index:', selectedVariantIndex);
+                                handleSubmit(event, selectedVariantIndex);
+                            }}
+                        >
+                            Enviar Producto
+                        </button>
                     </div>
                 </div>
             </div>

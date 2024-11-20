@@ -11,29 +11,26 @@ export const Product = () => {
         new_arrival: true,
         featured: false,
     });
-    const [variants, setVariants] = useState([]); // Se define variants como estado
     const navigate = useNavigate();
     const VITE_API_BACKEND = import.meta.env.VITE_API_BACKEND;
 
-    // Función para manejar cambios en los inputs
     const handleChange = (e) => {
         const { id, value } = e.target;
-        console.log(`Cambiando ${id}: ${value}`); // Depuración
+        console.log(`Cambiando ${id}: ${value}`);
         setGeneralProduct((prev) => ({
             ...prev,
             [id]: value,
         }));
     };
-    // Desactiva "new_arrival" después de 1 semana
+
     useEffect(() => {
         const timer = setTimeout(() => {
             setGeneralProduct((prev) => ({ ...prev, new_arrival: false }));
-        }, 7 * 24 * 60 * 60 * 1000); // 1 semana
+        }, 7 * 24 * 60 * 60 * 1000);
 
         return () => clearTimeout(timer);
     }, []);
 
-    // Validación de datos del producto
     const validateProductData = () => {
         if (!generalProduct.collection || !generalProduct.brand || !generalProduct.type || !generalProduct.gender) {
             console.error("Datos incompletos: Faltan algunos campos.");
@@ -42,20 +39,16 @@ export const Product = () => {
         return true;
     };
 
-    // Función para enviar los datos al backend
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Prevenir la recarga del formulario
+        e.preventDefault();
         if (!validateProductData()) return;
 
         const formData = new FormData();
         
-        // Agregar datos generales del producto
         Object.keys(generalProduct).forEach((key) => {
             formData.append(key, generalProduct[key]);
         });
 
-        // Agregar variantes
-        formData.append("variants", JSON.stringify(variants));
 
         try {
             const token = localStorage.getItem("authToken");
@@ -75,7 +68,6 @@ export const Product = () => {
             const data = await response.json();
             console.log("Producto creado con éxito:", data);
 
-            // Redirigir tras éxito
             navigate("/admin");
         } catch (err) {
             console.error("Error en la creación del producto:", err);
