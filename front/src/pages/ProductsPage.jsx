@@ -133,6 +133,7 @@ export const ProductsPage = () => {
                             products.map((product) => (
                                 <div key={`${product._id}-${product.selectedVariant.variant_id}`} className="productItemWrapper">
                                     <div className="productImageWrapper">
+                                        {/* <div className="overlayFade"></div> */}
                                         <NavLink
                                             to={`/products/${product._id}?variant_id=${product.selectedVariant.variant_id}`}
                                             className="productItem_ProductPage"
@@ -157,8 +158,8 @@ export const ProductsPage = () => {
                                     </div>
 
                                     <div className='containerInfo_productPage'>
-                                        <h4>{product.name || 'Nombre no disponible'}</h4>
-                                        <p>${(product.base_price - product.discount).toFixed(2) || 'Precio no disponible'}</p>
+                                        <h4 className='h4Products'>{product.name || 'Nombre no disponible'}</h4>
+                                        <p className='pProducts'>${(product.base_price - product.discount).toFixed(2) || 'Precio no disponible'}</p>
                                     </div>
                                 </div>
                             ))

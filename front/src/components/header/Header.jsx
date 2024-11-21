@@ -15,32 +15,56 @@ const Header = () => {
     const navigate = useNavigate();
     const [isProductsPage, setIsProductsPage] = useState(false);
 
-    // Determinar si estamos en ProductsPage
+    const [news, setNews] = useState({
+        new1: { text: 'Promoción especial', link: '/promocion' },
+        new2: { text: 'Descubre nuestras ofertas', link: '/ofertas' },
+    });
+    const [isNewsVisible, setIsNewsVisible] = useState(true);
+
     useEffect(() => {
         setIsProductsPage(location.pathname === '/products');
     }, [location.pathname]);
 
-    // Función para manejar el clic en el botón de login
-    // Función para manejar el clic en el botón de login
     useEffect(() => {
         setIsProductsPage(location.pathname === '/products');
-    }, [location.pathname]); // Esto está correcto
+    }, [location.pathname]);
 
-    // Función para manejar el clic en el botón de login
     const handleLoginClick = () => {
         const token = localStorage.getItem('authToken');
         if (!token) {
-            openMenu('login'); // Solo abrir si no hay token
+            openMenu('login');
         } else {
             navigate('/profile');
         }
     };
 
-
+const removeHeaderNews = () => {
+    setIsNewsVisible(false);
+};
 
     return (
         <>
             <header className={`headerContainer ${isProductsPage ? 'productsPageActive' : ''}`}>
+                {isNewsVisible && (
+                    <div className="headerNews_Container">
+                        <div className="containerNews_sections">
+                            <div className="pauseNews"></div>
+                            <div className="newsInformation">
+                                <p>
+                                    {news.new1.text}{' '}
+                                    <Link to={news.new1.link}>Ver más</Link>
+                                </p>
+                                <p>
+                                    {news.new2.text}{' '}
+                                    <Link to={news.new2.link}>Ver más</Link>
+                                </p>
+                            </div>
+                            <div className="removeNews" onClick={removeHeaderNews}>
+                                <span className="material-symbols-outlined">close</span>
+                            </div>
+                        </div>
+                    </div>
+                )}
                 <div className="headerContainer">
                     <div className="headerLeft">
                         <div className="headerMenu">
@@ -101,7 +125,6 @@ const Header = () => {
                 )}
             </header>
 
-            {/* Componentes de Contenedores */}
             {activeMenu === 'sideMenu' && <HeaderMenu />}
             {activeMenu === 'login' && <LoginContainer />}
             {activeMenu === 'cart' && <CartContainer />}

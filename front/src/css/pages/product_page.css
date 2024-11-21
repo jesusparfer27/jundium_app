@@ -4,6 +4,23 @@
     position: relative;
 }
 
+.h4Products {
+    margin: 0;
+    padding-top: 1rem;
+}
+
+.pProducts {
+    margin: 0;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.containerInfo_productPage {
+    padding-left: 1rem;
+    background-color: rgb(238, 238, 236) ;
+    
+}
+
 .videoWrapper {
     width: 100%;
     display: flex;
@@ -27,7 +44,7 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* 4 columnas */
     gap: 0; /* Sin espacio entre los elementos */
-    
+    background-color: rgb(238, 238, 236);
 }
 
 .productItem_ProductPage {
@@ -132,19 +149,28 @@
     object-fit: cover;
 }
 
+/* Asegúrate de incluir esta clase en tu archivo product_page.css */
+.overlayFade {
+    position: absolute; /* Para que se superponga sobre el contenedor */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; /* Cubre todo el área del contenedor */
+    z-index: 10; /* Asegura que esté encima del contenido subyacente */
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+    pointer-events: none; /* Evita que interfiera con los clics */
+}
+
+
 .likeIcon {
     position: absolute; /* Cambia de relative a absolute */
-    top: 0; /* Sitúa el ícono en la parte superior */
-    right: 0; /* Opcional: sitúa el ícono en la esquina superior derecha */
+    top: 15px; /* Sitúa el ícono en la parte superior */
+    right: 15px; /* Opcional: sitúa el ícono en la esquina superior derecha */
     z-index: 10; /* Asegúrate de que esté encima de la imagen */
     padding: 10px; /* Opcional: agrega un poco de espacio alrededor del ícono */
     border: 0;
     background-color: transparent;
     cursor: pointer;
-}
-
-.containerInfo_productPage {
-    padding-left: 1rem;
 }
 
 .productImageWrapper {
@@ -153,11 +179,6 @@
 
 .imageProducts_Container {
     padding-bottom: -10rem;
-}
-
-.productsPage {
-    background-color: white;
-    
 }
 
 .imageProducts_Container img{
@@ -173,13 +194,10 @@
 }
 
 .likeIcon span {
-    font-size: 22px;
+    font-size: 28px;
     color: black;
 }
 
-.productPage {
-    
-}
 
 .variantOptions {
     position: absolute;

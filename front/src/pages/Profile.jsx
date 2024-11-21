@@ -14,23 +14,23 @@ export const Profile = () => {
     const { user, setUser, loading, error, fetchUserDetails } = useUser();
     const [isUserLoaded, setIsUserLoaded] = useState(false);
     const { VITE_API_BACKEND, VITE_IMAGES_BASE_URL } = import.meta.env;
-    const [isDirty, setIsDirty] = useState(false); // Nueva variable para controlar cambios
+    const [isDirty, setIsDirty] = useState(false);
     const [saveStatus, setSaveStatus] = useState(null);
 
     useEffect(() => {
         const token = localStorage.getItem('authToken');
         if (!token) {
-            navigate('/error'); // Redirige a la página de error si no hay token
+            navigate('/error');
         }
     }, [navigate]);
 
     useEffect(() => {
         const loadUser = async () => {
             const token = localStorage.getItem('authToken');
-            if (!token || user) return; // Si ya hay un usuario, no cargues de nuevo
+            if (!token || user) return;
 
             try {
-                await fetchUserDetails(); // Esto debería establecer el usuario en el contexto
+                await fetchUserDetails();
                 setIsUserLoaded(true);
             } catch (err) {
                 console.error('Error fetching user data:', err);
@@ -59,9 +59,8 @@ export const Profile = () => {
             }
 
             const data = await response.json();
-            console.log("esto es data:", data); // Verifica la estructura de la respuesta
+            console.log("esto es data:", data);
 
-            // Asegúrate de que 'wishlist' y 'items' existen y 'items' es un arreglo
             if (Array.isArray(data.items)) {
                 setWishlistItems(data.items);
             } else {
@@ -80,6 +79,13 @@ export const Profile = () => {
         navigate('/wish-list');
     };
 
+    const handleNavigateToProducts = () => {
+        navigate('/products');
+    };
+
+    const visibleItems = wishlistItems.slice(0, 2);
+    const remainingCount = wishlistItems.length - 2;
+
     useEffect(() => {
         const fetchOrderItems = async () => {
             const token = localStorage.getItem('authToken');
@@ -92,8 +98,8 @@ export const Profile = () => {
                     },
                 });
                 const data = await response.json();
-                setOrderItems(data); // Establece los elementos de los pedidos
-                console.log("Datos de los pedidos del usuario logueado:", data); // Log de los datos recibidos
+                setOrderItems(data);
+                console.log("Datos de los pedidos del usuario logueado:", data);
             } catch (err) {
                 console.error('Error al cargar los pedidos:', err);
             }
@@ -111,9 +117,8 @@ export const Profile = () => {
 
     const handleUserInfoChange = (e) => {
         const { name, value, checked, type } = e.target;
-        setIsDirty(true); // Marca como "sucio" al modificar
+        setIsDirty(true);
 
-        // Log del cambio en el input
         console.log(`Cambio en el campo: ${name} -> Valor: ${type === 'checkbox' ? checked : value}`);
 
         setUser((prevUser) => {
@@ -135,7 +140,7 @@ export const Profile = () => {
                     birth_date: {
                         ...prevUser.birth_date,
                         [datePart]: datePart === 'month' || datePart === 'day' || datePart === 'year'
-                            ? parseInt(value, 10) || '' // Mantén los valores numéricos
+                            ? parseInt(value, 10) || ''
                             : value,
                     },
                 };
@@ -144,21 +149,21 @@ export const Profile = () => {
             if (name === 'gender') {
                 return {
                     ...prevUser,
-                    gender: value, // Aquí actualizamos el campo gender
+                    gender: value,
                 };
             }
 
             if (name === 'country') {
                 return {
                     ...prevUser,
-                    country: value, // Aquí actualizamos el campo gender
+                    country: value,
                 };
             }
 
             if (name === 'phoneNumber') {
                 return {
                     ...prevUser,
-                    phone_number: value, // Aquí actualizamos el campo gender
+                    phone_number: value,
                 };
             }
 
@@ -172,7 +177,6 @@ export const Profile = () => {
                 };
             }
 
-            // Para campos de texto
             return {
                 ...prevUser,
                 [name]: value
@@ -182,9 +186,8 @@ export const Profile = () => {
 
     const handleSaveChanges = async () => {
         const token = localStorage.getItem('authToken');
-        if (!token || loading || !isDirty) return; // Permitir guardado solo si hubo cambios
+        if (!token || loading || !isDirty) return;
 
-        // Log antes de guardar los cambios
         console.log("Guardando cambios con los siguientes datos del usuario:", user);
 
         try {
@@ -201,18 +204,15 @@ export const Profile = () => {
             const updatedUser = await response.json();
             console.log('Datos de usuario actualizados:', updatedUser);
 
-            // Guarda el usuario actualizado en el localStorage
             localStorage.setItem('user', JSON.stringify(updatedUser));
 
             setUser(updatedUser);
-            setIsDirty(false); // Reiniciar estado de cambios
-            setSaveStatus({ success: true, message: 'Cambios guardados exitosamente' }); // Mensaje de éxito
-
-            // Recarga los detalles del usuario después de guardar los cambios
+            setIsDirty(false);
+            setSaveStatus({ success: true, message: 'Cambios guardados exitosamente' });
             await fetchUserDetails();
         } catch (err) {
             console.error('Error al guardar cambios:', err);
-            setSaveStatus({ success: false, message: 'Hubo un error al guardar los cambios' }); // Mensaje de error
+            setSaveStatus({ success: false, message: 'Hubo un error al guardar los cambios' });
         }
     };
 
@@ -225,14 +225,14 @@ export const Profile = () => {
         navigate('/');
     };
 
-    console.log("Usuario logeado:", user); // Para revisar en la consola
-    console.log("Nombre del usuario logeado:", user?.first_name); // Agrega este console.log
+    console.log("Usuario logeado:", user);
+    console.log("Nombre del usuario logeado:", user?.first_name);
 
 
     return (
         <section className="profile-section">
-            {loading && <div>Cargando datos del usuario...</div>} {/* Indicador de carga */}
-            {error && <div>Error al cargar los datos del usuario: {error.message}</div>} {/* Mensaje de error */}
+            {loading && <div>Cargando datos del usuario...</div>}
+            {error && <div>Error al cargar los datos del usuario: {error.message}</div>}
             <ProfileImage initials="IN" userName={`${user?.first_name || ''} ${user?.last_name || ''}`} />
             <div className="userProfile">
                 <div className="profile-info">
@@ -403,7 +403,7 @@ export const Profile = () => {
                                     >
                                         <option value="">Seleccionar mes</option>
                                         {['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'].map((month, idx) => (
-                                            <option key={idx} value={idx + 1}>{month}</option> // El mes se almacena como número
+                                            <option key={idx} value={idx + 1}>{month}</option>
                                         ))}
                                     </select>
                                 </div>
@@ -428,37 +428,30 @@ export const Profile = () => {
                     <div className="submit-buttonProfile">
                         <button onClick={handleSaveChanges}>Guardar cambios</button>
                     </div>
-                    
+
                 </div>
 
                 <div className="order-wishlist">
 
-                    {/* Wishlist */}
                     <div className="background-containerProfile">
                         <div className="separation_div">
                             <div className="headerProfileWishlist">Lista de deseos:</div>
                         </div>
                         {wishlistItems.length > 0 ? (
                             <div className="wishlist-list">
-                                {wishlistItems.map((item) => {
-                                    // Deconstrucción de propiedades
+                                {wishlistItems.slice(0, 2).map((item) => {  // Limita a 2 productos
                                     const { product_id, variant_id } = item;
                                     const { name, base_price } = product_id || {};
 
                                     const variants = product_id?.variants || [];
-
-
                                     const selectedVariant = variants.find(variant => variant.variant_id === variant_id);
                                     const imageUrl = selectedVariant?.image ? selectedVariant.image[0] : null;
-                                    const fullImageUrl = imageUrl ? `${VITE_IMAGES_BASE_URL}${imageUrl}` : null; // Asegúrate de manejar el caso donde no hay variantes
+                                    const fullImageUrl = imageUrl ? `${VITE_IMAGES_BASE_URL}${imageUrl}` : null;
 
                                     return (
                                         <div key={item._id} className="wishlist-item">
                                             {fullImageUrl ? (
-                                                <img
-                                                    src={`${fullImageUrl}`}
-                                                    alt={name}
-                                                />
+                                                <img src={fullImageUrl} alt={name} />
                                             ) : (
                                                 <p>Imagen no disponible</p>
                                             )}
@@ -470,18 +463,28 @@ export const Profile = () => {
                             </div>
                         ) : (
                             <>
-                                <p className='alternative_noWishlist'>No hay artículos en la lista de deseos.</p>
+                                <p className="alternative_noWishlist">No hay artículos en la lista de deseos.</p>
                                 <div className="submit-buttonProfile">
-                                    <button onClick={handleNavigateToWishlist}>Ir a tienda</button>
+                                    <button onClick={handleNavigateToProducts}>Ir a tienda</button>
                                 </div>
                             </>
                         )}
 
+                        <div className="wishlist-container">
+                            <div className="wishlist-items">
+                                {visibleItems.map((item, index) => (
+                                    <div key={index} className="wishlist-item-summary">
+                                        <p>{item.name}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
 
-                        {/* Botón "Ver más..." */}
                         {wishlistItems.length > 0 && (
                             <div className="submit-buttonProfile">
-                                <button onClick={handleNavigateToWishlist}>Ver más...</button>
+                                <button onClick={handleNavigateToWishlist}>
+                                    {wishlistItems.length < 3 ? 'Ir a wish-list' : `Ver ${remainingCount} productos restantes`}
+                                </button>
                             </div>
                         )}
 
@@ -494,7 +497,7 @@ export const Profile = () => {
                             </div>
                         </div>
                         <div className="buttonBlock">
-                        <button onClick={handleLogout} className="logout-button">Cerrar sesión</button>
+                            <button onClick={handleLogout} className="logout-button">Cerrar sesión</button>
                         </div>
                     </div>
                 </div>

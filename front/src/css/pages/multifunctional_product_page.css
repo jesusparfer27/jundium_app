@@ -4,6 +4,13 @@
     background-color: #f9f9f9;
 }
 
+.removeItem_Wishlist {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 95%;
+    padding-top: 1.6rem;
+}
+
 .wishlistTitle {
     font-size: 2rem;
     margin-bottom: 1.5rem;
@@ -34,6 +41,13 @@
     position: relative; /* Añadir posición relativa */
 }
 
+.removeItem_WishlistButton {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+
+}
+
 .imageContainer {
     width: 100%;
     margin-bottom: 0rem;
@@ -43,9 +57,8 @@
 .detailsContainer {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     width: 100%;
-    height: 95%;
     gap: 0.5rem;
     position: absolute; /* Cambiar a posición absoluta */
     z-index: 1; /* Asegurar que esté por encima de la imagen */
@@ -80,12 +93,16 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    background-color: #f6f6f6;
 }
 
 .productInfoColumn {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    padding-left: 1rem;
 }
 
 .productName {
@@ -99,16 +116,40 @@
 
 .addToCartButtonContainer {
     text-align: right;
-    padding-top: 2rem;
+    display: flex;
+    height: 60%;
+    padding-right: 1rem;
+    cursor: pointer;
 }
 
 .addToCartButton {
     background-color: black;
-    color: white;
+    color: rgb(234, 234, 234);
     border: none;
     border-radius: 4px;
     padding: 0.5rem 1rem;
     cursor: pointer;
+    border-radius: 35px;
+    width: 80%;
+    
+}
+
+.addToCartButton span{
+    color: rgb(240, 238, 238);
+    font-size: 20px;
+
+}
+
+.spanLink_Container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+
+.addToCartButton span:hover {
+    color: black;
 }
 
 .addToCartButton:hover {

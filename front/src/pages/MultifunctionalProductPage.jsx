@@ -42,18 +42,18 @@ export const MultifunctionalProductPage = () => {
 
     const handleRemoveFromWishlist = async (productId, variantId) => {
         const token = localStorage.getItem('authToken');
-    
+
         if (!token) {
             setError('Por favor, inicia sesión para eliminar productos de la wishlist.');
             return;
         }
-    
+
         if (!productId || !variantId) {
             console.error('Falta productId o variantId:', { productId, variantId });
             setError('No se pudo eliminar de la wishlist debido a un problema con los datos del producto.');
             return;
         }
-    
+
         try {
             const response = await fetch(`${VITE_API_BACKEND}/wishlist/${productId}/${variantId}`, {
                 method: 'DELETE',  // Usamos DELETE para eliminar
@@ -66,15 +66,15 @@ export const MultifunctionalProductPage = () => {
                     variant_id: variantId,
                 }),
             });
-    
+
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.message || 'Error al eliminar de la wishlist');
             }
-    
+
             const data = await response.json();
             console.log('Producto eliminado de la wishlist:', data);
-    
+
             // Actualizamos el estado local para eliminar el producto de la wishlist
             setLikedProducts((prevProducts) => prevProducts.filter(item => item.variant_id !== variantId));
         } catch (error) {
@@ -83,9 +83,11 @@ export const MultifunctionalProductPage = () => {
         }
     };
 
-    const addToCart = (productId) => {
-        navigate(`/cart/${productId}`);
+    const addToCart = (productId, variantId) => {
+        // Navega a la ruta con los parámetros del producto y variante
+        navigate(`/products/${productId}?variant_id=${variantId}`);
     };
+    
 
     if (loading) {
         return <div>Cargando productos...</div>;
@@ -99,50 +101,60 @@ export const MultifunctionalProductPage = () => {
         <section className="wishlistSection">
             <h2 className="wishlistTitle">Wish List</h2>
             <div className="wishlistContainer">
-            {likedProducts.length > 0 ? (
-    likedProducts.map(item => {
-        const { product_id, variant_id } = item;
-        const { name, base_price, variants } = product_id;
+                {likedProducts.length > 0 ? (
+                    likedProducts.map(item => {
+                        const { product_id, variant_id } = item;
+                        const { name, base_price, variants } = product_id;
 
-        // Buscar la variante correspondiente al variant_id
-        const variant = variants?.find(v => v.variant_id === variant_id); // Buscar variante por variant_id
-        const imageUrl = variant?.image?.[0]; // Acceder a la primera imagen de la variante
+                        // Buscar la variante correspondiente al variant_id
+                        const variant = variants?.find(v => v.variant_id === variant_id); // Buscar variante por variant_id
+                        const imageUrl = variant?.image?.[0]; // Acceder a la primera imagen de la variante
 
-        // Debug: Verificar qué imagen estamos obteniendo
-        console.log('Image URL:', imageUrl);
-        const fullImageUrl = imageUrl ? `${VITE_IMAGES_BASE_URL}${imageUrl}` : null;
-        console.log('Full Image URL:', fullImageUrl); // Log de la URL completa de la imagen
+                        // Debug: Verificar qué imagen estamos obteniendo
+                        console.log('Image URL:', imageUrl);
+                        const fullImageUrl = imageUrl ? `${VITE_IMAGES_BASE_URL}${imageUrl}` : null;
+                        console.log('Full Image URL:', fullImageUrl); // Log de la URL completa de la imagen
 
-        return (
-            <div key={variant_id} className="wishlistItem">
-                <div className="imageContainer">
-                    {fullImageUrl ? (
-                        <img src={fullImageUrl} alt={name} />
-                    ) : (
-                        <p>Imagen no disponible</p>
-                    )}
-                </div>
+                        return (
+                            <div key={variant_id} className="wishlistItem">
+                                <div className="imageContainer">
+                                    {fullImageUrl ? (
+                                        <img src={fullImageUrl} alt={name} />
+                                    ) : (
+                                        <p>Imagen no disponible</p>
+                                    )}
+                                </div>
 
-                <div className="detailsContainer">
-                    <div className="productInfoRow">
-                        <div className="productInfoColumn">
-                            <button onClick={() => handleRemoveFromWishlist(product_id._id, variant_id)}>X</button>
-                            <div className="productName">{name}</div>
-                            <div className="productPrice">${base_price}</div>
-                        </div>
-                        <div className="addToCartButtonContainer">
-                            <button className="addToCartButton" onClick={() => addToCart(product_id._id)}>
-                                Añadir al carrito
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    })
-) : (
-    <div>No tienes productos en tu wishlist.</div>
-)}
+                                <div className="detailsContainer">
+                                    <div className="removeItem_Wishlist">
+                                        <button className='removeItem_WishlistButton' onClick={() => handleRemoveFromWishlist(product_id._id, variant_id)}>
+                                            <span className="material-symbols-outlined">
+                                                close
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="productInfoRow">
+                                    <div className="productInfoColumn">
+                                        <div className="productName">{name}</div>
+                                        <div className="productPrice">${base_price}</div>
+                                    </div>
+                                    <div className="addToCartButtonContainer">
+                                        <button className="addToCartButton" onClick={() => addToCart(product_id._id, variant_id)}>
+                                            <div className="spanLink_Container">
+                                                <span className="material-symbols-outlined">
+                                                    visibility
+                                                </span>
+                                            </div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })
+                ) : (
+                    <div>No tienes productos en tu wishlist.</div>
+                )}
 
             </div>
         </section>
