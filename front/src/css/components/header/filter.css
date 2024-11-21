@@ -1,3 +1,49 @@
+@keyframes slideInHorizontalRightToLeft {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutHorizontalRightToLeft {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
+
+.filterContainer {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    background-color: white; /* Fondo blanco grisáceo */
+    color: #333; /* Texto en tono gris oscuro */
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1); /* Sombra ligera para dar profundidad */
+}
+
+/* Aplicación de animaciones */
+.overlay.slideInHorizontalRightToLeft {
+    animation: slideInHorizontalRightToLeft 0.3s ease-in-out forwards;
+}
+
+.overlay.slideOutHorizontalRightToLeft {
+    animation: slideOutHorizontalRightToLeft 0.3s ease-in-out forwards;
+}
+
+.filterContainer.active {
+    animation: slideInHorizontalRightToLeft 0.3s ease forwards;
+}
 
 
 .contactContainer {
@@ -19,7 +65,6 @@
 }
 
 .filterContainer {
-    width: 80%;
     display: flex;
     flex-direction: column;
     justify-content: center;

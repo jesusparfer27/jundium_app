@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import '../css/pages/checkoutpage.css';
-import InfoAccordion from '../components/checkout/ComponentCheckOut';
-import Modal from '../components/checkout/ComponentCheckOut';
+import { Modal }  from '../components/checkout/ComponentCheckOut';
 import { HeaderContext } from '../context/HeaderContext';
 import { useUser } from '../hooks/useUser';
 
@@ -9,9 +8,9 @@ export const CheckOutPage = () => {
     const [cartItems, setCartItems] = useState([]);
     const [total, setTotal] = useState({ price: 0, verySpenses: 0, endingPrice: 0 });
     const [expandedSections, setExpandedSections] = useState({});
-    const { openMenu } = useContext(HeaderContext);
     const { user } = useUser();
     const { VITE_API_BACKEND, VITE_IMAGES_BASE_URL } = import.meta.env;
+    const { activeMenu, openMenu } = useContext(HeaderContext);
 
     const removeItem = (product_id) => {
         setCartItems(cartItems.filter(item => item.product_id !== product_id));
@@ -123,16 +122,8 @@ export const CheckOutPage = () => {
     };
 
 
-
-    const toggleSection = (section) => {
-        setExpandedSections(prevSections => ({
-            ...prevSections,
-            [section]: !prevSections[section],
-        }));
-    };
-
     const handleOpenModal = () => {
-        openMenu('modal');
+        openMenu('modalInfo_CheckOut');
     };
 
 
@@ -248,13 +239,10 @@ export const CheckOutPage = () => {
                                 <div className='accordion-CheckOut'>
                                     <div className='accordion-CheckOut'>{getSectionTitle(section)}</div>
                                     {expandedSections[section] && (
-                                        <>
-                                            <p>{getSectionContent(section)}</p>
-                                            <InfoAccordion section={section} />
-                                        </>
+                                         <button className='button cartButton' ></button>
                                     )}
-                                    <button onClick={() => toggleSection(section)}>
-                                        {expandedSections[section] ? 'Cerrar' : 'Ver más'}
+                                    <button onClick={() => openMenu('modalInfo_CheckOut')}>
+                                        abrir
                                     </button>
                                 </div>
                             </div>
@@ -262,11 +250,11 @@ export const CheckOutPage = () => {
                     ))}
                 </div>
             </div>
-
-            <Modal />
+            {activeMenu === 'modalInfo_CheckOut' && <Modal />}
         </section>
     );
 };
+
 
 const getSectionTitle = (section) => {
     switch (section) {

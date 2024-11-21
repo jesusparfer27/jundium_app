@@ -58,6 +58,7 @@ a:hover {
     transition: opacity 0.3s ease-in-out;
 }
 
+
 /* Cuando el overlay está activo */
 .overlay.active {
     opacity: 1;
@@ -105,6 +106,34 @@ a:hover {
         transform: translateX(-100%);
     }
 }
+
+@keyframes slideInHorizontalRightToLeft {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutHorizontalRightToLeft {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
+
+/* Aplicación de animaciones */
+.overlay.slideInHorizontalRightToLeft {
+    animation: slideInHorizontalRightToLeft 0.3s ease-in-out forwards;
+}
+
+.overlay.slideOutHorizontalRightToLeft {
+    animation: slideOutHorizontalRightToLeft 0.3s ease-in-out forwards;
+}
+
 
 @keyframes fadeIn {
     from {

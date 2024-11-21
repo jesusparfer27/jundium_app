@@ -1,6 +1,3 @@
-import '../../css/components/header/header.css';
-import '../../css/components/header/contact.css';
-import '../../css/components/header/closeButton.css';
 import '../../css/components/header/filter.css';
 import { HeaderContext } from '../../context/HeaderContext';
 import React, { useContext, useRef, useState, useEffect } from 'react';
@@ -139,7 +136,7 @@ export const FilterProducts = () => {
     return (
         <div
             ref={filterContainerRef}
-            className={`contactContainer ${activeMenu === 'filter' ? 'active slideInVertical' : ''}`}
+            className={`filterContainer ${activeMenu === 'filter' ? 'active slideInHorizontalRightToLeft' : ''}`}
         >
             <button className="closeContainer" onClick={closeMenu}>X</button>
             <h2>Mostrar Filtros</h2>

@@ -1,19 +1,21 @@
-// src/components/Modal.jsx
-import React, { useContext } from 'react';
+// src/components/ContactContainer.jsx
+import React, { useContext, useState } from 'react';
+import  { useUser } from '../../hooks/useUser'
 import { HeaderContext } from '../../context/HeaderContext';
-import '../../css/components/checkout/checkout_component.css'; // Asegúrate de tener estilos para el modal
+import '../../css/components/checkout/checkout_component.css'
 
-const Modal = () => {
+export const Modal = () => {
     const { activeMenu, closeMenu } = useContext(HeaderContext);
+    
+    const { user } = useUser()
+    console.log(user)
 
     return (
-        <div className={`modal ${activeMenu === 'modal' ? 'active' : ''}`}>
-            <button className="closeModal" onClick={closeMenu}>X</button>
-            <h2>Información del Modal</h2>
-            <p>Aquí va la información que quieres mostrar en el modal.</p>
-            {/* Puedes agregar más contenido aquí */}
+        <div
+            className={`checkoutContainer_slide  ${activeMenu === 'modalInfo_CheckOut' ? 'active slideInHorizontalRightToLeft ' : ''}`}
+        >
+            
         </div>
     );
 };
 
-export default Modal;

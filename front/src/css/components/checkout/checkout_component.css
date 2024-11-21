@@ -1,35 +1,69 @@
-/* src/css/components/modal/modal.css */
-.modal {
+/* Estilos para el CartContainer */
+.checkoutContainer_slide {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    max-width: 500px;
-    height: auto;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    z-index: 1002; /* Asegúrate de que esté por encima del overlay */
-    display: none; /* Oculto por defecto */
+    right: 0;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    background-color: white; /* Fondo blanco grisáceo */
+    color: #333; /* Texto en tono gris oscuro */
+    z-index: 1001;
+    display: flex;
     flex-direction: column;
-    padding: 20px;
-    gap: 10px;
-    opacity: 0; /* Para la transición */
-    transition: opacity 0.3s ease; /* Transición para el fade in */
+    align-items: center;
+    gap: 1.5rem;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1); /* Sombra ligera para dar profundidad */
 }
 
-.modal.active {
-    display: flex; /* Mostrar cuando está activo */
-    opacity: 1; /* Aparecer con fade in */
+@keyframes slideInHorizontalRightToLeft {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
 }
 
-.closeModal {
+@keyframes slideOutHorizontalRightToLeft {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
+
+/* Aplicación de animaciones */
+.overlay.slideInHorizontalRightToLeft {
+    animation: slideInHorizontalRightToLeft 0.3s ease-in-out forwards;
+}
+
+.overlay.slideOutHorizontalRightToLeft {
+    animation: slideOutHorizontalRightToLeft 0.3s ease-in-out forwards;
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Botón para cerrar el carrito */
+.closeContainer {
     background: none;
     border: none;
+    color: #333;
     font-size: 1.5rem;
     cursor: pointer;
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 1rem;
+    right: 1rem;
+}
+
+.checkoutContainer_slide.active {
+    animation: slideInHorizontalRightToLeft 0.3s ease forwards;
 }

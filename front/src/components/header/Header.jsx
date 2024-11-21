@@ -90,7 +90,7 @@ const Header = () => {
                         <div className="headerFilter">
                             <div className="flexButton_FilterColumn">
                                 <div className="flexButton_Filter">
-                                    <button className='button_filterButton' onClick={() => openMenu('button_filterButton')}>
+                                    <button className='button_filterButton' onClick={() => openMenu('filter')}>
                                         <span className="material-symbols-outlined">filter_list</span>
                                         <h3 className='h3Style_Filter'>Filtrar</h3>
                                     </button>
@@ -107,7 +107,7 @@ const Header = () => {
             {activeMenu === 'cart' && <CartContainer />}
             {activeMenu === 'contact' && <ContactContainer />}
             {activeMenu === 'searchBar' && <HeaderSearch />}
-            {activeMenu === 'button_filterButton' && <FilterProducts />}
+            {activeMenu === 'filter' && <FilterProducts />}
         </>
     );
 };

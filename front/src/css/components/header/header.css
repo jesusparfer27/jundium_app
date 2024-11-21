@@ -28,10 +28,11 @@ html,
 
 @keyframes slideInHorizontal {
     from {
-        transform: translateX(-100%); /* Desliza desde la izquierda */
+        transform: translateX(150%); /* Llega a su posición final */
     }
     to {
-        transform: translateX(0); /* Llega a su posición final */
+        transform: translateX(50%); /* Desliza desde la izquierda */
+        
     }
 }
 
@@ -117,6 +118,7 @@ html,
     font-size: 24px;
 }
 
+
 /* Alineación de los elementos del header */
 .headerLeft,
 .headerRight {
@@ -167,7 +169,8 @@ html,
 .sideMenu,
 .favouriteContainer,
 .filterMenu,
-.genderMenu {
+.genderMenu,
+.contactContainer {
     transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
 
