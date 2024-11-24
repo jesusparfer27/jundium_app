@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom'; // Importar useLocation
 import '../../css/components/signin/accordion.css'; // Importar estilos CSS para AccordionContainer
 
 const AccordionContainer = ({ isAccordionOpen = [], toggleAccordion }) => {
@@ -9,8 +10,10 @@ const AccordionContainer = ({ isAccordionOpen = [], toggleAccordion }) => {
         }
     };
 
+    const isEmailValidationRoute = location.pathname === '/email-validation-2';
+
     return (
-        <div className="accordion-container">
+        <div  className={`accordion-container ${isEmailValidationRoute ? 'email-validation-padding' : ''}`}>
             <div className="accordion-group1">
                 <p className="tittle-accordion-group">AL CREAR UNA CUENTA PODEMOS</p>
 

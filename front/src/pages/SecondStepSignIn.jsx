@@ -8,23 +8,12 @@ export const SecondStepSignIn = () => {
   const [formData, setFormData] = useState({
     password: '',
     confirmPassword: '',
-    genero: '',
-    nombre: '',
-    apellido: '',
+    gender: '',
+    first_name: '',
+    last_name: '',
     aceptar: false
   });
   const [error, setError] = useState(''); // Estado para el mensaje de error
-  const {VITE_API_BACKEND} = import.meta.env
-
-  useEffect(() => {
-    // Verificar los datos guardados en localStorage
-    const userEmail = localStorage.getItem('userEmail');
-    const userData = localStorage.getItem('userData');
-    
-    console.log("Datos en localStorage:");
-    console.log("userEmail:", userEmail);
-    console.log("userData:", userData ? JSON.parse(userData) : null);
-  }, []);
 
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
@@ -35,73 +24,78 @@ export const SecondStepSignIn = () => {
     if (error) setError(''); // Limpia el error al cambiar cualquier campo
   };
 
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('userEmail');
+    if (!savedEmail) {
+      setError('El correo electrónico no está definido. Vuelve al paso anterior.');
+    } else {
+      setFormData((prevData) => ({ ...prevData, email: savedEmail }));
+    }
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { password, confirmPassword, genero, nombre, apellido, aceptar } = formData;
-    
+    const { email, password, confirmPassword, gender, first_name, last_name, aceptar } = formData;
+  
+
+    if (!email) {
+      setError('El correo electrónico no está definido. Vuelve al paso anterior.');
+      return;
+    }
     // Validaciones básicas
-    if (!password || !confirmPassword || !genero || !nombre || !apellido || !aceptar) {
+    if (!password || !confirmPassword || !gender || !first_name || !last_name || !aceptar) {
       setError('Por favor, completa todos los campos y acepta la política de privacidad.');
       return;
     }
-    
+  
     // Verificar si la contraseña es suficientemente fuerte
     if (password.length < 8) {
       setError('La contraseña debe tener al menos 8 caracteres.');
       return;
     }
-    
+  
     // Verificar si las contraseñas coinciden
     if (password !== confirmPassword) {
       setError('Las contraseñas no coinciden.');
       return;
     }
-    
-    // Asegúrate de que userEmail sea obtenido correctamente
-    const userEmail = localStorage.getItem('userEmail');
-    if (!userEmail) {
-      setError('No se encontró el email, por favor regresa a la primera etapa.');
-      return;
-    }
-    
-    // Crear un objeto de datos del usuario
-    const userData = { 
-      email: userEmail, // Ahora ya puedes usar userEmail aquí
-      password,
-      first_name: nombre,
-      last_name: apellido,
-      gender: genero,
-    };
-    
-    // Log de los datos que se enviarán a la colección accounts
-    console.log("Datos a enviar a la colección accounts:", userData);
-    
+  
     try {
-      // Realizar la solicitud POST al endpoint de usuarios
-      const response = await fetch(`${VITE_API_BACKEND}/register`, {
+      // Almacenar datos en la base de datos (o enviarlos al backend)
+      const userData = { email: formData.email, password, gender, first_name, last_name };
+      const registerResponse = await fetch(`${import.meta.env.VITE_API_BACKEND}/register`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userData) // Convertir a JSON
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData),
       });
   
-      if (!response.ok) {
-        throw new Error('Error al crear el usuario');
+      if (!registerResponse.ok) {
+        throw new Error('Error al registrar al usuario.');
       }
   
-      // Si el usuario se crea correctamente, almacenar datos en localStorage
-      localStorage.setItem('userData', JSON.stringify(userData));
+      // Realizar inicio de sesión automático
+      const loginResponse = await fetch(`${import.meta.env.VITE_API_BACKEND}/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.email, password }),
+      });
   
-      // Navegar al perfil
+      if (!loginResponse.ok) {
+        throw new Error('Error al iniciar sesión automáticamente.');
+      }
+  
+      const loginData = await loginResponse.json();
+      localStorage.setItem('authToken', loginData.token); // Almacena el token en localStorage
+  
+      // Redirigir al perfil
       navigate('/profile');
     } catch (error) {
-      console.error(error);
-      setError('Hubo un problema al crear la cuenta.'); // Muestra un error si la solicitud falla
+      console.error('Error en el registro o inicio de sesión automático:', error);
+      setError('Hubo un problema al completar el registro. Intenta nuevamente.');
     }
   };
   
-  
+
 
   const accordionData = [
     { titulo: 'Sección 1', contenido: 'Contenido de la sección 1' },
@@ -146,9 +140,9 @@ export const SecondStepSignIn = () => {
             <div className="campo">
               <label htmlFor="genero">Género</label>
               <select
-                id="genero"
+                id="gender"
                 className="input-field"
-                value={formData.genero}
+                value={formData.gender}
                 onChange={handleChange}
               >
                 <option value="">Seleccione...</option>
@@ -161,9 +155,9 @@ export const SecondStepSignIn = () => {
               <label htmlFor="nombre">Nombre</label>
               <input
                 type="text"
-                id="nombre"
+                id="first_name"
                 className="input-field"
-                value={formData.nombre}
+                value={formData.first_name}
                 onChange={handleChange}
               />
             </div>
@@ -171,9 +165,9 @@ export const SecondStepSignIn = () => {
               <label htmlFor="apellido">Apellido</label>
               <input
                 type="text"
-                id="apellido"
+                id="last_name"
                 className="input-field"
-                value={formData.apellido}
+                value={formData.last_name}
                 onChange={handleChange}
               />
             </div>

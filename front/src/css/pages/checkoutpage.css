@@ -12,31 +12,29 @@
     border: 1px solid black;
 }
 
+.iconAccordion {
+    display: flex;
+    gap: 2rem;
+}
+
 .columnFlex {
-    width: 33%;
+    width: 40%;
     background-color: white;
     height: 80vh;
     position: sticky;
     top: 0;
-    padding-top: 4rem;
+    padding-top: 6rem;
    
 }
 
-.left-column {
-    width: 68%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #f8f8f8;
-    padding-top: 3rem;
-    gap: 1rem; /* Añadido para un gap entre los elementos internos */
-}
+
 
 .infoAboutChanges {
     width: 84%;
     display: flex;
     justify-content: center;
     margin-bottom: 1rem;
+    padding-top: 3rem;
 }
 
 .black-box {
@@ -130,6 +128,10 @@
     padding-bottom: 16rem;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+}
+
+.renderContent {
+
 }
 
 .color-size {
@@ -264,20 +266,38 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 80%;
-    padding: 1rem;
+    align-items: center;
+    width: 100%;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
     border-bottom: 1px solid black;
     cursor: pointer; /* Agregado para indicar que es interactivo */
     transition: background-color 0.3s ease; /* Efecto de transición al fondo */
 }
 
+.buttonForward {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
 
 .groupInformation {
     width: 80%;
-    justify-content: center;
+    justify-content: space-between;
     display: flex;
+    
+}
+
+.left-column {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f8f8f8;
+    padding-top: 3rem;
+    gap: 1rem; /* Añadido para un gap entre los elementos internos */
 }
 
 .accordion-CheckOut {
-    padding-left: 3rem;
+    
 }

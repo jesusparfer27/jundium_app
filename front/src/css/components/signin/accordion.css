@@ -2,9 +2,12 @@
     /* Estilos para el contenedor del acordeón */
 }
 
-.accordion-group1,
-.accordion-group2 {
-    /* Estilos para los grupos de acordeón */
+.accordion-group1 {
+    background-color: #ececec;
+}
+
+.accordion-container.email-validation-padding {
+    padding-bottom: 10rem;
 }
 
 .accordion-item {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import '../css/pages/checkoutpage.css';
-import { Modal }  from '../components/checkout/ComponentCheckOut';
+import { Modal } from '../components/checkout/ComponentCheckOut';
 import { HeaderContext } from '../context/HeaderContext';
 import { useUser } from '../hooks/useUser';
 
@@ -122,8 +122,8 @@ export const CheckOutPage = () => {
     };
 
 
-    const handleOpenModal = () => {
-        openMenu('modalInfo_CheckOut');
+    const handleOpenSectionModal = (sectionId) => {
+        openMenu(`modalInfo_CheckOut_${sectionId}`);
     };
 
 
@@ -138,7 +138,7 @@ export const CheckOutPage = () => {
                 <div className="cartPrev">
                     <div>Mi selección: ({cartItems.length})</div>
                     <div>
-                        <button className="view-cart-button" onClick={handleOpenModal}>Ver carrito</button>
+                        <button className="view-cart-button" onClick={handleOpenSectionModal}>Ver carrito</button>
                     </div>
                 </div>
 
@@ -232,25 +232,30 @@ export const CheckOutPage = () => {
                 <div className="right-columnInformation">
                     {['pedido', 'envio', 'devolucion', 'atencion'].map((section, index) => (
                         <div key={`${section}-${index}`} className="informationToggle">
-                            <div className='groupInformation'>
+                            <div className="groupInformation">
                                 <div className="iconAccordion">
-                                    <span className='Materyal-Symbol-icons'>Delete</span>
+                                    {getSectionIcon(section)} {/* Ícono dinámico */}
+                                    <div className="accordion-CheckOut">{getSectionTitle(section)}</div>
                                 </div>
-                                <div className='accordion-CheckOut'>
-                                    <div className='accordion-CheckOut'>{getSectionTitle(section)}</div>
+                                <div className="accordion-CheckOut">
                                     {expandedSections[section] && (
-                                         <button className='button cartButton' ></button>
+                                        <button className="button cartButton"></button>
                                     )}
-                                    <button onClick={() => openMenu('modalInfo_CheckOut')}>
-                                        abrir
-                                    </button>
                                 </div>
+                                <button
+                                    className="buttonForward"
+                                    onClick={() => handleOpenSectionModal(section)}
+                                >
+                                    <span className="material-symbols-outlined">arrow_forward_ios</span>
+                                </button>
+
                             </div>
                         </div>
                     ))}
                 </div>
+
             </div>
-            {activeMenu === 'modalInfo_CheckOut' && <Modal />}
+            {activeMenu.startsWith('modalInfo_CheckOut') && <Modal />}
         </section>
     );
 };
@@ -273,6 +278,45 @@ const getSectionContent = (section) => {
         case 'devolucion': return 'Información sobre la política de devoluciones...';
         case 'atencion': return 'Contacta con Atención al Cliente...';
         default: return '';
+    }
+};
+
+const sections = [
+    { id: 'pedido', title: 'Pedido', icon: 'iconPedido' },
+    { id: 'envio', title: 'Envío', icon: 'iconEnvio' },
+    { id: 'devolucion', title: 'Devolución', icon: 'iconDevolucion' },
+    { id: 'atencion', title: 'Atención al Cliente', icon: 'iconAtencion' },
+];
+
+
+const getSectionIcon = (section) => {
+    switch (section) {
+        case 'pedido':
+            return (
+                <span className="material-symbols-outlined">
+                    shopping_bag
+                </span>
+            );
+        case 'envio':
+            return (
+                <span className="material-symbols-outlined">
+                    local_shipping
+                </span>
+            );
+        case 'devolucion':
+            return (
+                <span className="material-symbols-outlined">
+                    package_2
+                </span>
+            );
+        case 'atencion':
+            return (
+                <span className="material-symbols-outlined">
+                    help
+                </span>
+            );
+        default:
+            return null;
     }
 };
 

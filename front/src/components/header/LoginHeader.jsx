@@ -59,11 +59,16 @@ const LoginContainer = () => {
             <div className="logIn">
                 <div className='logInHeader'>
                     <h2 className='logInH2'>Iniciar Sesión</h2>
-                    <button className="closeContainerLogin" onClick={closeMenu}>X</button>
+                    <button className="closeContainerLogin" onClick={closeMenu}><span className="material-symbols-outlined">
+                close
+            </span></button>
                 </div>
 
                 <div className="mandatoryFields">
                     <p>Campos obligatorios *</p>
+                </div>
+                <div className="additionalText">
+                    <p>Accede a tu usuario</p>
                 </div>
                 <div className="inputField">
                     <label htmlFor="email">Email</label>
@@ -86,9 +91,6 @@ const LoginContainer = () => {
                     />
                     <a href="/recuperar-contraseña" className="forgotPassword">Recuperar contraseña</a>
                 </div>
-                <div className="additionalText">
-                    <p>Texto adicional aquí</p>
-                </div>
                 <div className="submitButton">
                     <button className='buttonSubmitLogIn' type="submit" onClick={handleLogin}>Iniciar Sesión</button>
                 </div>
@@ -97,10 +99,10 @@ const LoginContainer = () => {
             {/* Segundo div: SignIn */}
             <div className="signIn">
                 <div className="welcomeText">
-                    <p>Texto de bienvenida</p>
+                    <p>Bienvenido a nuestra app!</p>
                 </div>
                 <div className="extraText">
-                    <p>Otro texto aquí</p>
+                    <p>Registrar usuario</p>
                 </div>
                 <div className="registerButton">
                     <button className='buttonSubmitSignIn' onClick={handleSignIn}>Registrarse</button>

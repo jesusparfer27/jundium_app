@@ -78,11 +78,11 @@ const HeaderSearch = () => {
         }
 
         navigate(searchQuery);
-        
+
     };
 
-     // Nueva función reutilizable
-     const handleLinkClick = () => {
+    // Nueva función reutilizable
+    const handleLinkClick = () => {
         openMenu(null); // Cierra el menú
     };
 
@@ -102,8 +102,12 @@ const HeaderSearch = () => {
                         className={`searchBar ${activeMenu === 'searchBar' ? 'activeSearch' : ''}`}
                     />
                     <div className="groupButtons_Header">
-                        <button className="closeButtonHeader" onClick={handleCloseSearch}>X</button>
-                        <button className="searchButton" onClick={handleSearchSubmit}>Buscar</button>
+                        <button className="closeButtonHeader" onClick={handleCloseSearch}><span className="material-symbols-outlined">
+                            close
+                        </span></button>
+                        <button className="searchButton" onClick={handleSearchSubmit}><span className="material-symbols-outlined">
+                            search
+                        </span></button>
                     </div>
                 </div>
             </div>
@@ -114,10 +118,10 @@ const HeaderSearch = () => {
                         <div className="recentSearches_block">
                             <ul className='recentSearches_flexRow'>
                                 <span>Busquedas recientes</span>
-                                <li><NavLink to="/products?search=Renueva%20en%20ofertas"  onClick={handleLinkClick}>Renueva en ofertas</NavLink></li>
-                                <li><NavLink to="/products?search=Descubre%20trends"  onClick={handleLinkClick}>Descubre trends</NavLink></li>
-                                <li><NavLink to="/products?search=Eventos%20de%20última%20hora"  onClick={handleLinkClick}>Eventos de última hora</NavLink></li>
-                                <li><NavLink to="/products?search=Zapatillas%20de%20polietileno"  onClick={handleLinkClick}>Zapatillas de polietileno</NavLink></li>
+                                <li><NavLink to="/products?search=Renueva%20en%20ofertas" onClick={handleLinkClick}>Renueva en ofertas</NavLink></li>
+                                <li><NavLink to="/products?search=Descubre%20trends" onClick={handleLinkClick}>Descubre trends</NavLink></li>
+                                <li><NavLink to="/products?search=Eventos%20de%20última%20hora" onClick={handleLinkClick}>Eventos de última hora</NavLink></li>
+                                <li><NavLink to="/products?search=Zapatillas%20de%20polietileno" onClick={handleLinkClick}>Zapatillas de polietileno</NavLink></li>
                             </ul>
                         </div>
                     </div>
@@ -129,7 +133,7 @@ const HeaderSearch = () => {
                             <ul className='groupList_searchesRecomendations'>
                                 {recommendations.map((rec, index) => (
                                     <li className='recomendSearches' key={index}>
-                                        <NavLink className="searchRecommendation_Navlink" to={`/products?search=${encodeURIComponent(rec)}`}  onClick={handleLinkClick}> <span className="material-symbols-outlined">
+                                        <NavLink className="searchRecommendation_Navlink" to={`/products?search=${encodeURIComponent(rec)}`} onClick={handleLinkClick}> <span className="material-symbols-outlined">
                                             search
                                         </span>{rec}</NavLink>
                                     </li>

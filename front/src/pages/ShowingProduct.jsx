@@ -192,9 +192,6 @@ export const ShowingProductPage = () => {
                         {accordionOpen && selectedVariant && (
                             <div className="accordionContent">
                                 <p>Materiales del producto: {selectedVariant.material}</p>
-                                <p>Tamaño: {selectedVariant.size.join(', ')}</p>
-                                <p>Color: {selectedVariant.color.colorName}</p>
-                                <p>Disponibilidad: {selectedVariant.stock ? 'En stock' : 'Agotado'}</p>
                             </div>
                         )}
 

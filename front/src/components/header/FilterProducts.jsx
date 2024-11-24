@@ -138,11 +138,13 @@ export const FilterProducts = () => {
             ref={filterContainerRef}
             className={`filterContainer ${activeMenu === 'filter' ? 'active slideInHorizontalRightToLeft' : ''}`}
         >
-            <button className="closeContainer" onClick={closeMenu}>X</button>
+            <button className="closeContainer" onClick={closeMenu}><span className="material-symbols-outlined">
+                close
+            </span></button>
             <h2>Mostrar Filtros</h2>
             <div className="filtersSection">
                 {/* Filtro por Tamaño */}
-                <div className="filterAccordion">
+                <div className="filterAccordion_Container">
                     <div className="filterHeader" onClick={() => toggleAccordion('size')}>
                         <span>Por Tamaño</span>
                         <span className="material-symbols-outlined">
@@ -153,21 +155,24 @@ export const FilterProducts = () => {
                         <div className="filterContent">
                             <div className='checkboxes'>
                                 {['XS', 'S', 'M', 'L', 'XL', 'Única'].map((size, index) => (
-                                    <label className="custom-label" key={index}>
-                                        <input 
-                                            type="checkbox" 
-                                            checked={filters.size.includes(size)} 
-                                            onChange={() => handleSizeChange(size)} 
-                                        />
-                                        {size}
-                                    </label>
+                                    <div className="checkboxes_Container" key={index}>
+                                        <label className="custom-label">
+                                            <input
+                                                type="checkbox"
+                                                checked={filters.size.includes(size)}
+                                                onChange={() => handleSizeChange(size)}
+                                                className='checkbox'
+                                            />
+                                            {size}
+                                        </label>
+                                    </div>
                                 ))}
                             </div>
                         </div>
                     )}
                 </div>
                 {/* Filtro por Color */}
-                <div className="filterAccordion">
+                <div className="filterAccordion_Container">
                     <div className="filterHeader" onClick={() => toggleAccordion('color')}>
                         <span>Por Color</span>
                         <span className="material-symbols-outlined">
@@ -178,23 +183,28 @@ export const FilterProducts = () => {
                         <div className="filterContent">
                             <div className='checkboxes'>
                                 {['Rojo', 'Azul', 'Verde', 'Negro', 'Blanco'].map((color, index) => (
-                                    <label className="custom-label" key={index}>
-                                        <input 
-                                            type="checkbox" 
-                                            checked={filters.color.includes(color)} 
-                                            onChange={() => handleColorChange(color)} 
-                                        />
-                                        {color}
-                                    </label>
+                                    <div className="checkboxes_Container" key={index}>
+                                        <label className="custom-label" >
+                                            <input
+                                                type="checkbox"
+                                                checked={filters.color.includes(color)}
+                                                onChange={() => handleColorChange(color)}
+                                                className='checkbox'
+                                            />
+                                            <span>{color}</span>
+                                        </label>
+                                    </div>
                                 ))}
                             </div>
                         </div>
                     )}
                 </div>
             </div>
-            <button className="applyFilterButton" onClick={handleSubmit}>
-                Aplicar filtros
-            </button>
+            <div className="container_applyFilter">
+                <button className="applyFilterButton" onClick={handleSubmit}>
+                    Aplicar filtros
+                </button>
+            </div>
         </div>
     );
 };

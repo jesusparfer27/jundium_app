@@ -349,6 +349,10 @@ const orderSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    orderCode: {
+        type: String,
+        required: true
+    },
     date: {
         type: Date,
         default: Date.now

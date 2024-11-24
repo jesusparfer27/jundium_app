@@ -103,7 +103,9 @@ const CartContainer = () => {
                     <div className="cartHeader">
                         <div className="cartTitle">
                             <p>Mi Carrito</p>
-                            <button className="closeContainerCart" onClick={closeMenu}>X</button>
+                            <button className="closeContainerCart" onClick={closeMenu}><span className="material-symbols-outlined">
+                close
+            </span></button>
                         </div>
                     </div>
 

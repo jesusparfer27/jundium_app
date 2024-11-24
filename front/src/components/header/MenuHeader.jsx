@@ -30,19 +30,19 @@ const HeaderMenu = () => {
 
         switch (gender) {
             case 'Hombre':
-                setColor('#E0F7FA');
+                setColor('#FFFFFF');
                 setSectionImage(ManSectionHeader);
                 break;
             case 'Mujer':
-                setColor('#FCE4EC');
+                setColor('#FFFFFF');
                 setSectionImage(WomanSectionHeader);
                 break;
             case 'Colecciones':
-                setColor('#E8F5E9');
+                setColor('#FFFFFF');
                 setSectionImage(CollectionsSectionHeader);
                 break;
             case 'Descuentos':
-                setColor('#FFF3E0');
+                setColor('#FFFFFF');
                 setSectionImage(DiscountSectionHeader);
                 break;
             default:
@@ -74,7 +74,9 @@ const HeaderMenu = () => {
                 ref={sideMenuRef}
                 className={`sideMenu ${activeMenu === 'sideMenu' ? 'open slideInHorizontal' : (isClosing ? 'close slideOutHorizontal' : '')}`}
             >
-                <button className="closeMenu" onClick={handleCloseMenu}>X</button>
+                <button className="closeMenu" onClick={handleCloseMenu}><span className="material-symbols-outlined">
+                    close
+                </span></button>
                 <h2>Filtrar por:</h2>
                 <button className="filterButtonMenu" onClick={() => handleGenderClick('Hombre')}>Hombre</button>
                 <button className="filterButtonMenu" onClick={() => handleGenderClick('Mujer')}>Mujer</button>
@@ -91,14 +93,14 @@ const HeaderMenu = () => {
             </div>
 
             {showGenderSection && (
-                <div 
+                <div
                     className={`genderSection ${activeMenu === 'sideMenu' ? 'open' : 'close'}`}
-                    style={{ backgroundColor: color }} 
+                    style={{ backgroundColor: color }}
                 >
-                    <div 
+                    <div
                         className="sectionImage"
                         style={{
-                            backgroundImage: `url(${sectionImage})`, 
+                            backgroundImage: `url(${sectionImage})`,
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
                             width: '90%',
@@ -106,7 +108,7 @@ const HeaderMenu = () => {
                             margin: '10px auto',
                         }}
                     ></div>
-                    <h3 
+                    <h3
                         style={{
                             color: 'black',
                             paddingLeft: '1rem',

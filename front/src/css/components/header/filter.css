@@ -16,6 +16,7 @@
     }
 }
 
+
 .filterContainer {
     position: fixed;
     right: 0;
@@ -70,8 +71,18 @@
     justify-content: center;
 }
 
-.filterAccordion {
-    margin: 10px 0;
+.filterAccordion_Container{
+    width: 100%;
+    display: flex;
+    border-bottom: 1px solid black;
+    flex-direction: column;
+}
+
+.filtersSection {
+    width: 70%;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
 }
 
 .filterHeader {
@@ -80,6 +91,11 @@
     border-radius: 5px;
     width: 100%;
     display: flex;
+    justify-content: space-between;
+}
+
+.filterHeader span {
+    font-size: 18px;
 }
 
 .headerContent {
@@ -91,14 +107,34 @@
 .filterContent {
     padding: 10px;
     width: 100%;
+    display: flex;
 }
 
 .custom-label {
-    width: 100%;
+    width: auto;
+    display: flex;
+    justify-content: center;
+    padding-left: 0;
+    gap: 1rem;
+}
+
+.inputCheckbox_Container {
+    display: flex;
+    justify-content: flex-start;
 }
 
 .checkboxes {
-    width: 100%;
+    width: 50%;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: .8rem;
+
+}
+
+.checkboxes_Container {
+    display: flex;
+    align-items: center;
 }
 
 .sizeFilter {
@@ -153,23 +189,38 @@
     background-color: #0056b3;
 }
 
-.submitButton {
+.container_applyFilter {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 8rem;
+}
+
+
+.applyFilterButton {
     padding: 10px;
+    width: 50%;
     color: white;
+    background-color: black;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    border: 1px solid black;
+
 }
 
+.applyFilterButton:hover {
+    background-color: transparent;
+    border: 1px solid black;
+    color: black;
+}
 
 
 .material-symbols-outlined {
     color: black;
     font-size: 24px;
-}
-
-.filtersSection {
-    width: 100%;
 }
 
 .collectionFilter {

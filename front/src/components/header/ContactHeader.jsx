@@ -68,7 +68,9 @@ const ContactContainer = () => {
             ref={contactContainerRef}
             className={`contactContainer ${activeMenu === 'contact' ? 'active slideInVertical' : ''}`}
         >
-            <button className="closeContainer" onClick={closeMenu}>X</button>
+            <button className="closeContainer" onClick={closeMenu}><span className="material-symbols-outlined">
+                close
+            </span></button>
             <h2>Contáctenos</h2>
             <div className="headerContactContainer">
                 <div className='borderContact'>

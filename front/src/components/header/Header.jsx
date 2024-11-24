@@ -15,10 +15,11 @@ const Header = () => {
     const navigate = useNavigate();
     const [isProductsPage, setIsProductsPage] = useState(false);
 
-    const [news, setNews] = useState({
-        new1: { text: 'Promoción especial', link: '/promocion' },
-        new2: { text: 'Descubre nuestras ofertas', link: '/ofertas' },
-    });
+    const news = [
+        { text: 'Promoción especial', link: '/promocion' },
+        { text: 'Descubre nuestras ofertas', link: '/ofertas' },
+    ]
+    const [activeNewsIndex, setActiveNewsIndex] = useState(0);
     const [isNewsVisible, setIsNewsVisible] = useState(true);
 
     useEffect(() => {
@@ -26,8 +27,13 @@ const Header = () => {
     }, [location.pathname]);
 
     useEffect(() => {
-        setIsProductsPage(location.pathname === '/products');
-    }, [location.pathname]);
+        if (isNewsVisible) {
+            const interval = setInterval(() => {
+                setActiveNewsIndex((prevIndex) => (prevIndex + 1) % news.length);
+            }, 3000); // Cambiar cada 3 segundos
+            return () => clearInterval(interval);
+        }
+    }, [isNewsVisible]);
 
     const handleLoginClick = () => {
         const token = localStorage.getItem('authToken');
@@ -38,25 +44,22 @@ const Header = () => {
         }
     };
 
-const removeHeaderNews = () => {
-    setIsNewsVisible(false);
-};
+    const removeHeaderNews = () => {
+        setIsNewsVisible(false);
+    };
 
     return (
         <>
-            <header className={`headerContainer ${isProductsPage ? 'productsPageActive' : ''}`}>
+            <header className="headerMainContainer">
                 {isNewsVisible && (
                     <div className="headerNews_Container">
                         <div className="containerNews_sections">
                             <div className="pauseNews"></div>
                             <div className="newsInformation">
                                 <p>
-                                    {news.new1.text}{' '}
-                                    <Link to={news.new1.link}>Ver más</Link>
-                                </p>
-                                <p>
-                                    {news.new2.text}{' '}
-                                    <Link to={news.new2.link}>Ver más</Link>
+                                    <Link to={news[activeNewsIndex].link}>
+                                        {news[activeNewsIndex].text}{' '}
+                                    </Link>
                                 </p>
                             </div>
                             <div className="removeNews" onClick={removeHeaderNews}>
@@ -65,18 +68,19 @@ const removeHeaderNews = () => {
                         </div>
                     </div>
                 )}
-                <div className="headerContainer">
+
+                <div className={`headerContainer ${isProductsPage ? 'productsPageActive' : ''}`}>
                     <div className="headerLeft">
                         <div className="headerMenu">
-                            <button className='button headerButton' onClick={() => openMenu('sideMenu')}>
+                            <button className="button headerButton" onClick={() => openMenu('sideMenu')}>
                                 <span className="material-symbols-outlined">menu</span>
                                 <h3 className="h3Style">Menú</h3>
                             </button>
                         </div>
                         <div className="headerSearch">
-                            <button className='button headerButton' onClick={() => openMenu('searchBar')}>
+                            <button className="button headerButton" onClick={() => openMenu('searchBar')}>
                                 <span className="material-symbols-outlined">search</span>
-                                <h3 className='h3Style'>Buscar</h3>
+                                <h3 className="h3Style">Buscar</h3>
                             </button>
                         </div>
                     </div>
@@ -87,22 +91,22 @@ const removeHeaderNews = () => {
 
                     <div className="headerRight">
                         <div className="contact">
-                            <button className='button contactButton' onClick={() => openMenu('contact')}>
-                                <h3 className='h3Style'>Llámenos</h3>
+                            <button className="button contactButton" onClick={() => openMenu('contact')}>
+                                <h3 className="h3Style">Llámenos</h3>
                             </button>
                         </div>
                         <div className="like">
-                            <button className='button favButton' onClick={() => navigate('/wish-list')}>
+                            <button className="button favButton" onClick={() => navigate('/wish-list')}>
                                 <span className="material-symbols-outlined">favorite</span>
                             </button>
                         </div>
                         <div className="logIn">
-                            <button className='button logInButton' onClick={handleLoginClick}>
+                            <button className="button logInButton" onClick={handleLoginClick}>
                                 <span className="material-symbols-outlined">person</span>
                             </button>
                         </div>
                         <div className="shopCart">
-                            <button className='button cartButton' onClick={() => openMenu('cart')}>
+                            <button className="button cartButton" onClick={() => openMenu('cart')}>
                                 <span className="material-symbols-outlined">shopping_bag</span>
                             </button>
                         </div>
@@ -114,9 +118,9 @@ const removeHeaderNews = () => {
                         <div className="headerFilter">
                             <div className="flexButton_FilterColumn">
                                 <div className="flexButton_Filter">
-                                    <button className='button_filterButton' onClick={() => openMenu('filter')}>
+                                    <button className="button_filterButton" onClick={() => openMenu('filter')}>
                                         <span className="material-symbols-outlined">filter_list</span>
-                                        <h3 className='h3Style_Filter'>Filtrar</h3>
+                                        <h3 className="h3Style_Filter">Filtrar</h3>
                                     </button>
                                 </div>
                             </div>
