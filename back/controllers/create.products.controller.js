@@ -7,7 +7,6 @@ import mongoose from 'mongoose';
 connectDB();
 
 // Generar un código único para cada producto
-
 function generateProductCode() {
     return `PROD-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
 }
@@ -26,36 +25,47 @@ export const createProduct = async (req, res) => {
             return res.status(400).json({ message: 'Faltan datos requeridos para crear el producto.' });
         }
 
-        // Validación de las variantes
-        // Validación de las variantes
+        // Validación de las variantes y asignación del variant_id
         const updatedVariants = await Promise.all(variants.map(async (variant) => {
             let productCode;
             let isUnique = false;
-
+        
+            // Generar un variant_id único
+            const variantId = new mongoose.Types.ObjectId();
+        
+            // Generar un código de producto único para cada variante
             while (!isUnique) {
                 productCode = generateProductCode();
                 const existingProduct = await Product.findOne({ 'variants.product_code': productCode });
-
+        
                 if (!existingProduct) {
-                    isUnique = true;
+                    isUnique = true;  // Si no existe un producto con ese código, lo consideramos único
                 }
             }
-
-            return {
+        
+            // Eliminar el campo _id (si existe) y asignar el variant_id y product_code
+            const updatedVariant = {
                 ...variant,
-                product_code: productCode, // Sobrescribe cualquier product_code existente
+                variant_id: variantId, // Asignar variant_id único
+                product_code: productCode, // Sobrescribir el código de producto con uno único
             };
+        
+            // Eliminar el campo _id si existe
+            delete updatedVariant._id;
+        
+            return updatedVariant;
         }));
+        
 
         // Validación adicional para evitar product_code null
         if (updatedVariants.some(v => !v.product_code)) {
             console.log('Algunas variantes no tienen un código de producto válido:', updatedVariants);
             return res.status(400).json({ message: 'Algunas variantes no tienen un código de producto válido.' });
         }
+
         console.log('Códigos de producto generados:', updatedVariants.map(v => v.product_code));
 
-
-        // Creación del producto en la base de datos
+        // Crear el producto en la base de datos
         const product = new Product({
             collection,
             brand,
@@ -63,7 +73,7 @@ export const createProduct = async (req, res) => {
             gender,
             new_arrival,
             featured,
-            variants: updatedVariants,
+            variants: updatedVariants, //    Asignar las variantes actualizadas al producto
         });
 
         await product.save();

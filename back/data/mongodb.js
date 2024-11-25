@@ -191,9 +191,10 @@ const productSchema = new mongoose.Schema({
     },
     variants: [
         {
+            _id: { type: mongoose.Schema.Types.ObjectId, auto: false },  // No auto-generar _id
             variant_id: {
                 type: mongoose.Schema.Types.ObjectId,
-                required: false, // Hacer que no sea obligatorio para la creación del producto
+                required: true
             },
             product_reference: {
                 type: String,
@@ -231,10 +232,6 @@ const productSchema = new mongoose.Schema({
             material: {
                 type: String,
                 required: true
-            },
-            discount: {
-                type: Number,
-                default: 0
             },
             description: {
                 type: String,
