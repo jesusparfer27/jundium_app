@@ -1,16 +1,15 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { ProductContext } from "../context/ProductContext";
 import '../../../css/pages/admin.css'
 
 export const Product = () => {
-    const [generalProduct, setGeneralProduct] = useState({
-        collection: "",
-        brand: "",
-        type: "",
-        gender: "",
-        new_arrival: true,
-        featured: false,
-    });
+    const { generalProduct, setGeneralProduct } = useContext(ProductContext);
+
+    const [variants, setVariants] = useState([]);
+    const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
+    const [currentVariant, setCurrentVariant] = useState({});
+
     const navigate = useNavigate();
     const VITE_API_BACKEND = import.meta.env.VITE_API_BACKEND;
 
@@ -22,6 +21,7 @@ export const Product = () => {
             [id]: value,
         }));
     };
+    
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -38,6 +38,10 @@ export const Product = () => {
         }
         return true;
     };
+
+    useEffect(() => {
+        localStorage.setItem("generalProduct", JSON.stringify(generalProduct));
+    }, [generalProduct]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -73,6 +77,29 @@ export const Product = () => {
             console.error("Error en la creación del producto:", err);
         }
     };
+
+    useEffect(() => {
+        if (variants.length === 0) {
+            setVariants([{
+                name: '',
+                color: { colorName: '', hexCode: '' },
+                size: [],
+                file: [],
+                material: '',
+                base_price: '',
+                discount: 0,
+                image: [],
+                is_main: false,
+                description: '',
+            }]);
+        }
+    }, []);
+    
+    useEffect(() => {
+        if (variants.length > 0) {
+            setCurrentVariant(variants[selectedVariantIndex]);
+        }
+    }, [selectedVariantIndex, variants]);
 
     return (
         <div className="createProductContainer">

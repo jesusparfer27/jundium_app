@@ -107,3 +107,43 @@ export const Admin = () => {
         </>
     );
 };
+
+
+ {/* <div className="container_ButtonSubmitContainer">
+                                <div className="submitEdition">
+                                    <button className="submitCreateButton" onClick={() => handleDeleteVariant(index)}>Eliminar variante</button>
+                                </div>
+                            </div> */}
+
+                                // const handleDeleteVariant = (index) => {
+    //     setVariants((prevVariants) => {
+    //         const updatedVariants = prevVariants.filter((_, i) => i !== index);
+    //         return updatedVariants;
+    //     });
+    // };
+
+                                        
+
+                                        // const validateVariant = (variant) => {
+    //     console.log('Validating Variant:', variant);
+
+    //     if (!variant || !variant.name || !variant.color.colorName || !variant.color.hexCode || !variant.price) {
+    //         setError('Por favor, complete todos los campos requeridos.');
+    //         console.log('Validation Error: Missing required fields', variant);
+    //         console.log('Validation Error: Falta completar campos requeridos.');
+    //         return false;
+    //     }
+    //     if (isNaN(variant.price)) {
+    //         setError('El precio debe ser un número válido.');
+    //         console.log('Validation Error: El precio no es válido.');
+    //         return false;
+    //     }
+    //     if (isNaN(variant.discount)) {
+    //         setError('El descuento debe ser un número válido.');
+    //         console.log('Validation Error: El descuento no es válido.');
+    //         return false;
+    //     }
+    //     setError('');
+    //     console.log('Validation Passed.');
+    //     return true;
+    // };

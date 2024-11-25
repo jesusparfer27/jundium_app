@@ -1,67 +1,76 @@
 import { Product } from '../data/mongodb.js';
-import multer from 'multer';
-import { upload } from '../middlewares/multer.js'; // Asumiendo que tienes un middleware para manejar la subida de archivos
+import multer from 'multer'; // Si usas multer para manejo de imágenes
+import { upload } from '../middlewares/multer.js'; // Middleware de multer, si aplica
+import { connectDB } from '../data/mongodb.js';
+import mongoose from 'mongoose';
 
-// Crear un producto
+connectDB();
+
+// Generar un código único para cada producto
+
+function generateProductCode() {
+    return `PROD-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
+}
+
 export const createProduct = async (req, res) => {
     try {
-        // Extraer los datos del body que corresponden a tu esquema
-        const {
-            collection,
-            brand,
-            type,
-            gender,
-            variants,
-            new_arrival,
-            featured,
-        } = req.body;
+        console.log('Datos recibidos en el backend:', req.body);  // Verifica los datos recibidos
+        console.log('Archivos recibidos:', req.files); // Verifica los archivos recibidos
 
-        // Validación de datos requeridos
-        if (!collection || !brand || !type || !gender || !variants) {
-            return res.status(400).json({ message: 'Faltan datos para crear el producto.' });
+        const { collection, brand, type, gender, new_arrival, featured } = req.body.generalProduct || {};
+        const { variants } = req.body;
+
+        // Validación de datos principales del producto
+        if (!collection || !brand || !type || !gender || !Array.isArray(variants) || variants.length === 0) {
+            console.log('Faltan datos en el producto principal');
+            return res.status(400).json({ message: 'Faltan datos requeridos para crear el producto.' });
         }
 
-        // Si hay imágenes, las manejamos aquí
-        let imageUrls = [];
-        if (req.files && req.files.length > 0) {
-            imageUrls = req.files.map(file => `/uploads/products/${file.filename}`); // Asegúrate de que la ruta es la correcta
-        }
+        // Validación de las variantes
+        // Validación de las variantes
+        const updatedVariants = await Promise.all(variants.map(async (variant) => {
+            let productCode;
+            let isUnique = false;
 
-        // Aquí es donde vamos a agregar la imagen a cada variante
-        const updatedVariants = variants.map(variant => {
-            if (variant.image && variant.image.length > 0) {
-                // Si hay imágenes en la variante, las actualizamos
-                variant.image = [...variant.image, ...imageUrls]; // Se añaden las imágenes a la variante
-            } else {
-                variant.image = imageUrls; // Si no hay imágenes en la variante, las asignamos
+            while (!isUnique) {
+                productCode = generateProductCode();
+                const existingProduct = await Product.findOne({ 'variants.product_code': productCode });
+
+                if (!existingProduct) {
+                    isUnique = true;
+                }
             }
 
-            return variant;
-        });
+            return {
+                ...variant,
+                product_code: productCode, // Sobrescribe cualquier product_code existente
+            };
+        }));
 
-        // Crear el nuevo producto
-        const newProduct = new Product({
+        // Validación adicional para evitar product_code null
+        if (updatedVariants.some(v => !v.product_code)) {
+            console.log('Algunas variantes no tienen un código de producto válido:', updatedVariants);
+            return res.status(400).json({ message: 'Algunas variantes no tienen un código de producto válido.' });
+        }
+        console.log('Códigos de producto generados:', updatedVariants.map(v => v.product_code));
+
+
+        // Creación del producto en la base de datos
+        const product = new Product({
             collection,
             brand,
             type,
             gender,
+            new_arrival,
+            featured,
             variants: updatedVariants,
-            new_arrival: new_arrival || false,
-            featured: featured || false,
         });
 
-        // Guardar el producto en la base de datos
-        await newProduct.save();
+        await product.save();
+        res.status(201).json({ message: 'Producto creado con éxito.', product });
 
-        res.status(201).json({
-            message: 'Producto creado con éxito',
-            product: newProduct
-        });
     } catch (error) {
-        // Manejo de errores
-        if (error instanceof multer.MulterError) {
-            return res.status(400).json({ message: `Error de carga de archivo: ${error.message}` });
-        }
-        res.status(500).json({ message: 'Error al crear el producto', error: error.message });
+        console.error('Error al crear el producto:', error);
+        res.status(500).json({ message: 'Error al crear el producto.' });
     }
 };

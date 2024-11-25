@@ -1,102 +1,88 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { ProductContext } from '../context/ProductContext';
 import '../../../css/pages/admin.css'
 
 export const Variant = () => {
+    const { generalProduct, variants, setVariants } = useContext(ProductContext);
+
     const [sizes, setSizes] = useState([]);
     const [fileNames, setFileNames] = useState([]);
     const [error, setError] = useState('');
     const [variantCount, setVariantCount] = useState(0);
-    const [selectedVariantIndex, setSelectedVariantIndex] = useState(null);
+    const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
     const [activeAccordion, setActiveAccordion] = useState(null);
-    const [variants, setVariants] = useState([{
-        name: '',
-        color: { colorName: '', hexCode: '' },
-        size: [],
-        file: [],
-        material: '',
-        price: '',
-        discount: 0,
-        image: [],
-        is_main: false,
-        description: '',
-    }]);
     const [currentSize, setCurrentSize] = useState('');
     const [imageUrls, setImageUrls] = useState([]);
     const [currentVariant, setCurrentVariant] = useState({
         name: '',
         color: { colorName: '', hexCode: '' },
-        size: [],
+        size: [''],
         file: [],
         material: '',
-        price: '',
+        base_price: '',
         discount: 0,
-        image: [],
+        image: [''],
         is_main: false,
         description: '',
     });
     const { VITE_API_BACKEND } = import.meta.env;
 
+    useEffect(() => {
+        localStorage.setItem("variants", JSON.stringify(variants));
+    }, [variants]);
 
-const handleVariantChange = (e, index) => {
-    const { id, checked } = e.target;
-    console.log(`handleVariantChange - Index: ${index}, ID: ${id}, Checked: ${checked}`);
-    if (index === undefined || index === null) {
-        console.error("Invalid index received:", index);
-        return;
-    }
 
-    setVariants((prevVariants) => {
-        const updatedVariants = [...prevVariants];
-        const currentVariant = { ...updatedVariants[index] };
-
-        if (id === 'is_main') {
-            currentVariant.is_main = checked;
-        } else if (id.includes('.')) {
-            const [parentKey, childKey] = id.split('.');
-            currentVariant[parentKey] = {
-                ...currentVariant[parentKey],
-                [childKey]: e.target.value,
-            };
-        } else {
-            currentVariant[id] = e.target.value;
+    const handleVariantChange = (e) => {
+        const index = selectedVariantIndex ?? 0; // Usa 0 como fallback
+        if (index < 0 || index >= variants.length) {
+            console.error('handleVariantChange Error: Índice de variante no válido.');
+            return;
+        }
+        const { id, checked } = e.target;
+        console.log(`handleVariantChange - Index: ${index}, ID: ${id}, Checked: ${checked}`);
+        if (index === undefined || index === null) {
+            console.error("Invalid index received:", index);
+            return;
         }
 
-        updatedVariants[index] = currentVariant;
-        return updatedVariants;
-    });
-};
+        setVariants((prevVariants) => {
+            const updatedVariants = [...prevVariants];
+            const currentVariant = { ...updatedVariants[index] };
 
-    const validateVariant = (variant) => {
-        console.log('Validating Variant:', variant);
+            if (id === 'is_main') {
+                currentVariant.is_main = checked;
+            } else if (id.includes('.')) {
+                const [parentKey, childKey] = id.split('.');
+                currentVariant[parentKey] = {
+                    ...currentVariant[parentKey],
+                    [childKey]: e.target.value,
+                };
+            } else {
+                currentVariant[id] = e.target.value;
+            }
 
-        if (!variant || !variant.name || !variant.color.colorName || !variant.color.hexCode || !variant.price) {
-            setError('Por favor, complete todos los campos requeridos.');
-            console.log('Validation Error: Missing required fields', variant);
-            console.log('Validation Error: Falta completar campos requeridos.');
-            return false;
-        }
-        if (isNaN(variant.price)) {
-            setError('El precio debe ser un número válido.');
-            console.log('Validation Error: El precio no es válido.');
-            return false;
-        }
-        if (isNaN(variant.discount)) {
-            setError('El descuento debe ser un número válido.');
-            console.log('Validation Error: El descuento no es válido.');
-            return false;
-        }
-        setError('');
-        console.log('Validation Passed.');
-        return true;
+            updatedVariants[index] = currentVariant;
+            return updatedVariants;
+        });
     };
 
+    const handleAddImageInput = (index) => {
+        setVariants((prevVariants) => {
+            const updatedVariants = [...prevVariants];
+            // Asegurarte de que `image` es siempre un array.
+            if (!Array.isArray(updatedVariants[index].image)) {
+                updatedVariants[index].image = [];
+            }
 
-    const addImage = (url) => {
-        if (!url) return;
-        setCurrentVariant((prev) => ({
-            ...prev,
-            image: [...prev.image, url],
-        }));
+            // Evita agregar un campo vacío si el último ya está vacío
+            if (updatedVariants[index].image[updatedVariants[index].image.length - 1] === '') {
+                return updatedVariants;
+            }
+
+            // Agregar un nuevo campo vacío de imagen
+            updatedVariants[index].image.push('');
+            return updatedVariants;
+        });
     };
 
     const handleImageUploadChange = (e, index) => {
@@ -120,7 +106,6 @@ const handleVariantChange = (e, index) => {
         });
     };
 
-
     const handleImageChange = (e, index) => {
         const files = Array.from(e.target.files);
         const imageUrls = files.map((file) => URL.createObjectURL(file));
@@ -139,6 +124,7 @@ const handleVariantChange = (e, index) => {
         });
     };
 
+
     useEffect(() => {
         if (variants.length === 0) {
             setVariants([
@@ -148,7 +134,7 @@ const handleVariantChange = (e, index) => {
                     size: [],
                     file: [],
                     material: '',
-                    price: '',
+                    base_price: '',
                     discount: 0,
                     image: [],
                     is_main: false,
@@ -157,65 +143,73 @@ const handleVariantChange = (e, index) => {
             ]);
         }
     }, []);
+
+    const generateProductCode = () => {
+        const code = 'PROD-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        console.log('Generated Product Code:', code);  // Verifica que se genera correctamente
+        return code;
+    };
     
 
-    const handleSubmit = async (event, index) => {
-        event.preventDefault();
-
-        if (index === undefined || index === null || index < 0 || index >= variants.length) {
-            setError('Índice de variante no válido.');
-            console.error('handleSubmit Error: Índice de variante no válido.');
-            return;
+    const validateData = () => {
+        if (!generalProduct.collection || !generalProduct.brand) {
+            console.error("Faltan datos del producto.");
+            return false;
         }
-    
-        const variantToSubmit = variants[index];
-        console.log('handleSubmit - Variant to Submit:', variantToSubmit);
-    
-        if (!validateVariant(variantToSubmit)) {
-            console.log('handleSubmit: La variante no pasó la validación.');
-            return;
-        }
-
-        try {
-            console.log('Submitting Variant to Backend:', variantToSubmit)
-            const response = await fetch(`${VITE_API_BACKEND}/create-product`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(variantToSubmit),
-            });
-
-            if (!response.ok) {
-                throw new Error('Error al enviar la variante');
+        for (const variant of variants) {
+            if (!variant.name || !variant.base_price) {
+                console.error("Faltan datos de una variante.");
+                return false;
             }
+        }
+        return true;
+    };
 
-            const data = await response.json();
-            console.log('Variante guardada exitosamente:', data);
-
-            setVariants((prevVariants) => {
-                const updatedVariants = [...prevVariants];
-                updatedVariants[index] = {
-                    color: { colorName: '', hexCode: '' },
-                    name: '',
-                    size: [],
-                    material: '',
-                    price: '',
-                    discount: 0,
-                    image: [],
-                    is_main: false,
-                    description: '',
-                };
-                console.log(`handleSubmit - Reset Variants:`, updatedVariants);
-                return updatedVariants;
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!validateData()) return;
+    
+        // Generar el código del producto solo en el frontend
+        const updatedVariants = variants.map((variant) => {
+            const productCode = generateProductCode();
+            if (!productCode) {
+                console.error("El código del producto es nulo o vacío");
+                return null;
+            }
+            return {
+                ...variant,
+                product_code: productCode, // Añadimos el código generado
+            };
+        });
+    
+        console.log("Datos de las variantes antes de enviar al backend:", updatedVariants);
+    
+        if (updatedVariants.includes(null)) return; // Si alguna variante es inválida, no continuar
+    
+        const totalProducts = {
+            ...generalProduct,
+            variants: updatedVariants,
+        };
+    
+        console.log("Productos enviados:", totalProducts);
+    
+        try {
+            const response = await fetch(`${VITE_API_BACKEND}/create-product`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+                },
+                body: JSON.stringify({ generalProduct, variants: updatedVariants }), // Enviamos el product_code generado
             });
-
-            setError('');
+    
+            if (!response.ok) throw new Error("Error al crear el producto.");
+            console.log("Producto creado con éxito.");
         } catch (error) {
-            console.error('Error al guardar la variante:', error);
-            setError('Hubo un problema al guardar la variante. Intente nuevamente.');
+            console.error("Error al enviar el producto:", error);
         }
     };
+    
 
     const handleSizeChange = (e, index) => {
         const size = e.target.value.toUpperCase();
@@ -227,13 +221,6 @@ const handleVariantChange = (e, index) => {
                     updatedVariants[index].size.push(size);
                 }
             }
-            return updatedVariants;
-        });
-    };
-
-    const handleDeleteVariant = (index) => {
-        setVariants((prevVariants) => {
-            const updatedVariants = prevVariants.filter((_, i) => i !== index);
             return updatedVariants;
         });
     };
@@ -275,23 +262,6 @@ const handleVariantChange = (e, index) => {
         return `${gender}/${type}/${name}/${colorName}`;
     };
 
-    const handleAddImageInput = (index) => {
-        setVariants((prevVariants) => {
-            const updatedVariants = [...prevVariants];
-
-            if (!updatedVariants[index].image) {
-                updatedVariants[index].image = [];
-            }
-
-            if (updatedVariants[index].image[updatedVariants[index].image.length - 1] === '') {
-                return updatedVariants;
-            }
-
-            updatedVariants[index].image.push('');
-            return updatedVariants;
-        });
-    };
-
     const handleDeleteImageInput = (index, urlIndex) => {
         setVariants((prevVariants) => {
             const updatedVariants = [...prevVariants];
@@ -303,7 +273,7 @@ const handleVariantChange = (e, index) => {
     const handleImageUrlChange = (index, urlIndex, value) => {
         setVariants((prevVariants) => {
             const updatedVariants = [...prevVariants];
-            updatedVariants[index].image[urlIndex] = value;
+            updatedVariants[index].image[urlIndex] = value; // Actualiza el valor de la imagen
             return updatedVariants;
         });
     };
@@ -321,7 +291,7 @@ const handleVariantChange = (e, index) => {
                 color: { colorName: '', hexCode: '' },
                 size: [],
                 material: '',
-                price: '',
+                base_price: '',
                 discount: 0,
                 image: [],
                 is_main: false,
@@ -336,7 +306,7 @@ const handleVariantChange = (e, index) => {
             color: { colorName: '', hexCode: '' },
             size: [],
             material: '',
-            price: '',
+            base_price: '',
             discount: 0,
             image: [],
             is_main: false,
@@ -373,220 +343,199 @@ const handleVariantChange = (e, index) => {
                 color: { colorName: '', hexCode: '' },
                 size: [],
                 material: '',
-                price: '',
+                base_price: '',
                 discount: 0,
-                image: [],
+                image: [''],
                 is_main: false,
                 description: '',
             },
         ]);
     };
 
-    const addNewVariantAccordion = (e) => {
-        e.preventDefault();
-
-        if (validateVariant(currentVariant)) {
-            setVariants((prevVariants) => [
-                ...prevVariants,
-                { ...currentVariant },
-            ]);
-        }
-
-        setCurrentVariant({
-            name: '',
-            color: { colorName: '', hexCode: '' },
-            size: [],
-            material: '',
-            price: '',
-            discount: 0,
-            image: [],
-            is_main: false,
-            description: '',
-        });
-        setVariantCount((prevCount) => prevCount + 1);
-    };
-
-    const handleVariantSelection = (index) => {
-        console.log('Selected variant index:', index);
-        setSelectedVariantIndex(index);
-    };
-
-
-    const handleVariantClick = (index) => {
-        if (index >= 0 && index < variants.length) {
-            setSelectedVariantIndex(index);
-            setCurrentVariant(variants[index]);
-        }
-    };
-
     return (
         <>
-            <div className="godDiv">
-                <div className={`accordionContainer ${activeAccordion === 'variant' ? 'open' : ''}`}>
-                    {variants.map((variant, index) => (
-                        <div className="godSon" key={index}>
-                            <div className="createVariant_Container">
-                                <div className="containerTittle_AdminContainer">
-                                    <div className="containerTittle_Admin">
-                                        <h2 className='text_createVariant' onClick={() => setActiveAccordion('variant')}>
-                                            Variante {index + 1}
-                                        </h2>
+            <form onSubmit={handleSubmit}>
+                <div className="godDiv">
+                    <div className={`accordionContainer ${activeAccordion === 'variant' ? 'open' : ''}`}>
+                        {variants.map((variant, index) => (
+                            <div className="godSon" key={index}>
+                                <div className="createVariant_Container">
+                                    <div className="containerTittle_AdminContainer">
+                                        <div className="containerTittle_Admin">
+                                            <h2 className='text_createVariant' onClick={() => setActiveAccordion('variant')}>
+                                                Variante {index + 1}
+                                            </h2>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div className="variant">
-                                    <div className="variantForm">
-                                        <div className="divForm_Column">
-                                            <label htmlFor="colorName">Name:</label>
-                                            <input
-                                                name="name"
-                                                type="text"
-                                                id="name"
-                                                value={variants[index]?.name || ''}
-                                                onChange={(e) => handleVariantChange(e, index)}
-                                            />
-                                        </div>
-                                        <div className="divForm_Column">
-                                            <label htmlFor="colorName">Color Name:</label>
-                                            <input
-                                                name="colorName"
-                                                type="text"
-                                                id="color.colorName"
-                                                value={variants[index]?.color?.colorName || ''}
-                                                onChange={(e) => handleVariantChange(e, index)}
-                                            />
-                                        </div>
-                                        <div className="divForm_Column">
-                                            <label htmlFor="hexCode">Hex Code:</label>
-                                            <input
-                                                type="text"
-                                                id="color.hexCode"
-                                                value={variants[index]?.color?.hexCode || ''}
-                                                onChange={(e) => handleVariantChange(e, index)}
-                                            />
-                                        </div>
-                                        <div className="divForm_Column">
-                                            <label htmlFor="material">Material:</label>
-                                            <input
-                                                name='material'
-                                                type="text"
-                                                id="material"
-                                                value={variants[index]?.material || ''}
-                                                onChange={(e) => handleVariantChange(e, index)}
-                                            />
-                                        </div>
-                                        <div className="divForm_Column">
-                                            <label htmlFor="size">Talla:</label>
-                                            <input
-                                                type="text"
-                                                id="size"
-                                                placeholder="Ej: M"
-                                                value={currentSize}
-                                                onChange={(e) => setCurrentSize(e.target.value.toUpperCase())}
-                                            />
-                                            <div className="sizeContainer_Button">
-                                                <button
-                                                    className="submitEditProductButton"
-                                                    onClick={() => handleAddSize(index)}
-                                                >
-                                                    Enviar talla
-                                                </button>
-                                            </div>
-                                            <div className="containerSize_Display">
-                                                <ul className="sizeDisplay">
-                                                    {variants[index]?.size.map((size, idx) => (
-                                                        <li key={idx} className="sizeSelected_Group">
-                                                            {size}
-                                                            <button
-                                                                className="deleteSize_Button"
-                                                                onClick={() => handleDeleteSize(size, index)}
-                                                            >
-                                                                X
-                                                            </button>
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div className="divForm_Column">
-                                            <div className="introduceImage">
-                                                <label htmlFor={`image-${index}`} className="labelImage">Subir Imagen</label>
+                                    <div className="variant">
+                                        <div className="variantForm">
+                                            <div className="divForm_Column">
+                                                <label htmlFor="colorName">Name:</label>
                                                 <input
-                                                    name="image"
-                                                    type="file"
-                                                    multiple
-                                                    id={`image-${index}`}
-                                                    className="inputImage"
-                                                    onChange={(e) => handleImageUploadChange(e, index)}
+                                                    name="name"
+                                                    type="text"
+                                                    id="name"
+                                                    value={variants[index]?.name || ''}
+                                                    onChange={(e) => handleVariantChange(e, index)}
                                                 />
                                             </div>
-                                            <div className="containerForPreviews">
-                                                {variants[index]?.image.map((imageUrl, imgIndex) => (
-                                                    <div key={imgIndex} className="imagePreview">
-                                                        <img
-                                                            src={imageUrl}
-                                                            alt={`Preview ${imgIndex}`}
-                                                            className="previewImage"
+                                            <div className="divForm_Column">
+                                                <label htmlFor="colorName">Color Name:</label>
+                                                <input
+                                                    name="colorName"
+                                                    type="text"
+                                                    id="color.colorName"
+                                                    value={variants[index]?.color?.colorName || ''}
+                                                    onChange={(e) => handleVariantChange(e, index)}
+                                                />
+                                            </div>
+                                            <div className="divForm_Column">
+                                                <label htmlFor="hexCode">Hex Code:</label>
+                                                <input
+                                                    type="text"
+                                                    id="color.hexCode"
+                                                    value={variants[index]?.color?.hexCode || ''}
+                                                    onChange={(e) => handleVariantChange(e, index)}
+                                                />
+                                            </div>
+                                            <div className="divForm_Column">
+                                                <label htmlFor="material">Material:</label>
+                                                <input
+                                                    name='material'
+                                                    type="text"
+                                                    id="material"
+                                                    value={variants[index]?.material || ''}
+                                                    onChange={(e) => handleVariantChange(e, index)}
+                                                />
+                                            </div>
+                                            <div className="divForm_Column">
+                                                <label htmlFor="size">Talla:</label>
+                                                <input
+                                                    type="text"
+                                                    id="size"
+                                                    placeholder="Ej: M"
+                                                    value={currentSize}
+                                                    onChange={(e) => setCurrentSize(e.target.value.toUpperCase())}
+                                                />
+                                                <div className="sizeContainer_Button">
+                                                    <button
+                                                        className="submitEditProductButton"
+                                                        onClick={() => handleAddSize(index)}
+                                                    >
+                                                        Enviar talla
+                                                    </button>
+                                                </div>
+                                                <div className="containerSize_Display">
+                                                    <ul className="sizeDisplay">
+                                                        {variants[index]?.size.map((size, idx) => (
+                                                            <li key={idx} className="sizeSelected_Group">
+                                                                {size}
+                                                                <button
+                                                                    className="deleteSize_Button"
+                                                                    onClick={() => handleDeleteSize(size, index)}
+                                                                >
+                                                                    X
+                                                                </button>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div className="divForm_Column">
+                                                <div className="introduceImage">
+                                                    <label htmlFor={`image-${index}`} className="labelImage">Subir Imagen</label>
+                                                    <input
+                                                        name="image"
+                                                        type="file"
+                                                        multiple
+                                                        id={`image-${index}`}
+                                                        className="inputImage"
+                                                        onChange={(e) => handleImageUploadChange(e, index)}
+                                                    />
+                                                </div>
+                                                <div className="containerForPreviews">
+                                                    {variants[index]?.image.map((imageUrl, imgIndex) => (
+                                                        <div key={imgIndex} className="imagePreview">
+                                                            <img
+                                                                src={imageUrl}
+                                                                alt={`Preview ${imgIndex}`}
+                                                                className="previewImage"
+                                                            />
+                                                            <p className="fileName">{variants[index]?.file[imgIndex]}</p>
+                                                            <button
+                                                                className="deleteImage_Button"
+                                                                onClick={() => handleDeleteImageInput(index, imgIndex)}
+                                                            >
+                                                                Eliminar
+                                                            </button>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            <div className="divForm_Column">
+                                                <label htmlFor="img_name">Path to Image</label>
+                                                {variants[index]?.image && Array.isArray(variants[index]?.image) && variants[index]?.image.map((image, imgIndex) => (
+                                                    <div key={imgIndex}>
+                                                        <input
+                                                            name={`image-${imgIndex}`}
+                                                            type="text"
+                                                            value={image}
+                                                            onChange={(e) => handleImageUrlChange(index, imgIndex, e.target.value)}
                                                         />
-                                                        <p className="fileName">{variants[index]?.file[imgIndex]}</p>
-                                                        <button
-                                                            className="deleteImage_Button"
-                                                            onClick={() => handleDeleteImageInput(index, imgIndex)}
-                                                        >
-                                                            Eliminar
-                                                        </button>
+                                                        <button onClick={() => handleDeleteImageInput(index, imgIndex)}>Eliminar casilla</button>
                                                     </div>
                                                 ))}
+                                                <button onClick={() => handleAddImageInput(index)}>Agregar casilla</button>
                                             </div>
-                                        </div>
-                                        <div className="divForm_Column">
-                                            <label htmlFor="price">Precio:</label>
-                                            <input
-                                                type="number"
-                                                id="price"
-                                                value={variants[index]?.price || ''}
-                                                onChange={(e) => handleVariantChange(e, index)}
-                                            />
-                                        </div>
-                                        <div className="divForm_Column">
-                                            <label htmlFor="discount">Descuento:</label>
-                                            <input
-                                                name='discount'
-                                                type="number"
-                                                id="discount"
-                                                value={variants[index]?.discount || ''}
-                                                onChange={(e) => handleVariantChange(e, index)}
-                                            />
-                                        </div>
-                                        <div className="divForm_Column">
-                                            <label htmlFor="description">Descripción:</label>
-                                            <textarea
-                                                id="description"
-                                                value={variants[index]?.description || ''}
-                                                onChange={(e) => handleVariantChange(e, index)}
-                                            />
-                                        </div>
-                                        <div className="divForm_Column">
-                                            <label htmlFor="is_main">¿Es Principal?</label>
-                                            <input
-                                                type="checkbox"
-                                                id="is_main"
-                                                checked={variant.is_main}
-                                                onChange={(e) => handleVariantChange(e, index)}
-                                            />
+
+
+                                            <div className="divForm_Column">
+                                                <label htmlFor="price">Precio:</label>
+                                                <input
+                                                    type="number"
+                                                    id="base_price"
+                                                    value={variants[index]?.base_price || ''}
+                                                    onChange={(e) => handleVariantChange(e, index)}
+                                                />
+                                            </div>
+                                            <div className="divForm_Column">
+                                                <label htmlFor="discount">Descuento:</label>
+                                                <input
+                                                    name='discount'
+                                                    type="number"
+                                                    id="discount"
+                                                    value={variants[index]?.discount || ''}
+                                                    onChange={(e) => handleVariantChange(e, index)}
+                                                />
+                                            </div>
+                                            <div className="divForm_Column">
+                                                <label htmlFor="description">Descripción:</label>
+                                                <textarea
+                                                    id="description"
+                                                    value={variants[index]?.description || ''}
+                                                    onChange={(e) => handleVariantChange(e, index)}
+                                                />
+                                            </div>
+                                            <div className="divForm_Column">
+                                                <label htmlFor="is_main">¿Es Principal?</label>
+                                                <input
+                                                    type="checkbox"
+                                                    id="is_main"
+                                                    checked={variant.is_main}
+                                                    onChange={(e) => handleVariantChange(e, index)}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="container_ButtonSubmitContainer">
-                                <div className="submitEdition">
-                                    <button className="submitCreateButton" onClick={() => handleDeleteVariant(index)}>Eliminar variante</button>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
+                        ))}
+                    </div>
+                </div >
+            </form>
+
             <div className="container_ButtonSubmit">
                 <div className="container_ButtonSubmitContainer">
                     <div className="submitEdition">

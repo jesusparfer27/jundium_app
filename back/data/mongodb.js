@@ -193,11 +193,10 @@ const productSchema = new mongoose.Schema({
         {
             variant_id: {
                 type: mongoose.Schema.Types.ObjectId,
-                required: true,
+                required: false, // Hacer que no sea obligatorio para la creación del producto
             },
             product_reference: {
                 type: String,
-                required: true
             },
             name: {
                 type: String,
@@ -209,7 +208,8 @@ const productSchema = new mongoose.Schema({
             },
             product_code: {
                 type: String,
-                required: true
+                required: true,
+                unique: true
             },
             out_of_stock: {
                 type: Boolean,
@@ -230,10 +230,6 @@ const productSchema = new mongoose.Schema({
             },
             material: {
                 type: String,
-                required: true
-            },
-            price: {
-                type: Number,
                 required: true
             },
             discount: {
@@ -271,6 +267,7 @@ const productSchema = new mongoose.Schema({
     versionKey: false,
     strict: false
 });
+
 
 // Schema de Wishlist
 const wishlistSchema = new mongoose.Schema({
