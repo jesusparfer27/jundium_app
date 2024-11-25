@@ -21,7 +21,7 @@ export const Variant = () => {
         material: '',
         base_price: '',
         discount: 0,
-        image: [''],
+        image: [],
         is_main: false,
         description: '',
     });
@@ -32,39 +32,34 @@ export const Variant = () => {
     }, [variants]);
 
 
-    const handleVariantChange = (e) => {
-        const index = selectedVariantIndex ?? 0; // Usa 0 como fallback
-        if (index < 0 || index >= variants.length) {
-            console.error('handleVariantChange Error: Índice de variante no válido.');
-            return;
-        }
-        const { id, checked } = e.target;
-        console.log(`handleVariantChange - Index: ${index}, ID: ${id}, Checked: ${checked}`);
-        if (index === undefined || index === null) {
-            console.error("Invalid index received:", index);
-            return;
-        }
-
+    const handleVariantChange = (e, index) => {
+        const { id, value, checked } = e.target;
         setVariants((prevVariants) => {
             const updatedVariants = [...prevVariants];
-            const currentVariant = { ...updatedVariants[index] };
+            const variant = updatedVariants[index];
 
-            if (id === 'is_main') {
-                currentVariant.is_main = checked;
-            } else if (id.includes('.')) {
-                const [parentKey, childKey] = id.split('.');
-                currentVariant[parentKey] = {
-                    ...currentVariant[parentKey],
-                    [childKey]: e.target.value,
-                };
+            if (id === 'name') {
+                variant.name = value;
+            } else if (id === 'is_main') {
+                variant.is_main = checked;
             } else {
-                currentVariant[id] = e.target.value;
+                // Handle other fields, like color, material, etc.
+                if (id.includes('.')) {
+                    const [parentKey, childKey] = id.split('.');
+                    variant[parentKey] = {
+                        ...variant[parentKey],
+                        [childKey]: value,
+                    };
+                } else {
+                    variant[id] = value;
+                }
             }
 
-            updatedVariants[index] = currentVariant;
+            updatedVariants[index] = variant;
             return updatedVariants;
         });
     };
+
 
     const handleAddImageInput = (index) => {
         setVariants((prevVariants) => {
@@ -149,7 +144,7 @@ export const Variant = () => {
         console.log('Generated Product Code:', code);  // Verifica que se genera correctamente
         return code;
     };
-    
+
 
     const validateData = () => {
         if (!generalProduct.collection || !generalProduct.brand) {
@@ -165,10 +160,15 @@ export const Variant = () => {
         return true;
     };
 
+    // Cuando actualices selectedVariantIndex, asegúrate de hacerlo de manera correcta
+    const handleSelectVariant = (index) => {
+        setSelectedVariantIndex(index);  // Set the selected index for input form to work correctly
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validateData()) return;
-    
+
         // Generar el código del producto solo en el frontend
         const updatedVariants = variants.map((variant) => {
             const productCode = generateProductCode();
@@ -181,18 +181,18 @@ export const Variant = () => {
                 product_code: productCode, // Añadimos el código generado
             };
         });
-    
+
         console.log("Datos de las variantes antes de enviar al backend:", updatedVariants);
-    
+
         if (updatedVariants.includes(null)) return; // Si alguna variante es inválida, no continuar
-    
+
         const totalProducts = {
             ...generalProduct,
             variants: updatedVariants,
         };
-    
+
         console.log("Productos enviados:", totalProducts);
-    
+
         try {
             const response = await fetch(`${VITE_API_BACKEND}/create-product`, {
                 method: "POST",
@@ -202,14 +202,14 @@ export const Variant = () => {
                 },
                 body: JSON.stringify({ generalProduct, variants: updatedVariants }), // Enviamos el product_code generado
             });
-    
+
             if (!response.ok) throw new Error("Error al crear el producto.");
             console.log("Producto creado con éxito.");
         } catch (error) {
             console.error("Error al enviar el producto:", error);
         }
     };
-    
+
 
     const handleSizeChange = (e, index) => {
         const size = e.target.value.toUpperCase();
@@ -345,7 +345,7 @@ export const Variant = () => {
                 material: '',
                 base_price: '',
                 discount: 0,
-                image: [''],
+                image: [],
                 is_main: false,
                 description: '',
             },
@@ -376,8 +376,8 @@ export const Variant = () => {
                                                     name="name"
                                                     type="text"
                                                     id="name"
-                                                    value={variants[index]?.name || ''}
-                                                    onChange={(e) => handleVariantChange(e, index)}
+                                                    value={variant.name || ''}  // Each variant has its own name here
+                                                    onChange={(e) => handleVariantChange(e, index)}  // Ensure index is passed
                                                 />
                                             </div>
                                             <div className="divForm_Column">
