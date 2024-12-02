@@ -1,71 +1,62 @@
 import { Product } from '../data/mongodb.js';
-import multer from 'multer'; // Si usas multer para manejo de imágenes
-import { upload } from '../middlewares/multer.js'; // Middleware de multer, si aplica
+import { upload } from '../middlewares/multer.js'; // Asegúrate de que este middleware esté configurado
 import { connectDB } from '../data/mongodb.js';
 import mongoose from 'mongoose';
 
 connectDB();
 
-// Generar un código único para cada producto
 function generateProductCode() {
     return `PROD-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
 }
 
 export const createProduct = async (req, res) => {
     try {
-        console.log('Datos recibidos en el backend:', req.body);  // Verifica los datos recibidos
-        console.log('Archivos recibidos:', req.files); // Verifica los archivos recibidos
+        // Log para verificar los datos recibidos
+        console.log('Datos recibidos en el backend:', req.body);
+        console.log('Archivos recibidos:', req.files); // Los archivos deberían estar en req.files
 
+        // Desestructuración de los datos del producto
         const { collection, brand, type, gender, new_arrival, featured } = req.body.generalProduct || {};
         const { variants } = req.body;
 
-        // Validación de datos principales del producto
+        // Verificar que los datos esenciales están presentes
         if (!collection || !brand || !type || !gender || !Array.isArray(variants) || variants.length === 0) {
-            console.log('Faltan datos en el producto principal');
             return res.status(400).json({ message: 'Faltan datos requeridos para crear el producto.' });
         }
 
-        // Validación de las variantes y asignación del variant_id
+        // Procesar las variantes y generar un código único
         const updatedVariants = await Promise.all(variants.map(async (variant) => {
             let productCode;
             let isUnique = false;
-        
-            // Generar un variant_id único
+
             const variantId = new mongoose.Types.ObjectId();
-        
-            // Generar un código de producto único para cada variante
+
+            // Generar códigos de producto únicos
             while (!isUnique) {
                 productCode = generateProductCode();
                 const existingProduct = await Product.findOne({ 'variants.product_code': productCode });
-        
+
                 if (!existingProduct) {
-                    isUnique = true;  // Si no existe un producto con ese código, lo consideramos único
+                    isUnique = true;
                 }
             }
-        
-            // Eliminar el campo _id (si existe) y asignar el variant_id y product_code
+
             const updatedVariant = {
                 ...variant,
-                variant_id: variantId, // Asignar variant_id único
-                product_code: productCode, // Sobrescribir el código de producto con uno único
+                variant_id: variantId,
+                product_code: productCode,
             };
-        
-            // Eliminar el campo _id si existe
+
             delete updatedVariant._id;
-        
+
             return updatedVariant;
         }));
-        
 
-        // Validación adicional para evitar product_code null
         if (updatedVariants.some(v => !v.product_code)) {
-            console.log('Algunas variantes no tienen un código de producto válido:', updatedVariants);
             return res.status(400).json({ message: 'Algunas variantes no tienen un código de producto válido.' });
         }
 
-        console.log('Códigos de producto generados:', updatedVariants.map(v => v.product_code));
-
-        // Crear el producto en la base de datos
+        // Crear el nuevo producto
         const product = new Product({
             collection,
             brand,
@@ -73,7 +64,8 @@ export const createProduct = async (req, res) => {
             gender,
             new_arrival,
             featured,
-            variants: updatedVariants, //    Asignar las variantes actualizadas al producto
+            variants: updatedVariants,
+            images: req.files || [], // Asegúrate de que los archivos subidos estén guardados correctamente
         });
 
         await product.save();

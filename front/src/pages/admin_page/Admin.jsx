@@ -147,3 +147,46 @@ export const Admin = () => {
     //     console.log('Validation Passed.');
     //     return true;
     // };
+
+        // const handleImageChange = (e, index) => {
+    //     const files = Array.from(e.target.files);
+    //     const imageUrls = files.map((file) => URL.createObjectURL(file));
+
+    //     setVariants((prevVariants) => {
+    //         const updatedVariants = [...prevVariants];
+    //         updatedVariants[index].image = imageUrls;
+    //         return updatedVariants;
+    //     });
+
+    //     const fileNames = files.map((file) => file.name);
+    //     setVariants((prevVariants) => {
+    //         const updatedVariants = [...prevVariants];
+    //         updatedVariants[index].file = fileNames;
+    //         return updatedVariants;
+    //     });
+    // };
+
+
+//     Hay un error en mi codigo y es que esta definiendose las img como una url, cuando quiero que sea por nombre de archivo que tienen
+
+// example-blue-man-shoes-2
+
+// no este 
+
+// blob:http://localhost:5173/41a445bf-7697-4d89-ae6d-22eb10420ab7
+
+// <div className="divForm_Column">
+//                                                 <label htmlFor="img_name">Path to Image</label>
+//                                                 {variants[index]?.image && Array.isArray(variants[index]?.image) && variants[index]?.image.map((image, imgIndex) => (
+//                                                     <div key={imgIndex}>
+//                                                         <input
+//                                                             name={`image-${imgIndex}`}
+//                                                             type="text"
+//                                                             value={image}
+//                                                             onChange={(e) => handleImageUrlChange(index, imgIndex, e.target.value)}
+//                                                         />
+//                                                         <button onClick={() => handleDeleteImageInput(index, imgIndex)}>Eliminar casilla</button>
+//                                                     </div>
+//                                                 ))}
+//                                                 <button onClick={() => handleAddImageInput(index)}>Agregar casilla</button>
+//                                             </div>

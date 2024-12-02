@@ -7,6 +7,7 @@ import LoginContainer from './LoginHeader';
 import CartContainer from './CartHeader';
 import ContactContainer from './ContactHeader';
 import HeaderSearch from './SearchHeader';
+import LogoBlackLetters from '../../assets/logos/jundium_black_letters.png'
 import { FilterProducts } from './FilterProducts';
 
 const Header = () => {
@@ -86,7 +87,7 @@ const Header = () => {
                     </div>
 
                     <div className="headerCentral">
-                        <Link to="/" className="logo">LOGO</Link>
+                        <Link to="/" className="logo"><img className='logoHeaderBlack' src={LogoBlackLetters} alt="" /></Link>
                     </div>
 
                     <div className="headerRight">

@@ -241,6 +241,18 @@ header {
     border-bottom: 1px solid rgb(226, 226, 226);
 }
 
+.logoHeader {
+    height: auto;
+    width: 50%;
+}
+
+.logoHeaderBlack {
+    width: 100%;
+    height: 4vh;
+    object-fit: cover; /* Esto hará que la imagen rellene el espacio, recortando si es necesario */
+    object-position: center; /* Centra la imagen si se recorta */
+}
+
 .containerNews_sections {
     display: flex;
     width: 95%;

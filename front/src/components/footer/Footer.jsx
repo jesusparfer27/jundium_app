@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useLocation, NavLink } from 'react-router-dom';
 import '../../css/components/footer/footer.css';
 import { useUser } from '../../hooks/useUser';
+import logoJundiumWhite from '../../assets/logos/jundium_white_letters.png'
+import logoJundiumBlack from '../../assets/logos/jundium_black_letters.png'
 
 const Footer = () => {
     const location = useLocation();
@@ -94,7 +96,7 @@ const handleSubscribe = async () => {
     }
 };
 
-    
+    const logoSrc = isHomeOrWomenCollection ? logoJundiumBlack : logoJundiumWhite;
 
     return (
         <footer className={isHomeOrWomenCollection ? 'footer-light' : 'footer-dark'}>
@@ -156,7 +158,7 @@ const handleSubscribe = async () => {
 
             <div className="footerInferior">
                 <div className="footerBottomRow">
-                    <div>LOGO</div>
+                    <div><img src={logoSrc} alt="Jundium Logo" className="footerLogo" /></div>
                     <p>Déjanos tus comentarios y sugerencias</p>
                 </div>
             </div>

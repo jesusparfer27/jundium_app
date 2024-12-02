@@ -3,7 +3,6 @@ import React, { useContext, useRef, useState } from 'react';
 import  { useUser } from '../../hooks/useUser'
 import { HeaderContext } from '../../context/HeaderContext';
 import '../../css/components/header/header.css';
-import '../../css/components/header/closeButton.css'; // Importa los estilos del botón de cierre
 import '../../css/components/header/contact.css'
 
 const ContactContainer = () => {
