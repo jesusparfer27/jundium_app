@@ -5,7 +5,7 @@ import { HeaderContext } from '../../context/HeaderContext';
 import '../../css/components/header/header.css';
 import '../../css/components/header/contact.css'
 
-const ContactContainer = () => {
+const ContactContainer = () => { 
     const { activeMenu, closeMenu } = useContext(HeaderContext);
     const contactContainerRef = useRef(null);
     const { VITE_API_BACKEND } = import.meta.env
